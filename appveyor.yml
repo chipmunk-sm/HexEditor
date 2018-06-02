@@ -71,4 +71,5 @@ deploy:
 - provider: GitHub
   artifact: '*.zip'
   auth_token:
-    secure: t8KwiAN0pBg7QNaea4NCDavSO+NpzwADgO/Ir2md9HL1612P2WPV0xNLTaAj3xLM
+    secure: kHdzxX2T86HQf5j9fiIeK0imu96m0/LHJzdSB/wdrNS4JvzCqsQfAsyuIMembQDr
+
