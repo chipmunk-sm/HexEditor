@@ -1,0 +1,13 @@
+Source: hexeditor
+Section: utils
+Priority: optional
+Maintainer: chipmunk.sm <dannico@linuxmail.org>
+Build-Depends: debhelper (>=9),
+            qtbase5-dev
+Standards-Version: 4.0.0
+Homepage: https://github.com/chipmunk-sm/HexEditor
+
+Package: hexeditor
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Hex Editor GUI

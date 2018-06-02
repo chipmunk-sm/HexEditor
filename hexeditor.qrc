@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>data/hexeditor_logo.svg</file>
+        <file>data/hexeditor_logo.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,3 @@
+hexeditor usr/bin
+data/hexeditor.desktop usr/share/applications
+data/hexeditor_logo.png usr/share/icons/hicolor/256x256/apps

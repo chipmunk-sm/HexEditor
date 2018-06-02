@@ -1,0 +1,39 @@
+#include <winuser.h>
+#include <winnt.h>
+
+#include "versionhelper.h"
+
+LANGUAGE 25,1
+
+STRINGTABLE LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+BEGIN
+        1 "hexeditor"" binary file editor""\0"
+END
+
+1 VERSIONINFO
+        FILEVERSION    FVER1,FVER2,FVER3,FVER4
+        PRODUCTVERSION FVER1,FVER2,FVER3,FVER4
+        FILEOS         0x00000000
+        FILETYPE       0x00000001
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "ProductVersion",     PRODUCTVERSIONSTRING
+            VALUE "ProductName",        "hexeditor\0"
+            VALUE "FileDescription",    "hexeditor (binary file editor)\0"
+            VALUE "OriginalFilename",   "hexeditor.exe\0"
+            VALUE "LegalCopyright",     "Copyright (C) 2018 chipmunk-sm\0"
+            VALUE "Comments",           "https://github.com/chipmunk-sm/hexeditor\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+
+END
+

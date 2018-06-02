@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Utility;
+Comment=HexEditor (Hex Editor GUI)
+Exec=hexeditor
+GenericName=HexEditor (Hex Editor GUI)
+Icon=hexeditor_logo
+Name=HexEditor (Hex Editor GUI)
+StartupNotify=true
+Terminal=false
+
