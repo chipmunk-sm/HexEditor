@@ -67,9 +67,8 @@ artifacts:
   #- path: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip'
   #  name: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer'
 
-#deploy:
-#- provider: GitHub
-#  artifact: %DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.zip
-#  artifact: %DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip
-#  auth_token:
-#    secure: t8KwiAN0pBg7QNaea4NCDavSO+NpzwADgO/Ir2md9HL1612P2WPV0xNLTaAj3xLM
+deploy:
+- provider: GitHub
+  artifact: '*.zip'
+  auth_token:
+    secure: t8KwiAN0pBg7QNaea4NCDavSO+NpzwADgO/Ir2md9HL1612P2WPV0xNLTaAj3xLM
