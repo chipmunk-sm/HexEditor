@@ -16,12 +16,14 @@ environment:
   - QTDIR: C:\Qt\5.10.1\msvc2015_64
     DEPLOY_FOLDER_NAME: hexeditor.x64
     DEPLOY_INSTALLER_PROJ_NAME: Installer\hexeditor.x64.vdproj
+    DEPLOY_INSTALLER_SLN_NAME: Installer\hexeditor.x64.sln
     DEPLOY_INSTALLER_MSI_NAME: Installer\Release.x64
     DEPLOY_INSTALLER_PLATFORMID: "x64"
     DEVENV_EXE: C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\Common7\IDE\devenv.exe
   - QTDIR: C:\Qt\5.10.1\msvc2015
     DEPLOY_FOLDER_NAME: hexeditor.x86
     DEPLOY_INSTALLER_PROJ_NAME: Installer\hexeditor.x86.vdproj
+    DEPLOY_INSTALLER_SLN_NAME: Installer\hexeditor.x86.sln
     DEPLOY_INSTALLER_MSI_NAME: Installer\Release.x86
     DEPLOY_INSTALLER_PLATFORMID: "x86"
     DEVENV_EXE: C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\Common7\IDE\devenv.exe
@@ -55,9 +57,9 @@ after_build:
   - cp %APPVEYOR_BUILD_FOLDER%\data\hexeditor_logo.png %DEPLOY_FOLDER_NAME%
   - cp %APPVEYOR_BUILD_FOLDER%\data\hexeditor_logo.ico %DEPLOY_FOLDER_NAME%
   - 7z a "%APPVEYOR_BUILD_FOLDER%\%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.zip" %DEPLOY_FOLDER_NAME%/*
-  - cmd: echo '%DEVENV_EXE% %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_PROJ_NAME% /build Release'
-  #- cmd:      '%DEVENV_EXE% %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_PROJ_NAME% /build Release'
-  #- 7z a "%APPVEYOR_BUILD_FOLDER%\%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip" %DEPLOY_INSTALLER_MSI_NAME%/*
+  - cmd: echo '%DEVENV_EXE% %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_SLN_NAME% /build Release /project %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_PROJ_NAME% /projectconfig Release'
+  - cmd: '%DEVENV_EXE% %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_SLN_NAME% /build Release /project %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_PROJ_NAME% /projectconfig Release'
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip" %DEPLOY_INSTALLER_MSI_NAME%/*
 
 artifacts:
   - path: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.zip'
