@@ -3,6 +3,7 @@ Hex Editor GUI
 
 ## under development!!!
 
+### Linux
 To get the last release version, please use the PPA:
 
 https://launchpad.net/~chipmunk.sm/+archive/ubuntu/ppa
@@ -12,8 +13,10 @@ $ sudo add-apt-repository ppa:chipmunk.sm/ppa
 $ sudo apt-get update
 $ sudo apt-get install hexeditor
 ```
+### Windows
+https://github.com/chipmunk-sm/HexEditor/releases
 
-Home page:
+## Home page:
 
 https://github.com/chipmunk-sm/hexeditor
 
