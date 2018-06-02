@@ -18,10 +18,11 @@ echo $directory
 echo "******************************************************"
 echo "*** Parse GIT attributes..."
 echo "******************************************************"
+echo ""
 
 $tagPrefix = 'v'
 $revision = "HEAD" 
-$LastComm = "test build"
+$LastComm = "Test build"
 $Build = $env:appveyor_build_number
 
 $FullCommit = git -C $directory rev-parse $revision 2>$null
@@ -40,6 +41,11 @@ else
 {
     #git tag -l --format='%(contents)' <tag name>
     $LastComm = git -C $directory tag -l --format='%(contents)' $LastTag
+    if(!$LastComm)
+    {
+        $LastComm = "Auto-build"
+    }
+
     $LastComm = $LastComm.Replace("`n"," ")
     $LastComm = $LastComm.Replace("`r"," ")
     $LastComm = $LastComm.Replace(" ", "_")
@@ -48,7 +54,7 @@ else
 echo "Message: <$LastComm>" 
 
 
-if ($LastTag -match "^${tagPrefix}-?(\d+)\.(\d+)\.(\d+)\.(\d+)$") {
+if ($LastTag -match "^${tagPrefix}-?(\d+)\.(\d+)\.(\d+)\.(\d+)") {
 	$Major = [System.Convert]::ToUInt16($Matches[1])
 	$Minor = [System.Convert]::ToUInt16($Matches[2])
 	$Patch = [System.Convert]::ToUInt16($Matches[3])
@@ -73,6 +79,7 @@ $Millisecond = (Get-Date).Millisecond
 echo "******************************************************"
 echo "*** Start update ver.h..."
 echo "******************************************************"
+echo ""
 
 $output = "ver.h"
 
@@ -120,6 +127,7 @@ if ([string]::Compare($new_output_contents, $current_output_contents, $False) -n
 echo "******************************************************"
 echo "*** Start update Appveyor Build Version..."
 echo "******************************************************"
+echo ""
 
 if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
 {
@@ -129,6 +137,7 @@ if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
 echo "******************************************************"
 echo "*** Start update MSI props..."
 echo "******************************************************"
+echo ""
 
 $proj = $(Join-Path $directory "Installer\hexeditor.$platformId.vdproj")
 echo "`$proj: $proj"
@@ -164,4 +173,4 @@ echo "Update $proj"
 echo "******************************************************"
 echo "*** Finish "
 echo "******************************************************"
-
+echo ""
