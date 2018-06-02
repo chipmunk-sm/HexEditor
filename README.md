@@ -14,7 +14,7 @@ $ sudo apt-get update
 $ sudo apt-get install hexeditor
 ```
 ### Windows
-https://github.com/chipmunk-sm/HexEditor/releases
+Release version: https://github.com/chipmunk-sm/HexEditor/releases
 
 ## Home page:
 
