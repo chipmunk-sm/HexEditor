@@ -72,4 +72,5 @@ deploy:
   artifact: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.zip'
   auth_token:
     secure: kHdzxX2T86HQf5j9fiIeK0imu96m0/LHJzdSB/wdrNS4JvzCqsQfAsyuIMembQDr
-
+  on:
+   appveyor_repo_tag: true
