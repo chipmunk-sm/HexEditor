@@ -4,6 +4,12 @@ param(
     [string] $platformId
 )
 
+echo ""
+echo "******************************************************"
+echo "*** Create version info ***"
+echo "******************************************************"
+echo ""
+
 if(!$platformId)
 {
     Throw "platformId not set. Abort"
@@ -13,14 +19,14 @@ echo "`$platformId: $platformId"
 
 
 $directory = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($PSScriptRoot)
-echo $directory
+echo "`$directory: $directory"
 
+echo ""
 echo "******************************************************"
 echo "*** Parse GIT attributes..."
-echo "******************************************************"
 echo ""
 
-$tagPrefix = 'v'
+
 $revision = "HEAD" 
 $LastComm = "Test build"
 $Build = $env:appveyor_build_number
@@ -30,11 +36,11 @@ if (!$FullCommit) {
 	Throw "Failed on get commit for $revision revision"
 }
 
-$LastTag = git -C $directory describe --tags --first-parent --match "$tagPrefix*" $revision 2>$null
+$LastTag = git -C $directory describe --tags --first-parent --match "*" $revision 2>$null
 echo "TAG <$LastTag>"
 if (!$LastTag) 
 {
-	$LastTag = "${tagPrefix}-0.0.0.0"
+	$LastTag = "0.0.0.0"
 	Write-Host "Failed on get tag for revision $revision - defaulting to $LastTag"
 }
 else
@@ -54,17 +60,27 @@ else
 echo "Message: <$LastComm>" 
 
 
-if ($LastTag -match "^${tagPrefix}-?(\d+)\.(\d+)\.(\d+)\.(\d+)") {
+if ($LastTag -match "^[^\d]?[-|\.]?(\d+)\.(\d+)\.(\d+)\.?(\d+)?")
+{
 	$Major = [System.Convert]::ToUInt16($Matches[1])
 	$Minor = [System.Convert]::ToUInt16($Matches[2])
 	$Patch = [System.Convert]::ToUInt16($Matches[3])
-	if(!$Build) {
+	if(!$Build)
+    {
 		$Build = [System.Convert]::ToUInt16($Matches[4])
+	    if(!$Build)
+        {
+            $Build = 0
+        }
 	}
+    #echo "[$LastTag] => [$Major.$Minor.$Patch.$Build]"
 }
-else {
-	Throw "Failed on detected tag. ($LastTag) - invalid tag"
+else
+{
+	Throw "Failed on detected tag. [$LastTag] - invalid tag"
 }
+
+echo "[$LastTag] => [$Major.$Minor.$Patch.$Build]"
 
 $ShortCommit = $FullCommit.SubString(0, 7)
 
@@ -76,9 +92,9 @@ $Minute = (Get-Date).Minute
 $Second = (Get-Date).Second
 $Millisecond = (Get-Date).Millisecond
 
+echo ""
 echo "******************************************************"
 echo "*** Start update ver.h..."
-echo "******************************************************"
 echo ""
 
 $output = "ver.h"
@@ -124,9 +140,9 @@ if ([string]::Compare($new_output_contents, $current_output_contents, $False) -n
 	[System.IO.File]::WriteAllText((Join-Path $directory $output), $new_output_contents)
 }
 
+echo ""
 echo "******************************************************"
 echo "*** Start update Appveyor Build Version..."
-echo "******************************************************"
 echo ""
 
 if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
@@ -134,9 +150,9 @@ if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
     Update-AppveyorBuild -Version "$Major.$Minor.$Build"
 }
 
+echo ""
 echo "******************************************************"
 echo "*** Start update MSI props..."
-echo "******************************************************"
 echo ""
 
 $proj = $(Join-Path $directory "Installer\hexeditor.$platformId.vdproj")
@@ -170,7 +186,8 @@ $fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $bui
 echo "Update $proj"
 [System.IO.File]::WriteAllText( $proj, $fileContent, (New-Object System.Text.UTF8Encoding $True))
 
+echo ""
 echo "******************************************************"
-echo "*** Finish "
+echo "*** All Ok! "
 echo "******************************************************"
 echo ""
