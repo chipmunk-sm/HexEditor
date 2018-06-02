@@ -62,14 +62,14 @@ after_build:
   #- 7z a "%APPVEYOR_BUILD_FOLDER%\%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip" %DEPLOY_INSTALLER_MSI_NAME%/*
 
 artifacts:
-  - path: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.zip'
+  - path: '*.zip'
     name: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%'
   #- path: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip'
   #  name: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer'
 
 deploy:
 - provider: GitHub
-  artifact: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.zip'
+  description: 'New release of hexeditor'
   auth_token:
     secure: kHdzxX2T86HQf5j9fiIeK0imu96m0/LHJzdSB/wdrNS4JvzCqsQfAsyuIMembQDr
   on:
