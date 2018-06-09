@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 
-<Include>
-  <?define MajorVersion="0" ?>
-  <?define MinorVersion="3" ?>
-  <?define BuildVersion="0" ?>
-  <?define Version="0.3.0" ?>
-  <?define UpgradeCode="{ED1DA208-1973-445F-BADD-80B2E7CFE22A}" ?>
-  <?define ProductCode="{EFCDFED5-7193-4E1B-816D-D0601525C8BD}" ?>
-  <?define PackageCode="{55CCCA66-AF3A-41DA-8FC3-054CB57D282B}" ?>
-  <?define ExeProcessName="hexeditor.exe" ?>
-  <?define Name = "HexEditor" ?>
-  <?define Description = "Binary file editor" ?>
-  <?define Manufacturer="chipmunk-sm" ?>
-  <?define CopyrightWarning="License GPL v3.0 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details" ?>
-  <?define ARPTITLE="HexEditor" ?>
-  <?define ARPCONTACT="chipmunk-sm" ?> 
-  <?define ARPHELPLINK="https://github.com/chipmunk-sm/HexEditor" ?>
-  <?define ARPURLINFOABOUT="https://github.com/chipmunk-sm/HexEditor" ?>
-  <?define Platform="x64" ?>
-</Include>
--->
-
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <?include $(sys.CURRENTDIR)Installer\include.wxi ?>
@@ -37,7 +15,7 @@
   <?endif ?>
 
   <Product Id="$(var.ProductCode)"
-      Name="$(var.Name) $(var.Version)"
+      Name="$(var.Name) $(var.Version) $(var.Platform)"
       Language="!(loc.LANG)"
       Version="$(var.Version)"
       Manufacturer="$(var.Manufacturer)"
@@ -49,7 +27,8 @@
 	  Platform="$(var.Platform)"
       Compressed="yes"
       InstallScope="perMachine"
-      Description="$(var.Description)" />
+      Description="$(var.Name) $(var.Version) $(var.Platform)"
+	  Comments="$(var.Comments)" />
 
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
