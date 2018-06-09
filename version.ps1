@@ -1,7 +1,7 @@
 
 
 param(
-    [string] $platformId
+    [string] $platformId = "x64"
 )
 
 echo ""
@@ -142,6 +142,58 @@ if ([string]::Compare($new_output_contents, $current_output_contents, $False) -n
 
 echo ""
 echo "******************************************************"
+echo "*** Start update include.wxi..."
+echo ""
+
+# Upgrade code HAS to be the same for all updates!!!
+$UpgradeCode = "ED1DA208-1973-445F-BADD-80B2E7CFE22A"
+$ProductCode = [guid]::NewGuid().ToString().ToUpper()
+$PackageCode = [guid]::NewGuid().ToString().ToUpper()
+
+$directoryInstaller = $(Join-Path $directory "\Installer\")
+echo "`$directoryInstaller: $directoryInstaller"
+
+$directorySource = $(Join-Path $directory ("\hexeditor." + $platformId)) 
+echo "`$directorySource: $directorySource"
+
+$outputIncludeFile = $(Join-Path $directoryInstaller "include.wxi")
+If (Test-Path $outputIncludeFile)
+{
+	Remove-Item $outputIncludeFile
+}
+
+$new_output_contents_wxi_include = @"
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Automatically-generated file. Do not edit! -->
+<Include>
+  <?define MajorVersion="$Major" ?>
+  <?define MinorVersion="$Minor" ?>
+  <?define BuildVersion="$Build" ?>
+  <?define Version="$Major.$Minor.$Build" ?>
+  <?define UpgradeCode="{$UpgradeCode}" ?>
+  <?define ProductCode="{$ProductCode}" ?>
+  <?define PackageCode="{$PackageCode}" ?>
+  <?define InstallGroupDir="$directorySource" ?>
+  <?define InstallerDirectory="$directoryInstaller" ?>
+  <?define ExeProcessName="hexeditor.exe" ?>
+  <?define Name = "HexEditor" ?>
+  <?define Description = "Binary file editor" ?>
+  <?define Manufacturer="chipmunk-sm" ?>
+  <?define CopyrightWarning="License GPL v3.0 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details" ?>
+  <?define ARPTITLE="HexEditor" ?>
+  <?define ARPCONTACT="chipmunk-sm" ?> 
+  <?define ARPHELPLINK="https://github.com/chipmunk-sm/HexEditor" ?>
+  <?define ARPURLINFOABOUT="https://github.com/chipmunk-sm/HexEditor" ?>
+  <?define Platform="$platformId" ?>
+</Include>
+"@
+
+echo "Update $outputIncludeFile"
+[System.IO.File]::WriteAllText( $outputIncludeFile, $new_output_contents_wxi_include, (New-Object System.Text.UTF8Encoding $True))
+
+
+echo ""
+echo "******************************************************"
 echo "*** Start update Appveyor Build Version..."
 echo ""
 
@@ -168,12 +220,17 @@ $replaceTempl = "00000000-0000-0000-0000-000000000000"
 #"ProductCode" = "8:{00000000-0000-0000-0000-000000000000}"
 $searchTempl = "`"ProductCode`" = `"8:{"
 $pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
-$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, [guid]::NewGuid().ToString().ToUpper())
+$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $ProductCode)
 
 #"PackageCode" = "8:{00000000-0000-0000-0000-000000000000}"
 $searchTempl = "`"PackageCode`" = `"8:{"
 $pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
-$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, [guid]::NewGuid().ToString().ToUpper())
+$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $PackageCode)
+
+#"UpgradeCode" = "8:{00000000-0000-0000-0000-000000000000}"
+$searchTempl = "`"UpgradeCode`" = `"8:{"
+$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
+$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $UpgradeCode)
 
 $buildVersion = "$Major.$Minor.$Build"
 echo "`$buildVersion: $buildVersion"

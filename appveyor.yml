@@ -14,19 +14,9 @@ configuration:
 environment:
   matrix:
   - QTDIR: C:\Qt\5.10.1\msvc2015_64
-    DEPLOY_FOLDER_NAME: hexeditor.x64
-    DEPLOY_INSTALLER_PROJ_NAME: Installer\hexeditor.x64.vdproj
-    DEPLOY_INSTALLER_SLN_NAME: Installer\hexeditor.x64.sln
-    DEPLOY_INSTALLER_MSI_NAME: Installer\Release.x64
-    DEPLOY_INSTALLER_PLATFORMID: "x64"
-    DEVENV_EXE: C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\Common7\IDE\devenv.exe
+    BUILD_PLATFORMID: "x64"
   - QTDIR: C:\Qt\5.10.1\msvc2015
-    DEPLOY_FOLDER_NAME: hexeditor.x86
-    DEPLOY_INSTALLER_PROJ_NAME: Installer\hexeditor.x86.vdproj
-    DEPLOY_INSTALLER_SLN_NAME: Installer\hexeditor.x86.sln
-    DEPLOY_INSTALLER_MSI_NAME: Installer\Release.x86
-    DEPLOY_INSTALLER_PLATFORMID: "x86"
-    DEVENV_EXE: C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\Common7\IDE\devenv.exe
+    BUILD_PLATFORMID: "x86"
 
 install:
   - '%QTDIR%\bin\qtenv2.bat'
@@ -40,32 +30,23 @@ install:
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
 
-before_build:
-  - cmd: echo %DEPLOY_INSTALLER_PROJ_NAME%
-  - ps: powershell "$env:APPVEYOR_BUILD_FOLDER\version.ps1" -platformId "$env:DEPLOY_INSTALLER_PLATFORMID"
+build_script:
+  - ps: powershell "$env:APPVEYOR_BUILD_FOLDER\version.ps1" -platformId "$env:BUILD_PLATFORMID"
   - mkdir %APPVEYOR_BUILD_FOLDER%-build
   - qmake -o %APPVEYOR_BUILD_FOLDER%-build -r -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
-
-build_script:
-  #- qmake hexeditor.pro
   - cd %APPVEYOR_BUILD_FOLDER%-build
   - '%make%'
-
-after_build:
-  - windeployqt %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\hexeditor.exe --dir %DEPLOY_FOLDER_NAME%
-  - cp %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\hexeditor.exe %DEPLOY_FOLDER_NAME%
-  - cp %APPVEYOR_BUILD_FOLDER%\data\hexeditor_logo.png %DEPLOY_FOLDER_NAME%
-  - cp %APPVEYOR_BUILD_FOLDER%\data\hexeditor_logo.ico %DEPLOY_FOLDER_NAME%
-  - 7z a "%APPVEYOR_BUILD_FOLDER%\%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.zip" %DEPLOY_FOLDER_NAME%/*
-  - cmd: echo '%DEVENV_EXE% %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_SLN_NAME% /build Release /project %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_PROJ_NAME% /projectconfig Release'
-  #- cmd: '%DEVENV_EXE% %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_SLN_NAME% /build Release /project %APPVEYOR_BUILD_FOLDER%\%DEPLOY_INSTALLER_PROJ_NAME% /projectconfig Release'
-  #- 7z a "%APPVEYOR_BUILD_FOLDER%\%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip" %DEPLOY_INSTALLER_MSI_NAME%/*
+  - cd %APPVEYOR_BUILD_FOLDER%\Installer
+  - windeployqt %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\hexeditor.exe --dir Installer\Hexeditor
+  - cp %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\hexeditor.exe Installer\Hexeditor
+  - cp %APPVEYOR_BUILD_FOLDER%\data\* Installer\Hexeditor
+  - ps: powershell "$env:APPVEYOR_BUILD_FOLDER\installer.ps1" -platformId "$env:BUILD_PLATFORMID" -cultureId "en-us"
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%BUILD_PLATFORMID%.%APPVEYOR_BUILD_VERSION%.zip"           Installer\Hexeditor\*
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%BUILD_PLATFORMID%.%APPVEYOR_BUILD_VERSION%.Installer.zip" Installer\hexeditor.msi
 
 artifacts:
   - path: '*.zip'
-    name: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%'
-  #- path: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer.zip'
-  #  name: '%DEPLOY_FOLDER_NAME%.%APPVEYOR_BUILD_VERSION%.Installer'
+    name: 'hexeditor.%BUILD_PLATFORMID%.%APPVEYOR_BUILD_VERSION%'
 
 deploy:
 - provider: GitHub

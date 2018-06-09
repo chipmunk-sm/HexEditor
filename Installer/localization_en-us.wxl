@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization" Codepage="1252">
+    <String Id="LANG">1033</String>
+    <String Id="WixUILicenseRtf" Overridable="yes" >gpl-3.0.rtf</String>
+    <String Id="AppNotSupported">This application is not supported on current OS.</String>
+    <String Id="NewerVersionInstalled">A newer version is already installed.</String>  
+    <String Id="CloseAppBeforeContinue">"Please close application before continue setup</String>
+    <String Id="x64VersionRequired">You need to install the 64-bit version of this product on 64-bit Windows.</String>
+</WixLocalization>

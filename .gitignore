@@ -16,3 +16,6 @@ x86
 /hexeditor.x32
 /hexeditor.x64
 /hexeditor.x86
+/Installer/Release.x64
+/Installer/wix
+/*.wixobj
