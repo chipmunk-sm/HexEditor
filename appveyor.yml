@@ -40,11 +40,10 @@ build_script:
   - windeployqt %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\hexeditor.exe --dir Installer\Hexeditor
   - cp %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\hexeditor.exe Installer\Hexeditor
   - cp -a %APPVEYOR_BUILD_FOLDER%\data\. Installer\Hexeditor
-  - dir 
-  - dir Installer
   - ps: powershell "$env:APPVEYOR_BUILD_FOLDER\installer.ps1" -platformId "$env:BUILD_PLATFORMID" -cultureId "en-us"
-  - 7z a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%BUILD_PLATFORMID%.%APPVEYOR_BUILD_VERSION%.zip"           Installer\Hexeditor\*
-  - 7z a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%BUILD_PLATFORMID%.%APPVEYOR_BUILD_VERSION%.Installer.zip" Installer\hexeditor.msi
+  - cd %APPVEYOR_BUILD_FOLDER%\Installer
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%BUILD_PLATFORMID%.%APPVEYOR_BUILD_VERSION%.zip"           Hexeditor\*
+  - 7z a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%BUILD_PLATFORMID%.%APPVEYOR_BUILD_VERSION%.Installer.zip" hexeditor.msi
 
 artifacts:
   - path: '*.zip'
