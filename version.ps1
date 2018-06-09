@@ -202,46 +202,46 @@ if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
     Update-AppveyorBuild -Version "$Major.$Minor.$Build"
 }
 
-echo ""
-echo "******************************************************"
-echo "*** Start update MSI props..."
-echo ""
+#echo ""
+#echo "******************************************************"
+#echo "*** Start update MSI props..."
+#echo ""
 
-$proj = $(Join-Path $directory "Installer\hexeditor.$platformId.vdproj")
-echo "`$proj: $proj"
-$fileContent = Get-Content -Path "$proj" -Raw -Encoding UTF8
-if(!$fileContent)
-{
-    Throw "Failed get content from `"$proj`"."
-}
+#$proj = $(Join-Path $directory "Installer\hexeditor.$platformId.vdproj")
+#echo "`$proj: $proj"
+#$fileContent = Get-Content -Path "$proj" -Raw -Encoding UTF8
+#if(!$fileContent)
+#{
+#    Throw "Failed get content from `"$proj`"."
+#}
 
-$replaceTempl = "00000000-0000-0000-0000-000000000000"
+#$replaceTempl = "00000000-0000-0000-0000-000000000000"
 
-#"ProductCode" = "8:{00000000-0000-0000-0000-000000000000}"
-$searchTempl = "`"ProductCode`" = `"8:{"
-$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
-$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $ProductCode)
+##"ProductCode" = "8:{00000000-0000-0000-0000-000000000000}"
+#$searchTempl = "`"ProductCode`" = `"8:{"
+#$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
+#$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $ProductCode)
 
-#"PackageCode" = "8:{00000000-0000-0000-0000-000000000000}"
-$searchTempl = "`"PackageCode`" = `"8:{"
-$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
-$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $PackageCode)
+##"PackageCode" = "8:{00000000-0000-0000-0000-000000000000}"
+#$searchTempl = "`"PackageCode`" = `"8:{"
+#$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
+#$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $PackageCode)
 
-#"UpgradeCode" = "8:{00000000-0000-0000-0000-000000000000}"
-$searchTempl = "`"UpgradeCode`" = `"8:{"
-$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
-$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $UpgradeCode)
+##"UpgradeCode" = "8:{00000000-0000-0000-0000-000000000000}"
+#$searchTempl = "`"UpgradeCode`" = `"8:{"
+#$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
+#$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $UpgradeCode)
 
-$buildVersion = "$Major.$Minor.$Build"
-echo "`$buildVersion: $buildVersion"
-#"ProductVersion" = "8:1.0.0"
-$searchTempl = "`"ProductVersion`" = `"8:"
-$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
-$replaceTempl = "0.0.0"
-$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $buildVersion)
+#$buildVersion = "$Major.$Minor.$Build"
+#echo "`$buildVersion: $buildVersion"
+##"ProductVersion" = "8:1.0.0"
+#$searchTempl = "`"ProductVersion`" = `"8:"
+#$pos = $fileContent.IndexOf($searchTempl) + $searchTempl.Length
+#$replaceTempl = "0.0.0"
+#$fileContent = $fileContent.Remove($pos, $replaceTempl.Length).Insert($pos, $buildVersion)
 
-echo "Update $proj"
-[System.IO.File]::WriteAllText( $proj, $fileContent, (New-Object System.Text.UTF8Encoding $True))
+#echo "Update $proj"
+#[System.IO.File]::WriteAllText( $proj, $fileContent, (New-Object System.Text.UTF8Encoding $True))
 
 echo ""
 echo "******************************************************"
