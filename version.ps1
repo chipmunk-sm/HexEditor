@@ -153,9 +153,6 @@ $PackageCode = [guid]::NewGuid().ToString().ToUpper()
 $directoryInstaller = $(Join-Path $directory "\Installer\")
 echo "`$directoryInstaller: $directoryInstaller"
 
-$directorySource = $(Join-Path $directory ("\hexeditor." + $platformId)) 
-echo "`$directorySource: $directorySource"
-
 $outputIncludeFile = $(Join-Path $directoryInstaller "include.wxi")
 If (Test-Path $outputIncludeFile)
 {
@@ -173,8 +170,6 @@ $new_output_contents_wxi_include = @"
   <?define UpgradeCode="{$UpgradeCode}" ?>
   <?define ProductCode="{$ProductCode}" ?>
   <?define PackageCode="{$PackageCode}" ?>
-  <?define InstallGroupDir="$directorySource" ?>
-  <?define InstallerDirectory="$directoryInstaller" ?>
   <?define ExeProcessName="hexeditor.exe" ?>
   <?define Name = "HexEditor" ?>
   <?define Description = "Binary file editor" ?>

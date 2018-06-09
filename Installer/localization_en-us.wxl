@@ -4,6 +4,6 @@
     <String Id="WixUILicenseRtf" Overridable="yes" >gpl-3.0.rtf</String>
     <String Id="AppNotSupported">This application is not supported on current OS.</String>
     <String Id="NewerVersionInstalled">A newer version is already installed.</String>  
-    <String Id="CloseAppBeforeContinue">"Please close application before continue setup</String>
-    <String Id="x64VersionRequired">You need to install the 64-bit version of this product on 64-bit Windows.</String>
+    <String Id="CloseAppBeforeContinue">Please close application before continue setup</String>
+    <String Id="x86VersionRequired">You need to install the 32-bit version of this product on 32-bit Windows.</String>
 </WixLocalization>

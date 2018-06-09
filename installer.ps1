@@ -53,12 +53,15 @@ If (Test-Path $outputMsiFile)
 	Remove-Item $outputMsiFile
 }
 
+echo ""
 echo "----- heat"
 & $(Join-Path $wixBin "heat.exe") dir "$directorySource" -cg InstallGroup -dr INSTALLLOCATION -scom -sreg -gg -sfrag -srd -out $outputFragmentFile
 
+echo ""
 echo "----- candle" 
-& $(Join-Path $wixBin "candle.exe") $outputMainFile $outputFragmentFile -ext WixUIExtension -ext WiXUtilExtension
+& $(Join-Path $wixBin "candle.exe") $outputMainFile $outputFragmentFile -ext WixUIExtension -ext WiXUtilExtension -arch $platformId
 
+echo ""
 echo "----- light"
 & $(Join-Path $wixBin "light.exe") -out $outputMsiFile -b $directorySource main.wixobj sourceFragment.wixobj -cultures:$cultureId -loc $localizationFile  -ext WixUIExtension -ext WiXUtilExtension
 
