@@ -142,6 +142,7 @@
         <Directory Id="ProgramMenuFolderApp" Name="$(var.Name)">
           <Component Id="ApplicationProgramMenuShortcut" Guid="*">
             <Shortcut Id="ProgramSC" Advertise="no" Name="$(var.Name)" Target="[INSTALLLOCATION]$(var.ExeProcessName)" Icon="hexeditor_icon.exe" IconIndex="0" WorkingDirectory="INSTALLLOCATION"/>
+            <RemoveFolder Id="ProgramMenuFolderApp" On="uninstall"/>
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.Name)" Name="ProgramSC" Value="1" Type="integer" KeyPath="yes" />
           </Component>
         </Directory>
