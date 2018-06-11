@@ -129,6 +129,12 @@ cd "%APPVEYOR_BUILD_FOLDER%-build"
 %make%
 if %ERRORLEVEL% NEQ 0 GOTO error
 
+@echo. 
+@echo ******************************************************
+@echo *** Collect files to "%APPVEYOR_BUILD_FOLDER%\Installer\Hexeditor\" 
+@echo ******************************************************
+@echo.
+
 cd "%APPVEYOR_BUILD_FOLDER%"
 
 windeployqt "%APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION%\hexeditor.exe" --dir Installer\Hexeditor
