@@ -6,7 +6,7 @@ param(
 
 echo ""
 echo "******************************************************"
-echo "*** Create version info ***"
+echo "*** Start 'create version info' ***"
 echo "******************************************************"
 echo ""
 
@@ -22,14 +22,50 @@ $directory = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPS
 echo "`$directory: $directory"
 
 echo ""
-echo "******************************************************"
+echo "***"
 echo "*** Parse GIT attributes..."
+echo "***"
 echo ""
 
 
 $revision = "HEAD" 
 $LastComm = "Test build"
-$Build = $env:appveyor_build_number
+
+if($env:appveyor_build_number)
+{
+    $Build = $env:appveyor_build_number
+}
+else
+{
+    $versionFile = $(Join-Path $directory "ver.h")
+    echo "`$versionFile: $versionFile"
+    $fileContent = Get-Content -Path "$versionFile" -Raw -Encoding UTF8
+    if($fileContent)
+    {
+        $searchTempl = "#define VER_BUILD "
+        $posStart = $fileContent.IndexOf($searchTempl) 
+        if(-1 -ne $posStart)
+        {
+            $posStart += $searchTempl.Length
+            $posEnd = $fileContent.IndexOf("`n", $posStart) 
+            if(-1 -eq $posEnd)
+            {
+                $posEnd = $fileContent.IndexOf("`r", $posStart) 
+            }
+            if(-1 -ne $posEnd)
+            {
+                $posEnd -= 1
+                $newBuildNum = $fileContent.Substring($posStart, $posEnd - $posStart)
+                $Build = 1 + $newBuildNum
+                echo ""
+                echo "***"
+                echo "*** New Build Num = $Build"
+                echo "***"
+                echo ""
+            }
+        }
+    }
+}
 
 $FullCommit = git -C $directory rev-parse $revision 2>$null
 if (!$FullCommit) {
@@ -37,7 +73,9 @@ if (!$FullCommit) {
 }
 
 $LastTag = git -C $directory describe --tags --first-parent --match "*" $revision 2>$null
+
 echo "TAG <$LastTag>"
+
 if (!$LastTag) 
 {
 	$LastTag = "0.0.0.0"
@@ -93,8 +131,9 @@ $Second = (Get-Date).Second
 $Millisecond = (Get-Date).Millisecond
 
 echo ""
-echo "******************************************************"
+echo "***"
 echo "*** Start update ver.h..."
+echo "***"
 echo ""
 
 $output = "ver.h"
@@ -141,8 +180,9 @@ if ([string]::Compare($new_output_contents, $current_output_contents, $False) -n
 }
 
 echo ""
-echo "******************************************************"
+echo "***"
 echo "*** Start update include.wxi..."
+echo "***"
 echo ""
 
 # Upgrade code HAS to be the same for all updates!!!
@@ -188,18 +228,27 @@ echo "Update $outputIncludeFile"
 
 
 echo ""
-echo "******************************************************"
+echo "***"
 echo "*** Start update Appveyor Build Version..."
+echo "***"
 echo ""
 
 if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
 {
     Update-AppveyorBuild -Version "$Major.$Minor.$Build"
 }
+else
+{
+    $env:APPVEYOR_BUILD_VERSION="$Major.$Minor.$Build"
+    [System.IO.File]::WriteAllText( $(Join-Path $directory "tmpver.txt"), "$Major.$Minor.$Build", [Text.Encoding]::ASCII)
+}
+  
+echo "Version $Major.$Minor.$Build set to APPVEYOR_BUILD_VERSION = $env:APPVEYOR_BUILD_VERSION"
 
 #echo ""
-#echo "******************************************************"
+#echo "***"
 #echo "*** Start update MSI props..."
+#echo "***"
 #echo ""
 
 #$proj = $(Join-Path $directory "Installer\hexeditor.$platformId.vdproj")
@@ -240,6 +289,5 @@ if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
 
 echo ""
 echo "******************************************************"
-echo "*** All Ok! "
+echo "***  End 'create version info' "
 echo "******************************************************"
-
