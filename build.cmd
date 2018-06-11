@@ -83,7 +83,7 @@ if %ERRORLEVEL% NEQ 0 GOTO error
 @echo ******************************************************
 @echo.
 
-if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
+if %QTDIR:_64=%==%QTDIR% (set ARCH=x86) else set ARCH=x64
 @echo ARCH=%ARCH%
 
 @echo.
