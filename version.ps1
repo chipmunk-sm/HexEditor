@@ -237,13 +237,14 @@ if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
 {
     Update-AppveyorBuild -Version "$Major.$Minor.$Build"
 }
-else
-{
-    $env:APPVEYOR_BUILD_VERSION="$Major.$Minor.$Build"
-    [System.IO.File]::WriteAllText( $(Join-Path $directory "tmpver.txt"), "$Major.$Minor.$Build", [Text.Encoding]::ASCII)
-}
+
+$env:APPVEYOR_BUILD_VERSION="$Major.$Minor.$Build"
+
+$tmpVer = $(Join-Path $directory "tmpver.txt")
+
+[System.IO.File]::WriteAllText($tmpVer, "$Major.$Minor.$Build", [Text.Encoding]::ASCII)
   
-echo "Version $Major.$Minor.$Build set to APPVEYOR_BUILD_VERSION = $env:APPVEYOR_BUILD_VERSION"
+echo "Write version $Major.$Minor.$Build to $tmpVer"
 
 #echo ""
 #echo "***"
