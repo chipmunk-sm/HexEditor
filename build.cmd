@@ -149,10 +149,10 @@ cd "%APPVEYOR_BUILD_FOLDER%\Installer"
 @echo ******************************************************
 @echo.
 
-7z.exe a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%ARCH%.%APPVEYOR_BUILD_VERSION%.zip" "Hexeditor\*"
+7z.exe a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%WINVER%.%ARCH%.%APPVEYOR_BUILD_VERSION%.zip" "Hexeditor\*"
 if %ERRORLEVEL% NEQ 0 GOTO error
 
-7z.exe a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%ARCH%.%APPVEYOR_BUILD_VERSION%.Installer.zip" hexeditor.msi
+7z.exe a "%APPVEYOR_BUILD_FOLDER%\hexeditor.%WINVER%.%ARCH%.%APPVEYOR_BUILD_VERSION%.Installer.zip" hexeditor.msi
 if %ERRORLEVEL% NEQ 0 GOTO error
   
 goto exit
