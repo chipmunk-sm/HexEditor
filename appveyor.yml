@@ -1,16 +1,20 @@
  
 version: 0.0.{build}
 
-image:
-- Visual Studio 2015
-- Visual Studio 2017
-
 environment:
   matrix:
   - QTDIR: C:\Qt\5.10.1\msvc2015_64
     BUILD_PLATFORMID: "x64"
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    WINVER: Win8
   - QTDIR: C:\Qt\5.10.1\msvc2015
     BUILD_PLATFORMID: "x86"
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    WINVER: Win8
+  - QTDIR: C:\Qt\5.10.1\msvc2017_64
+    BUILD_PLATFORMID: "x64"
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    WINVER: Win10
 
 build_script:
   - build.cmd
