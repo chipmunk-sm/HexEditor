@@ -10,32 +10,15 @@ if [%APPVEYOR_BUILD_FOLDER%] == [] set APPVEYOR_BUILD_FOLDER=%cd%
 
 if [%QTDIR%] == [] set QTDIR=D:\Qt\5.10.1\msvc2015_64
 if [%QTDIR%] == [] set QTDIR=D:\Qt\5.10.1\msvc2015
+if [%QTDIR%] == [] set QTDIR=D:\Qt\5.10.1\msvc2017_64
 
 if [%CONFIGURATION%] == [] set CONFIGURATION=Release
 
 rem if [%APPVEYOR_BUILD_VERSION%] == [] set APPVEYOR_BUILD_VERSION=0.0.0
 
-if "%VCPATH14%" == "" (
-    if EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" (
-       set VCPATH14="%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC"
-    ) else  (
-       set VCPATH14="D:\MVS2015\VC"
-    )
-)
-
-if "%VCPATH15%" == "" (
-    if EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio 15.0\VC\vcvarsall.bat" (
-       set VCPATH15="%ProgramFiles(x86)%\Microsoft Visual Studio 15.0\VC"
-    ) else (
-       set VCPATH15="D:\MVS2017\VC"
-    )
-)
-
 @echo CONFIGURATION = %CONFIGURATION%
 @echo APPVEYOR_BUILD_FOLDER = %APPVEYOR_BUILD_FOLDER%
 @echo QTDIR = %QTDIR%
-@echo VCPATH14 = %VCPATH14%
-@echo VCPATH15 = %VCPATH15%
 
 @echo.
 @echo ******************************************************
@@ -95,8 +78,17 @@ if %QTDIR:_64=%==%QTDIR% (set ARCH=x86) else set ARCH=x64
 if %QTDIR:msvc=%==%QTDIR% g++ --version
 if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
 if %QTDIR:msvc=%==%QTDIR% %make% --version
-if not %QTDIR:msvc2015=%==%QTDIR% call %VCPATH14%\vcvarsall.bat %ARCH%
-if not %QTDIR:msvc2017=%==%QTDIR% call %VCPATH15%\vcvarsall.bat %ARCH%
+
+if %QTDIR:msvc2015=%==%QTDIR% goto skip14
+if EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
+if EXIST "D:\MVS2015\VC\vcvarsall.bat" call "D:\MVS2015\VC\vcvarsall.bat" %ARCH%
+:skip14
+
+if %QTDIR:msvc2017=%==%QTDIR% goto skip15
+if EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %ARCH%
+if EXIST "D:\MVS2017\VC\Auxiliary\Build\vcvarsall.bat" call "D:\MVS2017\VC\Auxiliary\Build\vcvarsall.bat" %ARCH%
+:skip15
+
 if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
 if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
 if %ERRORLEVEL% NEQ 0 GOTO error
@@ -167,8 +159,8 @@ goto exit
 
 :error
     @echo Failed!.
-	rem cd "%APPVEYOR_BUILD_FOLDER%"
-	rem exit 1
+	cd "%APPVEYOR_BUILD_FOLDER%"
+	exit 1
 :exit  
 cd "%APPVEYOR_BUILD_FOLDER%"
 rem pause
