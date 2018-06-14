@@ -125,8 +125,20 @@
     <QtMoc Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <ClInclude Include="ver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="versionhelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    
+    
+    
+    
+    
+    
     
     
     
@@ -191,6 +203,9 @@
     <None Include="README.md">
       <Filter>Distribution Files</Filter>
     </None>
+    <None Include="appveyor.yml">
+      <Filter>Distribution Files</Filter>
+    </None>
     <None Include="debian\changelog">
       <Filter>Distribution Files</Filter>
     </None>
@@ -215,5 +230,11 @@
     <None Include="debian\rules">
       <Filter>Distribution Files</Filter>
     </None>
+    <None Include="version.ps1">
+      <Filter>Distribution Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="hexeditor.rc" />
   </ItemGroup>
 </Project>

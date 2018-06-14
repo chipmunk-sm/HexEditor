@@ -232,6 +232,8 @@
     </QtMoc>
     <QtMoc Include="mainwindow.h">
     </QtMoc>
+    <ClInclude Include="ver.h" />
+    <ClInclude Include="versionhelper.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -272,6 +274,7 @@
     <None Include="ISSUE_TEMPLATE.md" />
     <None Include="LICENSE" />
     <None Include="README.md" />
+    <None Include="appveyor.yml" />
     <None Include="debian\changelog" />
     <None Include="debian\compat" />
     <None Include="debian\control" />
@@ -280,6 +283,10 @@
     <None Include="data\hexeditor.desktop" />
     <None Include="debian\hexeditor.install" />
     <None Include="debian\rules" />
+    <None Include="version.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="hexeditor.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
