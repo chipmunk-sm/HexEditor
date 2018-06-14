@@ -222,10 +222,11 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
     docPath = settings.value(DEFCFG_CFG_SAVEDIR, docPath).toString();
 
     QStringList filters;
-    filters << "ALL (*.*)";
+    filters << "ALL (*)";
 
     QFileDialog dialog(this, QObject::tr("Save as..."), docPath);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
+	dialog.setDefaultSuffix("txt");
     dialog.setNameFilters(filters);
     dialog.selectFile(m_filename);
 
