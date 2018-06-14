@@ -55,16 +55,6 @@ void DialogSaveToFile::DumpSelectionAsText(const QString &inFile, const QString 
         try
         {
             pThis->RunDumpThread();
-
-            pThis->ui->progressBar->hide();
-            pThis->ui->pushButton_cancel->hide();
-            pThis->ui->label_result->show();
-            pThis->ui->pushButton_exit->show();
-
-            if(pThis->m_error.isEmpty())
-                pThis->ui->label_result->setText(tr("Successfully saved"));
-            else
-                pThis->ui->label_result->setText(pThis->m_error);
         }
         catch(std::exception  const&e)
         {
@@ -74,7 +64,19 @@ void DialogSaveToFile::DumpSelectionAsText(const QString &inFile, const QString 
         {
             pThis->m_error = QObject::tr("Unexpected exception");
         }
+
+		QMetaObject::invokeMethod(pThis->ui->progressBar,       "hide", Qt::QueuedConnection);
+		QMetaObject::invokeMethod(pThis->ui->pushButton_cancel, "hide", Qt::QueuedConnection);
+		QMetaObject::invokeMethod(pThis->ui->label_result,      "show", Qt::QueuedConnection);
+		QMetaObject::invokeMethod(pThis->ui->pushButton_exit,   "show", Qt::QueuedConnection);
+
+		if (pThis->m_error.isEmpty())
+			QMetaObject::invokeMethod(pThis->ui->label_result, "setText", Qt::QueuedConnection, Q_ARG(const QString&, tr("Successfully saved")));
+		else
+			QMetaObject::invokeMethod(pThis->ui->label_result, "setText", Qt::QueuedConnection, Q_ARG(const QString&, pThis->m_error));
+
         pThis->m_exit = true;
+
     };
     (std::thread(OpenProcess, this)).detach();
 }
