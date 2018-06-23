@@ -50,8 +50,8 @@ public:
     QFile *GetFileHandler();
     QFile *GetPropertyFileHandler();
     void UpdateSelectionModelEx(bool reset) const;
-
     int GetColHex() const {return m_cols_hex;}
+    void SelectPosition(int64_t pos, int64_t len);
 private:
 
     mutable QFile m_file;

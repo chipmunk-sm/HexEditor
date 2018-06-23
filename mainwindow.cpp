@@ -9,9 +9,11 @@
 #include <QStandardPaths>
 #include <QDebug>
 #include <QFileInfo>
+#include <QStandardItemModel>
 
 #include "cconfigdialog.h"
 #include "chexviewselectionmodel.h"
+#include "csearch.h"
 #include "defines.h"
 #include "dialogsavetofile.h"
 
@@ -40,6 +42,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, &MainWindow::callCloseConfig,       this, &MainWindow::CloseConfig);
     connect(this, &MainWindow::callUpdateConfig,      this, &MainWindow::UpdateConfig);
+
+    QWidget *horizontalLineWidget = new QWidget(this);
+    horizontalLineWidget->setFixedHeight(1);
+    horizontalLineWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    //horizontalLineWidget->setStyleSheet(QString("background-color: white;"));
+    //horizontalLineWidget->setStyleSheet(QString("background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 cyan, stop:1 blue);"));
+    horizontalLineWidget->setStyleSheet(QString("background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 Whitesmoke, stop:1 Darkslategray);"));
+
+    m_ui->dockWidget_control->setTitleBarWidget(horizontalLineWidget);
+
+    m_ui->treeView_searchResult->setModel(new QStandardItemModel(0, 1, this));
+    m_ui->treeView_searchResult->model()->setHeaderData(0, Qt::Horizontal, tr("Position"));
+
+    connect(m_ui->treeView_searchResult->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::searchModelSelectionChanged);
+
+    m_ui->progressBar_search->setVisible(false);
+    m_ui->pushButton_abortSearch->setVisible(false);
 
 }
 
@@ -72,8 +91,9 @@ void MainWindow::closeEvent(QCloseEvent *  /*event*/)
     {
         QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
         settings.setValue(DEFCFG_MAINWINDOWGEOM, saveGeometry());
-        settings.setValue(DEFCFG_MAINWINDOWSPLITS, m_ui->splitter->saveState());
-        settings.setValue(DEFCFG_PROPRTYTABS, m_ui->propertyView->header()->saveState());
+        settings.setValue(DEFCFG_MAINWINDOWSTATE, saveState());
+        //settings.setValue(DEFCFG_MAINWINDOWSPLITS, m_ui->splitter->saveState());
+        //settings.setValue(DEFCFG_PROPRTYTABS, m_ui->propertyView->header()->saveState());
     }
     catch(...)
     {
@@ -93,9 +113,17 @@ void MainWindow::showEvent(QShowEvent *event)
         {
             QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
             m_ui->horizontalSlider_Zoom->setVisible(!settings.value(DEFCFG_CFG_HIDE_ZOOM, true).toBool());
-            restoreGeometry(settings.value(DEFCFG_MAINWINDOWGEOM,"").toByteArray());
-            m_ui->splitter->restoreState(settings.value(DEFCFG_MAINWINDOWSPLITS,"").toByteArray());
-            m_ui->propertyView->header()->restoreState(settings.value(DEFCFG_PROPRTYTABS,"").toByteArray());
+            this->restoreGeometry(settings.value(DEFCFG_MAINWINDOWGEOM,"").toByteArray());
+            this->restoreState(settings.value(DEFCFG_MAINWINDOWSTATE).toByteArray());
+            //m_ui->splitter->restoreState(settings.value(DEFCFG_MAINWINDOWSPLITS,"").toByteArray());
+            //m_ui->propertyView->header()->restoreState(settings.value(DEFCFG_PROPRTYTABS,"").toByteArray());
+            QList<QDockWidget*> docks = this->findChildren<QDockWidget*>();
+            for(int i = 0; i < docks.size(); i++)
+            {
+                //docks.at(i)->raise();
+                docks.at(i)->setFloating(false);
+                docks.at(i)->show();
+            }
         }
     }
     catch(...)
@@ -239,7 +267,7 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
             outFile = dialog.selectedFiles().first();
             if(outFile.compare(m_PathFilename,Qt::CaseInsensitive) == 0)
             {
-                QMessageBox::critical(this, QObject::tr("Save as..."), QObject::tr("Access denied"), QMessageBox::Ok);
+                QMessageBox::critical(this, QObject::tr("Save as..."), QObject::tr("Access denied\n") + m_PathFilename, QMessageBox::Ok);
             }
             else
             {
@@ -300,6 +328,51 @@ void MainWindow::on_pushButton_apply_clicked()
     m_pchexview->UpdateTable(false);
 }
 
+void MainWindow::on_pushButton_search_clicked()
+{
+    m_ui->lineEdit_searchtext->setEnabled(false);
+    m_ui->pushButton_search->setEnabled(false);
+    m_ui->progressBar_search->setVisible(true);
+    m_ui->pushButton_abortSearch->setVisible(true);
 
+    auto res =  m_ui->lineEdit_searchtext->text().toLatin1();
 
+    CSearch search(this);
+    m_pcsearch = &search;
+    search.Search(res.data(),
+                  res.length(),
+                  m_PathFilename,
+                  qobject_cast<QStandardItemModel*>(m_ui->treeView_searchResult->model()),
+                  m_ui->progressBar_search);
 
+    m_ui->lineEdit_searchtext->setEnabled(true);
+    m_ui->pushButton_search->setEnabled(true);
+    m_ui->progressBar_search->setVisible(false);
+    m_ui->pushButton_abortSearch->setVisible(false);
+    m_pcsearch = nullptr;
+
+}
+
+void MainWindow::on_pushButton_abortSearch_clicked()
+{
+    if(m_pcsearch)
+        m_pcsearch->Abort();
+}
+
+void MainWindow::searchModelSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+{
+
+    QModelIndexList items = selected.indexes();
+    foreach (auto &tmpindex, items)
+    {
+        auto val = tmpindex.data().toString();
+        auto list = val.split(' ', QString::SplitBehavior::SkipEmptyParts);
+        foreach (auto &tmpstr, list)
+        {
+            auto tmpv = tmpstr.toLongLong();
+            m_pchexview->SelectPosition(tmpv,1);
+            break;
+        }
+        break;
+    }
+}

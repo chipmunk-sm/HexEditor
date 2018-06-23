@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include "ccfontsize.h"
 #include "chexviewmodel.h"
+#include "csearch.h"
 
 namespace Ui {
     class MainWindow;
@@ -23,6 +24,7 @@ private:
     Ui::MainWindow *m_ui;
     CHexViewModel  *m_pchexview = nullptr;
     CEditView      *m_pceditview = nullptr;
+    CSearch        *m_pcsearch = nullptr;
 
     CCFontSize     m_ccfontsize;
     QString        m_filename;
@@ -30,6 +32,7 @@ private:
 
     void UpdateConfig();
     void CloseConfig();
+    void searchModelSelectionChanged(const QItemSelection &selected, const QItemSelection &);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -43,6 +46,8 @@ private slots:
     void on_pushButton_config_clicked();
     void on_pushButton_SaveSelected_clicked();
     void on_pushButton_apply_clicked();
+    void on_pushButton_search_clicked();
+    void on_pushButton_abortSearch_clicked();
 
 signals:
     void callUpdateConfig();

@@ -10,6 +10,8 @@
 #include <QTextStream>
 #include <thread>
 
+#include "cmemorymappedfile.h"
+
 DialogSaveToFile::DialogSaveToFile(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSaveToFile)
@@ -132,7 +134,7 @@ void DialogSaveToFile::RunDumpThread()
     if(height < 1)
         return;
 
-    buffer.resize(static_cast<uint64_t>(stride));
+    buffer.resize(static_cast<uint64_t>(m_cols_hex));
 
     if (!outFile.open(QIODevice::ReadWrite|QFile::Truncate))
     {
@@ -175,7 +177,7 @@ void DialogSaveToFile::RunDumpThread()
             return;
         }
 
-        auto len = inFile.read(reinterpret_cast<char*>(buffer.data()), stride );
+        auto len = inFile.read(reinterpret_cast<char*>(buffer.data()), static_cast<int64_t>(buffer.size()));
         if(len < 0)
             continue;
 
@@ -184,11 +186,11 @@ void DialogSaveToFile::RunDumpThread()
             memset(buffer.data() + len, 0, buffer.size() - static_cast<uint64_t>(len));
         }
 
-        for(int64_t colIdx = 0; colIdx < stride; colIdx++)
+        for(int64_t colIdx = m_left; colIdx < stride + m_left; colIdx++)
         {
             if(colIdx >= m_cols_hex)
             {
-                auto col = colIdx - m_cols_hex;
+                auto col = colIdx  - m_cols_hex;
                 auto charx = buffer[static_cast<uint64_t>(col)];
                 if(charx <= 0x1f)
                     charx = '.';

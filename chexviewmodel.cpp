@@ -320,7 +320,7 @@ QVariant CHexViewModel::headerData(int section, Qt::Orientation orientation, int
         if(section >= (m_pVerticalScrollBarHexView->maximum() + rowCount(QModelIndex())))
             return "";
 
-        auto val = static_cast<uint64_t>(section) * m_cols_hex;
+        auto val = static_cast<uint64_t>(section) * static_cast<uint64_t>(m_cols_hex);
         QString str("   ");
         str += QString("%1").arg(val, 8, 16, QLatin1Char('0')).toUpper();
         str += "   ";
@@ -368,6 +368,17 @@ void CHexViewModel::UpdateSelectionModelEx(bool reset) const
         SetInfo(pos);
         m_pCPropertyView->DecodeValue(pos);
     }
+}
+
+void CHexViewModel::SelectPosition(int64_t pos, int64_t len)
+{
+    auto scrollRow = pos / m_cols_hex;
+    auto startOffset = pos - scrollRow * m_cols_hex;
+    m_pVerticalScrollBarHexView->setValue(scrollRow);
+
+    //TODO: highlight selection
+
+
 }
 
 void CHexViewModel::UpdateSelectionModel() const

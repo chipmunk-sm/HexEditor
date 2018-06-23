@@ -20,7 +20,9 @@ SOURCES += \
     chexviewselectionmodel.cpp \
     chexviewverticalheader.cpp \
     dialogsavetofile.cpp \
-    ceditview.cpp
+    ceditview.cpp \
+    csearch.cpp \
+    cmemorymappedfile.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -35,7 +37,9 @@ HEADERS += \
     dialogsavetofile.h \
     ceditview.h \
     ver.h \
-    versionhelper.h
+    versionhelper.h \
+    csearch.h \
+    cmemorymappedfile.h
 
 FORMS += \
         mainwindow.ui \
