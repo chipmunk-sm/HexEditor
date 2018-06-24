@@ -69,6 +69,7 @@ private:
     QColor                      m_color_overwrite;
     QColor                      m_color_insert;
     QColor                      m_color_delete;
+    QColor                      m_color_search;
 
     int m_cols_hex = COLS_HEX;
 

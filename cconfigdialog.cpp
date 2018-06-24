@@ -109,6 +109,7 @@ void CConfigDialog::LoadConfig()
     LoadColor(m_ui->label_color_overwrite, DEFCFG_CLR_OVERWRITE, DEFCFG_CLR_OVERWRITE_DEF);
     LoadColor(m_ui->label_color_insert,    DEFCFG_CLR_INSERT, DEFCFG_CLR_INSERT_DEF);
     LoadColor(m_ui->label_color_delete,    DEFCFG_CLR_DELETE, DEFCFG_CLR_DELETE_DEF);
+    LoadColor(m_ui->label_color_search,    DEFCFG_CLR_SEARCH, DEFCFG_CLR_SEARCH_DEF);
 }
 
 void CConfigDialog::on_pushButton_restore_default_clicked()
@@ -120,6 +121,7 @@ void CConfigDialog::on_pushButton_restore_default_clicked()
     SaveColor(m_ui->label_color_overwrite, DEFCFG_CLR_OVERWRITE, DEFCFG_CLR_OVERWRITE_DEF);
     SaveColor(m_ui->label_color_insert,    DEFCFG_CLR_INSERT,    DEFCFG_CLR_INSERT_DEF);
     SaveColor(m_ui->label_color_delete,    DEFCFG_CLR_DELETE,    DEFCFG_CLR_DELETE_DEF);
+    SaveColor(m_ui->label_color_search,    DEFCFG_CLR_SEARCH,    DEFCFG_CLR_SEARCH_DEF);
 
     m_ccfontsize.Reset();
 
@@ -171,4 +173,9 @@ void CConfigDialog::on_pushButton_color_insert_clicked()
 void CConfigDialog::on_pushButton_color_delete_clicked()
 {
     ColorUpdateDialog(DEFCFG_CLR_DELETE);
+}
+
+void CConfigDialog::on_pushButton_color_search_clicked()
+{
+    ColorUpdateDialog(DEFCFG_CLR_SEARCH);
 }

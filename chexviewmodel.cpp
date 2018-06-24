@@ -77,6 +77,7 @@ void CHexViewModel::UpdateColorConfig()
     m_color_overwrite = settings.value(DEFCFG_CLR_OVERWRITE, DEFCFG_CLR_OVERWRITE_DEF).value<QColor>();
     m_color_insert    = settings.value(DEFCFG_CLR_INSERT,    DEFCFG_CLR_INSERT_DEF).value<QColor>();
     m_color_delete    = settings.value(DEFCFG_CLR_DELETE,    DEFCFG_CLR_DELETE_DEF).value<QColor>();
+    m_color_search    = settings.value(DEFCFG_CLR_SEARCH,    DEFCFG_CLR_SEARCH_DEF).value<QColor>();
 }
 
 QFile *CHexViewModel::GetFileHandler()

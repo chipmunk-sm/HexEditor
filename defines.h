@@ -29,10 +29,12 @@
 #define DEFCFG_CLR_OVERWRITE "clr/OVERWRITE"
 #define DEFCFG_CLR_INSERT    "clr/INSERT"
 #define DEFCFG_CLR_DELETE    "clr/DELETE"
+#define DEFCFG_CLR_SEARCH    "clr/SEARCH"
 
 #define DEFCFG_CLR_OVERWRITE_DEF  QColor(  0,   0, 240)
 #define DEFCFG_CLR_INSERT_DEF     QColor(  0, 184, 184)
 #define DEFCFG_CLR_DELETE_DEF     QColor(194,   0,   0)
+#define DEFCFG_CLR_SEARCH_DEF     QColor(230, 230,   0)
 
 
 #endif // DEFINES_H

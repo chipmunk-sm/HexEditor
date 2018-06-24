@@ -47,6 +47,8 @@ private slots:
     void on_pushButton_color_insert_clicked();
     void on_pushButton_color_delete_clicked();
 
+    void on_pushButton_color_search_clicked();
+
 private:
     Ui::CConfigDialog *m_ui;
     CCFontSize      m_ccfontsize;
