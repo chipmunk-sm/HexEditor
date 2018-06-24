@@ -127,6 +127,7 @@ void CHexViewModel::OpenFile(const QString &path)
         m_file.close();
 
     m_editview->Clear();
+	m_pcsearch->Clear();
 
     m_pCPropertyView->Close();
     m_cachePos = -1;
@@ -344,17 +345,16 @@ QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
     if(col >= m_cols_hex)
         pos -= m_cols_hex;
 
-    if(m_pcsearch->GetCellStatus(pos))
-    {
-        return m_color_search;
-    }
-
     switch (m_editview->GetCellStatus(pos))
     {
-        case CEditEvent::CEditEventNone:     return nullptr;
         case CEditEvent::CEditEventOverwrite:return m_color_overwrite;
         case CEditEvent::CEditEventInsert:   return m_color_insert;
         case CEditEvent::CEditEventDelete:   return m_color_delete;
+    }
+
+    if(m_pcsearch->GetCellStatus(pos))
+    {
+        return m_color_search;
     }
 
     return nullptr;

@@ -94,6 +94,8 @@ void MainWindow::closeEvent(QCloseEvent *  /*event*/)
 {
     try
     {
+		m_pcsearch->Abort();
+
         QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
         settings.setValue(DEFCFG_MAINWINDOWGEOM, saveGeometry());
         settings.setValue(DEFCFG_MAINWINDOWSTATE, saveState());
@@ -339,22 +341,26 @@ void MainWindow::on_pushButton_search_clicked()
     m_ui->pushButton_search->setEnabled(false);
     m_ui->progressBar_search->setVisible(true);
     m_ui->pushButton_abortSearch->setVisible(true);
+	m_ui->pushButtonOpen->setEnabled(false);
+	m_ui->pushButton_apply->setEnabled(false);
 
     auto res =  m_ui->lineEdit_searchtext->text().toLatin1();
 
     m_pcsearch->Search(res.data(), res.length(), m_PathFilename);
 
+	m_ui->pushButton_apply->setEnabled(true);
+	m_ui->pushButtonOpen->setEnabled(true);
     m_ui->lineEdit_searchtext->setEnabled(true);
     m_ui->pushButton_search->setEnabled(true);
     m_ui->progressBar_search->setVisible(false);
     m_ui->pushButton_abortSearch->setVisible(false);
-
+	m_pchexview->layoutChanged();
+	m_pchexview->UpdateTable(false);
 }
 
 void MainWindow::on_pushButton_abortSearch_clicked()
 {
-    if(m_pcsearch)
-        m_pcsearch->Abort();
+    m_pcsearch->Abort();
 }
 
 void MainWindow::searchModelSelectionChanged(const QItemSelection &selected, const QItemSelection &)

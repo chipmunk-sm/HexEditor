@@ -20,11 +20,7 @@ void CSearch::SetControl(QStandardItemModel *resultControl, QProgressBar *progre
 
 void CSearch::Search(const char *searchBuffer, int32_t searchBufferLength, const QString &searchFile)
 {
-
-    m_progressBar->setValue(0);
-    m_resultControl->removeRows(0,m_resultControl->rowCount());
-    m_result.clear();
-    m_abort = false;
+	Clear();
 
     if (!searchBufferLength)
     {
@@ -131,8 +127,8 @@ void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
                     if(searchIndex + res.len == searchBufferLength)
                     {
                         AddResult(res.pos, searchBufferLength);
-                        pos += searchIndex;
-                        dataPtr += searchIndex;
+                        pos += searchIndex - 1;
+                        dataPtr += searchIndex - 1;
                         break;
                     }
 
@@ -161,8 +157,8 @@ void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
                 if(searchIndex == searchBufferLength)
                 {
                     AddResult(pos, searchBufferLength);
-                    pos += searchIndex;
-                    dataPtr += searchIndex;
+                    pos += searchIndex - 1;
+                    dataPtr += searchIndex - 1;
                     break;
                 }
 
@@ -223,6 +219,14 @@ bool CSearch::GetCellStatus(int64_t pos)
 void CSearch::Abort()
 {
     m_abort = true;
+}
+
+void CSearch::Clear()
+{
+	m_progressBar->setValue(0);
+	m_resultControl->removeRows(0, m_resultControl->rowCount());
+	m_result.clear();
+	m_abort = false;
 }
 
 

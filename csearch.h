@@ -30,6 +30,7 @@ public:
     void Search(const char *searchBuffer, int32_t searchBufferLength, const QString &searchFile);
     void Abort();
     bool GetCellStatus(int64_t pos);
+	void Clear();
 private:
     void ParseFile(const char *searchBuffer, int32_t searchBufferLength);
     void AddResult(int64_t pos, int64_t len);
