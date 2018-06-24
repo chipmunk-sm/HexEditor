@@ -107,7 +107,26 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog
             return false;
         }
 
-        QFile srcFile(pFileA->fileName());
+		QDir dir;
+
+		auto srcPathName = pFileA->fileName();
+		if (CConfigDialog::LoadChklBox(nullptr, CONFIG_BACKUPONSAVE, CONFIG_BACKUPONSAVE_DEF))
+		{
+			auto incr = 0;
+			QString bacPathName;
+
+			do {
+				bacPathName = pFileA->fileName() + "." + QString::number(incr++) + ".old";
+			} while (dir.exists(bacPathName));
+
+			if (!QFile::copy(srcPathName, bacPathName))
+			{
+				infoDialog->setError(QObject::tr("Error: failed copy to\n") + bacPathName);
+				return false;
+			}
+		}
+
+        QFile srcFile(srcPathName);
 
         if(!srcFile.open(QIODevice::ReadWrite))
         {
