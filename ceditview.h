@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QLabel>
 #include <QSpinBox>
+#include <functional>
 
 enum CEditEvent
 {
