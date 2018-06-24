@@ -93,7 +93,7 @@ void MainWindow::closeEvent(QCloseEvent *  /*event*/)
         settings.setValue(DEFCFG_MAINWINDOWGEOM, saveGeometry());
         settings.setValue(DEFCFG_MAINWINDOWSTATE, saveState());
         //settings.setValue(DEFCFG_MAINWINDOWSPLITS, m_ui->splitter->saveState());
-        //settings.setValue(DEFCFG_PROPRTYTABS, m_ui->propertyView->header()->saveState());
+        settings.setValue(DEFCFG_PROPRTYTABS, m_ui->propertyView->header()->saveState());
     }
     catch(...)
     {
@@ -116,7 +116,7 @@ void MainWindow::showEvent(QShowEvent *event)
             this->restoreGeometry(settings.value(DEFCFG_MAINWINDOWGEOM,"").toByteArray());
             this->restoreState(settings.value(DEFCFG_MAINWINDOWSTATE).toByteArray());
             //m_ui->splitter->restoreState(settings.value(DEFCFG_MAINWINDOWSPLITS,"").toByteArray());
-            //m_ui->propertyView->header()->restoreState(settings.value(DEFCFG_PROPRTYTABS,"").toByteArray());
+            m_ui->propertyView->header()->restoreState(settings.value(DEFCFG_PROPRTYTABS,"").toByteArray());
             QList<QDockWidget*> docks = this->findChildren<QDockWidget*>();
             for(int i = 0; i < docks.size(); i++)
             {
