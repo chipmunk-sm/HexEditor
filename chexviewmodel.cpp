@@ -349,7 +349,7 @@ QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
         return m_color_search;
     }
 
-    switch (m_editview->GetCellStatus(indRow, index.column(), m_cols_hex))
+    switch (m_editview->GetCellStatus(pos))
     {
         case CEditEvent::CEditEventNone:     return nullptr;
         case CEditEvent::CEditEventOverwrite:return m_color_overwrite;

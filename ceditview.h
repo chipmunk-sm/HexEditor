@@ -82,7 +82,7 @@ public:
 
     void Clear();
     bool Apply(QFile *pFile1, QFile *pFile2, DialogSaveToFile *infoDialog);
-    CEditEvent GetCellStatus(int64_t row, int col, int cols_hex);
+    CEditEvent GetCellStatus(int64_t pos);
     QString GetEditStatus(int64_t row, int col, int cols_hex);
     void setUpdateCallback(std::function<void(void)> callbackUpdate);
     void setGetIndexCallback(std::function<int64_t(void)> callbackGetIndex);

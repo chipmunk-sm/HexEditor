@@ -364,15 +364,10 @@ QString CEditView::GetEditStatus(int64_t row, int col, int cols_hex)
     return nullptr;
 }
 
-CEditEvent CEditView::GetCellStatus(int64_t row, int col, int cols_hex)
+CEditEvent CEditView::GetCellStatus(int64_t pos)
 {
     if(m_event.valid)
     {
-        auto pos = row * cols_hex;
-        pos += col;
-
-        if(col >= cols_hex)
-            pos -= cols_hex;
 
         if(m_event.event == CEditEventDelete)
         {

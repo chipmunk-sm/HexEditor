@@ -52,21 +52,6 @@ void CSearch::Search(const char *searchBuffer, int32_t searchBufferLength, const
 
 }
 
-void CSearch::Abort()
-{
-    m_abort = true;
-}
-
-bool CSearch::GetCellStatus(int64_t pos)
-{
-    foreach(auto &item, m_result)
-    {
-        if(pos >= item.pos && pos < item.pos + item.len )
-            return true;
-    }
-    return false;
-}
-
 void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
 {
 
@@ -224,5 +209,21 @@ void CSearch::AddResult(int64_t pos, int64_t len)
     m_resultControl->appendRow(listitems);
 
 }
+
+bool CSearch::GetCellStatus(int64_t pos)
+{
+    foreach(auto &item, m_result)
+    {
+        if(pos >= item.pos && pos < item.pos + item.len )
+            return true;
+    }
+    return false;
+}
+
+void CSearch::Abort()
+{
+    m_abort = true;
+}
+
 
 
