@@ -78,7 +78,13 @@
     <ClCompile Include="chexviewverticalheader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cmemorymappedfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="cpropertyview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="csearch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogsavetofile.cpp">
@@ -113,7 +119,13 @@
     <QtMoc Include="chexviewverticalheader.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <ClInclude Include="cmemorymappedfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <QtMoc Include="cpropertyview.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="csearch.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClInclude Include="defines.h">
@@ -133,6 +145,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    
+    
     
     
     

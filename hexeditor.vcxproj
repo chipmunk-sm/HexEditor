@@ -125,10 +125,10 @@
       <InputFile>%(FullPath)</InputFile>
     </QtRcc>
     <QtUic>
+      <InputFile>%(FullPath)</InputFile>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
       <QTDIR>D:\QT\5.10.1\MSVC2015_64</QTDIR>
-      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
-      <InputFile>%(FullPath)</InputFile>
     </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -205,7 +205,9 @@
     <ClCompile Include="chexviewmodel.cpp" />
     <ClCompile Include="chexviewselectionmodel.cpp" />
     <ClCompile Include="chexviewverticalheader.cpp" />
+    <ClCompile Include="cmemorymappedfile.cpp" />
     <ClCompile Include="cpropertyview.cpp" />
+    <ClCompile Include="csearch.cpp" />
     <ClCompile Include="dialogsavetofile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
@@ -225,7 +227,10 @@
     </QtMoc>
     <QtMoc Include="chexviewverticalheader.h">
     </QtMoc>
+    <ClInclude Include="cmemorymappedfile.h" />
     <QtMoc Include="cpropertyview.h">
+    </QtMoc>
+    <QtMoc Include="csearch.h">
     </QtMoc>
     <ClInclude Include="defines.h" />
     <QtMoc Include="dialogsavetofile.h">

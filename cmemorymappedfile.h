@@ -28,7 +28,7 @@ public:
 private:
     bool RemapFile(int64_t offset);
 #ifdef _MSC_VER
-    void*         m_file        = INVALID_HANDLE_VALUE;
+    void*         m_file;
     void*         m_mappedFile  = nullptr;
 #else
     int           m_file        = -1;

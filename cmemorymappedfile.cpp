@@ -31,6 +31,9 @@
 #include "cmemorymappedfile.h"
 
 CMemoryMappedFile::CMemoryMappedFile()
+#ifdef _MSC_VER
+	: m_file(INVALID_HANDLE_VALUE)
+#endif
 {
     m_sysPageSize = CMemoryMappedFile::GetSysPageSize();
 }
