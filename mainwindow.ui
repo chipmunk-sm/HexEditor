@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>910</width>
-    <height>609</height>
+    <width>1243</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -279,7 +279,17 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLineEdit" name="lineEdit_searchtext"/>
+        <widget class="QLineEdit" name="lineEdit_searchtext">
+         <property name="inputMask">
+          <string notr="true"/>
+         </property>
+         <property name="maxLength">
+          <number>256</number>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButton_search">
@@ -332,7 +342,7 @@
     <string>Property</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>2</number>
+    <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_4">
