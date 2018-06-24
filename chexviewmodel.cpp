@@ -16,7 +16,8 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
                              QScrollBar *pVerticalScrollBarHexView,
                              QLineEdit  *pLineEditInfo,
                              CEditView  *pEditView,
-                             QLineEdit  *pLineEditGoTo)
+                             QLineEdit  *pLineEditGoTo,
+                             CSearch    *pcsearch)
 
     : QAbstractTableModel(pHexView)
     , m_cachePos(-1)
@@ -26,6 +27,7 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
     , m_pVerticalScrollBarHexView(pVerticalScrollBarHexView)
     , m_lineEditInfo(pLineEditInfo)
     , m_lineEditGoTo(pLineEditGoTo)
+    , m_pcsearch(pcsearch)
 {
     m_buffer.resize(m_cols_hex);
 
@@ -54,7 +56,7 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
     headerVertical->setHighlightSections(true);
 
     connect(m_hexView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CHexViewModel::UpdateSelectionModel);
-    connect(m_pVerticalScrollBarHexView, &QScrollBar::valueChanged,              this, &CHexViewModel::UpdatePos);
+    connect(m_pVerticalScrollBarHexView, &QScrollBar::valueChanged,              this, &CHexViewModel::RedrawDisplayArea);
     connect(m_lineEditGoTo,              &QLineEdit::textEdited,                 this, &CHexViewModel::lineEdit_goto_textEdited);
 
     m_lineEditGoTo->setValidator(new QRegExpValidator(QRegExp("^\\d{1,10}$"), this));
@@ -334,6 +336,19 @@ QVariant CHexViewModel::headerData(int section, Qt::Orientation orientation, int
 QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
 {
     auto indRow = static_cast<int64_t>(index.row()) + m_pVerticalScrollBarHexView->value();
+
+    auto col = index.column();
+    auto pos = indRow * m_cols_hex;
+    pos += col;
+
+    if(col >= m_cols_hex)
+        pos -= m_cols_hex;
+
+    if(m_pcsearch->GetCellStatus(pos))
+    {
+        return m_color_search;
+    }
+
     switch (m_editview->GetCellStatus(indRow, index.column(), m_cols_hex))
     {
         case CEditEvent::CEditEventNone:     return nullptr;
@@ -341,6 +356,7 @@ QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
         case CEditEvent::CEditEventInsert:   return m_color_insert;
         case CEditEvent::CEditEventDelete:   return m_color_delete;
     }
+
     return nullptr;
 }
 
@@ -371,15 +387,10 @@ void CHexViewModel::UpdateSelectionModelEx(bool reset) const
     }
 }
 
-void CHexViewModel::SelectPosition(int64_t pos, int64_t len)
+void CHexViewModel::SelectPosition(int64_t pos)
 {
     auto scrollRow = pos / m_cols_hex;
-    auto startOffset = pos - scrollRow * m_cols_hex;
     m_pVerticalScrollBarHexView->setValue(scrollRow);
-
-    //TODO: highlight selection
-
-
 }
 
 void CHexViewModel::UpdateSelectionModel() const
@@ -387,18 +398,15 @@ void CHexViewModel::UpdateSelectionModel() const
     UpdateSelectionModelEx(false);
 }
 
-void CHexViewModel::UpdatePos(int pos)
+void CHexViewModel::RedrawDisplayArea()
 {
-    Q_UNUSED(pos);
     m_hexView->verticalHeader()->viewport()->update(0, 0, m_hexView->verticalHeader()->viewport()->width(), m_hexView->verticalHeader()->viewport()->height());
     m_hexView->viewport()->update(0, 0, m_hexView->viewport()->width(), m_hexView->viewport()->height());
 }
 
 void CHexViewModel::lineEdit_goto_textEdited(const QString &arg1)
 {
-    auto pos = arg1.toLongLong();
-    auto scrollRow = pos / m_cols_hex;
-    m_pVerticalScrollBarHexView->setValue(scrollRow);
+    SelectPosition(arg1.toLongLong());
 }
 
 int64_t CHexViewModel::GetCurrentPos()

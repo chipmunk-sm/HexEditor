@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
+    m_pcsearch = new CSearch(this);
+
     m_pceditview = new CEditView(m_ui->label_operationInfo,
                                  m_ui->textEdit,
                                  m_ui->spinBox_bytesCountToDelete,
@@ -34,7 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
                                     m_ui->verticalScrollBarHexView,
                                     m_ui->label_info,
                                     m_pceditview,
-                                    m_ui->lineEdit_goto);
+                                    m_ui->lineEdit_goto,
+                                    m_pcsearch);
 
     setWindowIcon(QPixmap(":/data/hexeditor_logo.png"));
 
@@ -57,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(m_ui->treeView_searchResult->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::searchModelSelectionChanged);
 
+    m_pcsearch->SetControl(qobject_cast<QStandardItemModel*>(m_ui->treeView_searchResult->model()), m_ui->progressBar_search);
     m_ui->progressBar_search->setVisible(false);
     m_ui->pushButton_abortSearch->setVisible(false);
 
@@ -66,6 +70,7 @@ MainWindow::~MainWindow()
 {
     delete m_pchexview;
     delete m_pceditview;
+    delete m_pcsearch;
     delete m_ui;
 }
 
@@ -337,19 +342,12 @@ void MainWindow::on_pushButton_search_clicked()
 
     auto res =  m_ui->lineEdit_searchtext->text().toLatin1();
 
-    CSearch search(this);
-    m_pcsearch = &search;
-    search.Search(res.data(),
-                  res.length(),
-                  m_PathFilename,
-                  qobject_cast<QStandardItemModel*>(m_ui->treeView_searchResult->model()),
-                  m_ui->progressBar_search);
+    m_pcsearch->Search(res.data(), res.length(), m_PathFilename);
 
     m_ui->lineEdit_searchtext->setEnabled(true);
     m_ui->pushButton_search->setEnabled(true);
     m_ui->progressBar_search->setVisible(false);
     m_ui->pushButton_abortSearch->setVisible(false);
-    m_pcsearch = nullptr;
 
 }
 
@@ -370,7 +368,7 @@ void MainWindow::searchModelSelectionChanged(const QItemSelection &selected, con
         foreach (auto &tmpstr, list)
         {
             auto tmpv = tmpstr.toLongLong();
-            m_pchexview->SelectPosition(tmpv,1);
+            m_pchexview->SelectPosition(tmpv);
             break;
         }
         break;

@@ -5,6 +5,7 @@
 
 #include "ceditview.h"
 #include "cpropertyview.h"
+#include "csearch.h"
 
 #include <QAbstractTableModel>
 #include <QFile>
@@ -26,7 +27,8 @@ public:
                            QScrollBar *pVerticalScrollBarHexView,
                            QLineEdit  *pLineEditInfo,
                            CEditView  *pEditView,
-                           QLineEdit  *pLineEditGoTo);
+                           QLineEdit  *pLineEditGoTo,
+                           CSearch    *pcsearch);
 
     ~CHexViewModel() override;
 
@@ -51,7 +53,7 @@ public:
     QFile *GetPropertyFileHandler();
     void UpdateSelectionModelEx(bool reset) const;
     int GetColHex() const {return m_cols_hex;}
-    void SelectPosition(int64_t pos, int64_t len);
+    void SelectPosition(int64_t pos);
 private:
 
     mutable QFile m_file;
@@ -65,6 +67,7 @@ private:
     QScrollBar                  *m_pVerticalScrollBarHexView = nullptr;
     QLineEdit                   *m_lineEditInfo              = nullptr;
     QLineEdit                   *m_lineEditGoTo              = nullptr;
+    CSearch                     *m_pcsearch                  = nullptr;
 
     QColor                      m_color_overwrite;
     QColor                      m_color_insert;
@@ -78,7 +81,7 @@ private:
 
 public slots:
     void UpdateSelectionModel() const;
-    void UpdatePos(int pos);
+    void RedrawDisplayArea();
     //void HistorySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void lineEdit_goto_textEdited(const QString &arg1);
 };

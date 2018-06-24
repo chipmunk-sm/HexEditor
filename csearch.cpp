@@ -12,15 +12,19 @@ CSearch::CSearch(QObject *parent)
 {
 }
 
-void CSearch::Search(const char *searchBuffer, int32_t searchBufferLength, const QString &searchFile,
-                     QStandardItemModel* resultControl, QProgressBar *progressBar)
+void CSearch::SetControl(QStandardItemModel *resultControl, QProgressBar *progressBar)
+{
+    m_resultControl = resultControl;
+    m_progressBar = progressBar;
+}
+
+void CSearch::Search(const char *searchBuffer, int32_t searchBufferLength, const QString &searchFile)
 {
 
-    m_progressBar = progressBar;
     m_progressBar->setValue(0);
-
-    m_resultControl = resultControl;
     m_resultControl->removeRows(0,m_resultControl->rowCount());
+    m_result.clear();
+    m_abort = false;
 
     if (!searchBufferLength)
     {
@@ -46,6 +50,21 @@ void CSearch::Search(const char *searchBuffer, int32_t searchBufferLength, const
 
     ParseFile(searchBuffer, searchBufferLength);
 
+}
+
+void CSearch::Abort()
+{
+    m_abort = true;
+}
+
+bool CSearch::GetCellStatus(int64_t pos)
+{
+    foreach(auto &item, m_result)
+    {
+        if(pos >= item.pos && pos < item.pos + item.len )
+            return true;
+    }
+    return false;
 }
 
 void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
@@ -126,7 +145,7 @@ void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
 
                     if(searchIndex + res.len == searchBufferLength)
                     {
-                        AddResult(res.pos);
+                        AddResult(res.pos, searchBufferLength);
                         pos += searchIndex;
                         dataPtr += searchIndex;
                         break;
@@ -156,7 +175,7 @@ void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
 
                 if(searchIndex == searchBufferLength)
                 {
-                    AddResult(pos);
+                    AddResult(pos, searchBufferLength);
                     pos += searchIndex;
                     dataPtr += searchIndex;
                     break;
@@ -192,9 +211,9 @@ void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
 
 }
 
-void CSearch::AddResult(int64_t pos)
+void CSearch::AddResult(int64_t pos, int64_t len)
 {
-    //m_result.emplace_back(pos);
+    m_result.emplace_back(pos, len);
 
     QList<QStandardItem*> listitems;
     listitems << new QStandardItem(tr("%1 (HEX %2)").arg(pos, 8, 10, QLatin1Char('0')).arg(pos, 8, 16, QLatin1Char('0')).toUpper());
