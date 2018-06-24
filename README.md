@@ -30,6 +30,7 @@ Supported Features:
 Insert
 Overwrite
 Delete
+Search - (The current release limited to Latin character sets)
 The maximum file size HexEditor can edit is 64 GB
 ```
 
