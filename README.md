@@ -41,3 +41,7 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details
+
+## Screenshot
+
+![hexeditor](https://user-images.githubusercontent.com/29524958/41822897-710c7c72-77ff-11e8-9201-c0fbe938f894.png)
