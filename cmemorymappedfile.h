@@ -23,7 +23,7 @@ public:
     bool OpenMapped(const std::wstring &filename, CacheAccess hint);
     int64_t GetFileSize() const;
     int64_t GetMappedBytes() const;
-    char *GetDataPtr(int64_t pos, int64_t *pageSize);
+    uint8_t *GetDataPtr(int64_t pos, int64_t *pageSize);
 
 private:
     bool RemapFile(int64_t offset);

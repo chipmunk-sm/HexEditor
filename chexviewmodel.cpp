@@ -350,6 +350,7 @@ QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
         case CEditEvent::CEditEventOverwrite:return m_color_overwrite;
         case CEditEvent::CEditEventInsert:   return m_color_insert;
         case CEditEvent::CEditEventDelete:   return m_color_delete;
+        default: break;
     }
 
     if(m_pcsearch->GetCellStatus(pos))

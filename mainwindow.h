@@ -32,8 +32,10 @@ private:
 
     void UpdateConfig();
     void CloseConfig();
-    void searchModelSelectionChanged(const QItemSelection &selected, const QItemSelection &);
-
+    void searchSelectionModelChanged(const QItemSelection &selected, const QItemSelection &);
+    uint32_t HexChartoInt(uint32_t x);
+    std::vector<uint8_t> ConvertHexTextToByteArray(const QString &src);
+    QString ConvertByteArrayToHexText(const std::vector<uint8_t> &byteArray);
 protected:
     void closeEvent(QCloseEvent *event) override;
     void changeEvent(QEvent *e) override;
@@ -48,6 +50,12 @@ private slots:
     void on_pushButton_apply_clicked();
     void on_pushButton_search_clicked();
     void on_pushButton_abortSearch_clicked();
+
+    void on_lineEdit_searchtext_textChanged(const QString &arg1);
+
+    void on_lineEdit_searchtext_textEdited(const QString &arg1);
+
+    void on_radioButton_search_text_toggled(bool checked);
 
 signals:
     void callUpdateConfig();

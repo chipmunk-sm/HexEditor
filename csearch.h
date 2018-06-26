@@ -27,12 +27,14 @@ class CSearch : public QObject
 public:
     explicit CSearch(QObject *parent);
     void SetControl(QStandardItemModel* resultControl, QProgressBar *progressBar);
-    void Search(const char *searchBuffer, int32_t searchBufferLength, const QString &searchFile);
+    bool Search(const uint8_t *searchBuffer, int32_t searchBufferLength, const QString &searchFile);
     void Abort();
     bool GetCellStatus(int64_t pos);
 	void Clear();
+    uint64_t GetResultCount();
+    QString GetErrorString();
 private:
-    void ParseFile(const char *searchBuffer, int32_t searchBufferLength);
+    bool ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength);
     void AddResult(int64_t pos, int64_t len);
     CMemoryMappedFile m_mappedFile;
     QFile m_file;
@@ -40,6 +42,7 @@ private:
     QProgressBar *m_progressBar = nullptr;
     bool m_abort = false;
     std::vector<FoundedResult> m_result;
+    QString m_error;
 };
 
 

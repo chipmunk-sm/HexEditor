@@ -18,37 +18,37 @@ void CSearch::SetControl(QStandardItemModel *resultControl, QProgressBar *progre
     m_progressBar = progressBar;
 }
 
-void CSearch::Search(const char *searchBuffer, int32_t searchBufferLength, const QString &searchFile)
+bool CSearch::Search(const uint8_t *searchBuffer, int32_t searchBufferLength, const QString &searchFile)
 {
 	Clear();
+    m_error = "";
 
     if (!searchBufferLength)
     {
-        QMessageBox::critical(nullptr, QObject::tr("Open"), tr("Nothing to search for"), QMessageBox::Ok);
-        return;
+        m_error =  tr("Nothing to search for");
+        return false;
     }
 
     if(m_mappedFile.OpenMapped(searchFile.toStdWString(), CMemoryMappedFile::CacheAccess_Sequential))
     {
-        ParseFile(searchBuffer, searchBufferLength);
-        return;
+        return ParseFile(searchBuffer, searchBufferLength);
     }
 
     m_file.setFileName(searchFile);
 
     if (!m_file.open(QIODevice::ReadOnly))
     {
-        QMessageBox::critical(nullptr, QObject::tr("Open"), m_file.errorString(), QMessageBox::Ok);
-        return;
+        m_error =  m_file.errorString();
+        return false;
     }
 
     m_file.seek(0);
 
-    ParseFile(searchBuffer, searchBufferLength);
+    return ParseFile(searchBuffer, searchBufferLength);
 
 }
 
-void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
+bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
 {
 
     auto sysPageSize = CMemoryMappedFile::GetSysPageSize();
@@ -64,10 +64,11 @@ void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
         {
             m_file.close();
         }
-        return;
+        m_error =  tr("Search pattern out of range");
+        return false;
     }
 
-    std::vector<char> m_buffer;
+    std::vector<uint8_t> m_buffer;
 
     if(!useMapped)
         m_buffer.resize(static_cast<uint64_t>(sysPageSize));
@@ -189,6 +190,7 @@ void CSearch::ParseFile(const char *searchBuffer, int32_t searchBufferLength)
     }
 
     QMetaObject::invokeMethod(m_progressBar, "setValue", Qt::QueuedConnection, Q_ARG(int, 100));
+    return true;
 
 }
 
@@ -227,6 +229,16 @@ void CSearch::Clear()
 	m_resultControl->removeRows(0, m_resultControl->rowCount());
 	m_result.clear();
 	m_abort = false;
+}
+
+uint64_t CSearch::GetResultCount()
+{
+    return m_result.size();
+}
+
+QString CSearch::GetErrorString()
+{
+    return m_error;
 }
 
 

@@ -132,7 +132,7 @@ bool CMemoryMappedFile::OpenMapped(const std::wstring& filename, CacheAccess hin
     return true;
 }
 
-char* CMemoryMappedFile::GetDataPtr(int64_t pos, int64_t *pageSize)
+uint8_t* CMemoryMappedFile::GetDataPtr(int64_t pos, int64_t *pageSize)
 {
     if(!RemapFile(pos))
     {
@@ -142,7 +142,7 @@ char* CMemoryMappedFile::GetDataPtr(int64_t pos, int64_t *pageSize)
 
     *pageSize = m_mappedBytes;
 
-    return static_cast<char*>(m_mappedView);
+    return static_cast<uint8_t*>(m_mappedView);
 }
 
 int64_t CMemoryMappedFile::GetFileSize() const

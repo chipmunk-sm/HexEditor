@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QStandardItemModel>
+#include <QTextCodec>
 
 #include "cconfigdialog.h"
 #include "chexviewselectionmodel.h"
@@ -58,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->treeView_searchResult->setModel(new QStandardItemModel(0, 1, this));
     m_ui->treeView_searchResult->model()->setHeaderData(0, Qt::Horizontal, tr("Position"));
 
-    connect(m_ui->treeView_searchResult->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::searchModelSelectionChanged);
+    connect(m_ui->treeView_searchResult->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::searchSelectionModelChanged);
 
     m_pcsearch->SetControl(qobject_cast<QStandardItemModel*>(m_ui->treeView_searchResult->model()), m_ui->progressBar_search);
     m_ui->progressBar_search->setVisible(false);
@@ -343,12 +344,28 @@ void MainWindow::on_pushButton_search_clicked()
     m_ui->pushButton_abortSearch->setVisible(true);
 	m_ui->pushButtonOpen->setEnabled(false);
 	m_ui->pushButton_apply->setEnabled(false);
+    m_ui->radioButton_search_hex->setEnabled(false);
+    m_ui->radioButton_search_text->setEnabled(false);
 
-    auto res =  m_ui->lineEdit_searchtext->text().toLatin1();
+    auto sourceText = m_ui->radioButton_search_hex->isChecked() ? m_ui->lineEdit_searchtext->text() : m_ui->lineEdit_searchtext->text().toLatin1().toHex(' ');
+    auto byteArray = ConvertHexTextToByteArray(sourceText);
 
-    m_pcsearch->Search(res.data(), res.length(), m_PathFilename);
+    auto timeStart = std::chrono::high_resolution_clock::now();
 
-	m_ui->pushButton_apply->setEnabled(true);
+    if(m_pcsearch->Search(byteArray.data(), static_cast<int32_t>(byteArray.size()), m_PathFilename))
+    {
+        auto time_span = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - timeStart);
+        QString info = tr("Found %1 in %2 seconds.").arg(m_pcsearch->GetResultCount()).arg(QString::number(time_span.count(), 'f', 3));
+        m_ui->label_search_info->setText(info);
+    }
+    else
+    {
+        QMessageBox::critical(nullptr, QObject::tr("Open"), m_pcsearch->GetErrorString(), QMessageBox::Ok);
+    }
+
+    m_ui->radioButton_search_hex->setEnabled(true);
+    m_ui->radioButton_search_text->setEnabled(true);
+    m_ui->pushButton_apply->setEnabled(true);
 	m_ui->pushButtonOpen->setEnabled(true);
     m_ui->lineEdit_searchtext->setEnabled(true);
     m_ui->pushButton_search->setEnabled(true);
@@ -363,7 +380,7 @@ void MainWindow::on_pushButton_abortSearch_clicked()
     m_pcsearch->Abort();
 }
 
-void MainWindow::searchModelSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void MainWindow::searchSelectionModelChanged(const QItemSelection &selected, const QItemSelection &)
 {
 
     QModelIndexList items = selected.indexes();
@@ -379,4 +396,68 @@ void MainWindow::searchModelSelectionChanged(const QItemSelection &selected, con
         }
         break;
     }
+}
+
+uint32_t MainWindow::HexChartoInt(uint32_t x)
+{
+    uint32_t const xval = x;
+    if(xval < 65)
+        return xval - 48;
+    if(xval < 97)
+        return xval - (65 - 10);
+    return xval - (97 - 10);
+}
+
+std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString &src)
+{
+
+    std::vector<uint8_t> data;
+
+    uint32_t tmp[2] = {0};
+    auto tmpInd = 0;
+
+    for (auto ind = 0; ind < src.length(); ind++)
+    {
+
+        if(src[ind].isSpace())
+            continue;
+
+        auto val = src[ind].toLatin1();
+        if(!isxdigit(val))
+            continue;
+
+        tmp[tmpInd++] = static_cast<uint32_t>(val);
+        if(tmpInd == 2)
+        {
+            data.push_back(static_cast<uint8_t>(HexChartoInt(tmp[0]) << 4 | HexChartoInt(tmp[1])));
+            tmpInd = 0;
+        }
+    }
+
+    return data;
+}
+
+QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t> &byteArray)
+{
+    QString hex;
+    foreach(auto &item, byteArray)
+        hex += QString("%1 ").arg(item, 2, 16, QLatin1Char('0')).toUpper();
+    return hex;
+}
+
+void MainWindow::on_lineEdit_searchtext_textChanged(const QString &arg1)
+{
+    auto sourceText = m_ui->radioButton_search_hex->isChecked() ? arg1 : arg1.toLatin1().toHex(' ');
+    m_ui->label_search_info->setText(ConvertByteArrayToHexText(ConvertHexTextToByteArray(sourceText)));
+    m_pcsearch->Clear();
+}
+
+void MainWindow::on_lineEdit_searchtext_textEdited(const QString &arg1)
+{
+    on_lineEdit_searchtext_textChanged(arg1);
+}
+
+void MainWindow::on_radioButton_search_text_toggled(bool)
+{
+    on_lineEdit_searchtext_textChanged(m_ui->lineEdit_searchtext->text());
 }
