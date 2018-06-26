@@ -11,6 +11,7 @@
 #include <QFileInfo>
 #include <QStandardItemModel>
 #include <QTextCodec>
+#include <chrono>
 
 #include "cconfigdialog.h"
 #include "chexviewselectionmodel.h"
