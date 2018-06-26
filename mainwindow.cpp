@@ -347,12 +347,15 @@ void MainWindow::on_pushButton_search_clicked()
     m_ui->radioButton_search_hex->setEnabled(false);
     m_ui->radioButton_search_text->setEnabled(false);
 
-    auto sourceText = m_ui->radioButton_search_hex->isChecked() ? m_ui->lineEdit_searchtext->text() : m_ui->lineEdit_searchtext->text().toLatin1().toHex(' ');
-    auto byteArray = ConvertHexTextToByteArray(sourceText);
+    auto searchText = m_ui->lineEdit_searchtext->text();
+
+    on_lineEdit_searchtext_textChanged(searchText);
+
+    auto bytesToSearch = ConvertHexTextToByteArray(m_ui->radioButton_search_hex->isChecked() ? searchText : searchText.toLatin1().toHex(' '));
 
     auto timeStart = std::chrono::high_resolution_clock::now();
 
-    if(m_pcsearch->Search(byteArray.data(), static_cast<int32_t>(byteArray.size()), m_PathFilename))
+    if(m_pcsearch->Search(bytesToSearch.data(), static_cast<int32_t>(bytesToSearch.size()), m_PathFilename))
     {
         auto time_span = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - timeStart);
         QString info = tr("Found %1 in %2 seconds.").arg(m_pcsearch->GetResultCount()).arg(QString::number(time_span.count(), 'f', 3));
@@ -447,8 +450,8 @@ QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t> &byteAr
 
 void MainWindow::on_lineEdit_searchtext_textChanged(const QString &arg1)
 {
-    auto sourceText = m_ui->radioButton_search_hex->isChecked() ? arg1 : arg1.toLatin1().toHex(' ');
-    m_ui->label_search_info->setText(ConvertByteArrayToHexText(ConvertHexTextToByteArray(sourceText)));
+    auto searchText = m_ui->radioButton_search_hex->isChecked() ? arg1 : arg1.toLatin1().toHex(' ');
+    m_ui->label_search_info->setText(ConvertByteArrayToHexText(ConvertHexTextToByteArray(searchText)));
     m_pcsearch->Clear();
 }
 

@@ -50,11 +50,8 @@ private slots:
     void on_pushButton_apply_clicked();
     void on_pushButton_search_clicked();
     void on_pushButton_abortSearch_clicked();
-
     void on_lineEdit_searchtext_textChanged(const QString &arg1);
-
     void on_lineEdit_searchtext_textEdited(const QString &arg1);
-
     void on_radioButton_search_text_toggled(bool checked);
 
 signals:
