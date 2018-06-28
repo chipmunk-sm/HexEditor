@@ -62,7 +62,8 @@ DISTFILES += \
     ISSUE_TEMPLATE.md \
     LICENSE \
     appveyor.yml \
-    version.ps1
+    version.ps1 \
+    installer.ps1
 
 win32 {
   RC_FILE     += hexeditor.rc
