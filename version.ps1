@@ -107,10 +107,27 @@ echo "[$LastTag] => [$Major.$Minor.$Patch.$Build]"
 
 $ShortCommit = $FullCommit.SubString(0, 7)
 
-$releaseNote = git  -C $directory log --pretty=format:"%an, %aD : %d %s %N"
+echo ""
+echo "***"
+echo "*** Create release note..."
+echo "***"
+echo ""
+
+$gitTag = "$(git describe --tags --abbrev=0)..HEAD"
+echo "gitTag = $gitTag"
+$releaseNote = (Join-Path $directory releaseNote.txt)
+
+git -C $directory log $gitTag --pretty=format:"%an, %aD : %d %s %N" | Out-File -FilePath "$releaseNote"
+
 echo ""
 echo "Release Note:"
-echo "$releaseNote"
+echo ""
+Get-Content -Path "$releaseNote"
+
+echo ""
+echo "***"
+echo "*** Start update ver.h..."
+echo "***"
 echo ""
 
 $Year = (Get-Date).Year
@@ -120,12 +137,6 @@ $Hour = (Get-Date).Hour
 $Minute = (Get-Date).Minute
 $Second = (Get-Date).Second
 $Millisecond = (Get-Date).Millisecond
-
-echo ""
-echo "***"
-echo "*** Start update ver.h..."
-echo "***"
-echo ""
 
 $output = "ver.h"
 
