@@ -113,7 +113,7 @@ echo "*** Create release note..."
 echo "***"
 echo ""
 
-$gitTag = "$(git describe --tags --abbrev=0)..HEAD"
+$gitTag = "$(git -C $directory describe --tags --abbrev=0)..HEAD"
 echo "gitTag = $gitTag"
 $releaseNote = (Join-Path $directory releaseNote.txt)
 
