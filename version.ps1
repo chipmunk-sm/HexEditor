@@ -27,13 +27,13 @@ echo "*** Parse GIT attributes..."
 echo "***"
 echo ""
 
-
 $revision = "HEAD" 
-$LastComm = "Test build"
+$buildName = "Custom build"
 
 if($env:appveyor_build_number)
 {
     $Build = $env:appveyor_build_number
+    $buildName = "Auto-build"
 }
 else
 {
@@ -75,28 +75,13 @@ if (!$FullCommit) {
 $LastTag = git -C $directory describe --tags --first-parent --match "*" $revision 2>$null
 
 echo "TAG <$LastTag>"
+echo "Message: <$buildName>" 
 
 if (!$LastTag) 
 {
 	$LastTag = "0.0.0.0"
 	Write-Host "Failed on get tag for revision $revision - defaulting to $LastTag"
 }
-else
-{
-    #git tag -l --format='%(contents)' <tag name>
-    $LastComm = git -C $directory tag -l --format='%(contents)' $LastTag
-    if(!$LastComm)
-    {
-        $LastComm = "Auto-build"
-    }
-
-    $LastComm = $LastComm.Replace("`n"," ")
-    $LastComm = $LastComm.Replace("`r"," ")
-    $LastComm = $LastComm.Replace(" ", "_")
-}
-
-echo "Message: <$LastComm>" 
-
 
 if ($LastTag -match "^[^\d]?[-|\.]?(\d+)\.(\d+)\.(\d+)\.?(\d+)?")
 {
@@ -121,6 +106,12 @@ else
 echo "[$LastTag] => [$Major.$Minor.$Patch.$Build]"
 
 $ShortCommit = $FullCommit.SubString(0, 7)
+
+$releaseNote = git log --pretty=format:"%an, %aD : %s %N"
+echo ""
+echo "Release Note:"
+echo "$releaseNote"
+echo ""
 
 $Year = (Get-Date).Year
 $Month = (Get-Date).Month
@@ -165,7 +156,7 @@ $new_output_contents = @"
 #define S_VER_MINUTE "$Minute"
 #define S_VER_SECOND "$Second"
 #define S_VER_MILLISECOND "$Millisecond"
-#define FVER_NAME "$LastComm"
+#define FVER_NAME "$buildName"
 #define FVER1 VER_MAJOR
 #define FVER2 VER_MINOR
 #define FVER3 VER_BUILD
