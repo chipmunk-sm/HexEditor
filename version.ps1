@@ -107,7 +107,7 @@ echo "[$LastTag] => [$Major.$Minor.$Patch.$Build]"
 
 $ShortCommit = $FullCommit.SubString(0, 7)
 
-$releaseNote = git  -C $directory log --pretty=format:"%an, %aD : %s %N"
+$releaseNote = git  -C $directory log --pretty=format:"%an, %aD : %d %s %N"
 echo ""
 echo "Release Note:"
 echo "$releaseNote"
