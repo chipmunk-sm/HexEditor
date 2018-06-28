@@ -8,6 +8,9 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QDebug>
+#include <QTextEdit>
+#include <QFile>
+#include <QDir>
 
 #include "versionhelper.h"
 CConfigDialog::CConfigDialog(std::function<void ()> callbackUpdate, std::function<void ()> callbackClose, QWidget *parent)
@@ -178,4 +181,43 @@ void CConfigDialog::on_pushButton_color_delete_clicked()
 void CConfigDialog::on_pushButton_color_search_clicked()
 {
     ColorUpdateDialog(DEFCFG_CLR_SEARCH);
+}
+
+void CConfigDialog::on_pushButton_releaseNote_clicked()
+{
+
+    QString path = QDir(QDir(".").absolutePath()).filePath("releaseNote.txt");
+    QFile file(path);
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::information(this, "Error", path + "\n" + file.errorString());
+        return;
+    }
+
+    auto infoDialog = new QDialog(this);
+    infoDialog->setWindowTitle(tr("Release note"));
+    infoDialog->setWindowFlags(infoDialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    auto infoEditor = new QTextEdit;
+    infoEditor->setLineWrapMode(QTextEdit::NoWrap);
+
+    infoEditor->setPlainText(QTextStream(&file).readAll());
+    infoEditor->setReadOnly(true);
+
+    QFont newfont("monospace");
+    newfont.setStyleHint(QFont::Monospace);
+    newfont.setPointSize((this->font()).pointSize());
+    infoEditor->setFont(newfont);
+
+    auto mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(infoEditor );
+    infoDialog->setLayout(mainLayout);
+
+    infoDialog->setAttribute(Qt::WA_DeleteOnClose);
+    auto newsize = this->size();
+    infoDialog->resize(newsize.width(), newsize.height());
+    infoDialog->show();
+    infoDialog->raise();
+    infoDialog->activateWindow();
+
 }

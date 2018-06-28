@@ -14,47 +14,7 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="11" column="0" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Font size</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox_showGrid">
-     <property name="text">
-      <string>Show grid</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLabel" name="label_app_version">
-     <property name="text">
-      <string>app version</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>&lt;html&gt;
-&lt;head/&gt;
-&lt;body&gt;
-Copyright (C) chipmunk-sm&lt;br&gt;
-&lt;a href=&quot;https://github.com/chipmunk-sm/&quot;&gt;https://github.com/chipmunk-sm/&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;</string>
-     </property>
-     <property name="openExternalLinks">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="0" colspan="2">
+   <item row="14" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pushButton_close">
@@ -85,47 +45,7 @@ Copyright (C) chipmunk-sm&lt;br&gt;
      </item>
     </layout>
    </item>
-   <item row="10" column="0" colspan="2">
-    <widget class="QFontComboBox" name="fontComboBox"/>
-   </item>
-   <item row="7" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox_alternatingRowColors">
-     <property name="text">
-      <string>Alternating row colors</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0" colspan="2">
-    <widget class="QSlider" name="horizontalSlider_Zoom">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QLabel" name="label_qt_version">
-     <property name="text">
-      <string>qt version</string>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Color сonfiguration</string>
@@ -202,13 +122,100 @@ Copyright (C) chipmunk-sm&lt;br&gt;
      </layout>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="label_app_version">
+     <property name="text">
+      <string>app version</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Font size</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox_showGrid">
+     <property name="text">
+      <string>Show grid</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+Copyright (C) chipmunk-sm&lt;br&gt;
+&lt;a href=&quot;https://github.com/chipmunk-sm/&quot;&gt;https://github.com/chipmunk-sm/&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox_alternatingRowColors">
+     <property name="text">
+      <string>Alternating row colors</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0" colspan="2">
+    <widget class="QSlider" name="horizontalSlider_Zoom">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="label_qt_version">
+     <property name="text">
+      <string>qt version</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="11" column="0" colspan="2">
+    <widget class="QFontComboBox" name="fontComboBox"/>
+   </item>
+   <item row="7" column="0">
     <widget class="QCheckBox" name="checkBox_BackupOnSave">
      <property name="text">
       <string>Backup on save</string>
      </property>
      <property name="checked">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="pushButton_releaseNote">
+     <property name="text">
+      <string>Release note</string>
      </property>
     </widget>
    </item>
