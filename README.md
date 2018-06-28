@@ -44,6 +44,6 @@ GNU General Public License for more details
 
 ## Screenshot
 
-![hexeditor](https://user-images.githubusercontent.com/29524958/41822897-710c7c72-77ff-11e8-9201-c0fbe938f894.png)
+![hexeditor](https://user-images.githubusercontent.com/29524958/42015778-6927b206-7ab1-11e8-8183-c5dfbcb6a2a4.png)
 
 ![hexeditor1](https://user-images.githubusercontent.com/29524958/41941248-15681b78-79a4-11e8-9636-44c974ec53c9.png)
