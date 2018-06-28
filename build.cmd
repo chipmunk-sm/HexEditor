@@ -138,6 +138,9 @@ if %ERRORLEVEL% NEQ 0 GOTO error
 copy "%APPVEYOR_BUILD_FOLDER%\data\*.*" "%APPVEYOR_BUILD_FOLDER%\Installer\Hexeditor\"
 if %ERRORLEVEL% NEQ 0 GOTO error
 
+copy "%APPVEYOR_BUILD_FOLDER%\releaseNote.txt" "%APPVEYOR_BUILD_FOLDER%\Installer\Hexeditor\"
+if %ERRORLEVEL% NEQ 0 GOTO error
+
 powershell.exe -noprofile -executionpolicy bypass -file "%APPVEYOR_BUILD_FOLDER%\installer.ps1" -platformId %ARCH% -cultureId "en-us"
 if %ERRORLEVEL% NEQ 0 GOTO error
 
