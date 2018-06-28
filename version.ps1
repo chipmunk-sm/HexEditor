@@ -117,7 +117,8 @@ $gitTag = "$(git -C $directory describe --tags --abbrev=0)..HEAD"
 echo "gitTag = $gitTag"
 $releaseNote = (Join-Path $directory releaseNote.txt)
 
-git -C $directory log $gitTag --pretty=format:"%an, %aD : %d %s %N" | Out-File -FilePath "$releaseNote"
+#git -C $directory log $gitTag --pretty=format:"%an, %aD : %d %s %N" | Out-File -FilePath "$releaseNote"
+git -C $directory log $gitTag --pretty=format:"%d %s %N" | Out-File -FilePath "$releaseNote"
 
 echo ""
 echo "Release Note:"
