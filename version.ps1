@@ -113,17 +113,23 @@ echo "*** Create release note..."
 echo "***"
 echo ""
 
-$gitTag = "$(git -C $directory describe --tags --abbrev=0)..HEAD"
-echo "gitTag = $gitTag"
-$releaseNote = (Join-Path $directory releaseNote.txt)
+$releaseNoteFile = (Join-Path $directory releaseNote.txt)
 
-#git -C $directory log $gitTag --pretty=format:"%an, %aD : %d %s %N" | Out-File -FilePath "$releaseNote"
-git -C $directory log $gitTag --pretty=format:"%d %s %N" | Out-File -FilePath "$releaseNote"
+$gitTagList = git -C $directory tag --sort=-version:refname
+if(1 -ge $gitTagList.Count)
+{
+    echo "Use all entries for a release note:"
+    git -C $directory log --pretty=format:"%d %s %N" | Out-File -FilePath "$releaseNoteFile"
+}
+else
+{
+    $gitTagRange = $gitTagList[1] + "..$revision"
+    echo "Release note range $gitTagRange :"
+    git -C $directory log "$gitTagRange" --pretty=format:"%d %s %N" | Out-File -FilePath "$releaseNoteFile"
+}
 
 echo ""
-echo "Release Note:"
-echo ""
-Get-Content -Path "$releaseNote"
+Get-Content -Path "$releaseNoteFile"
 
 echo ""
 echo "***"
@@ -295,3 +301,4 @@ echo ""
 echo "******************************************************"
 echo "***  End 'create version info' "
 echo "******************************************************"
+
