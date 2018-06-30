@@ -192,7 +192,7 @@ void DialogSaveToFile::RunDumpThread()
             {
                 auto col = colIdx  - m_cols_hex;
                 auto charx = buffer[static_cast<uint64_t>(col)];
-                if(charx <= 0x1f)
+                if(charx <= 0x1F || charx >= 0x7F)
                     charx = '.';
                 stream << QChar(charx);
             }

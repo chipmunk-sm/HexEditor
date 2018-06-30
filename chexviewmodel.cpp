@@ -6,13 +6,18 @@
 #include "defines.h"
 
 #include <QMessageBox>
-#include <QDebug>
 #include <QSettings>
 #include <QCoreApplication>
 #include <QLineEdit>
 
+#if 0
+#   include <QDebug>
+#   define DEBUGTRACE() qDebug() << Q_FUNC_INFO
+#else
+#   define DEBUGTRACE()
+#endif
+
 CHexViewModel::CHexViewModel(QTableView *pHexView,
-                             QTreeView  *pPropertyView,
                              QScrollBar *pVerticalScrollBarHexView,
                              QLineEdit  *pLineEditInfo,
                              CEditView  *pEditView,
@@ -29,6 +34,8 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
     , m_lineEditGoTo(pLineEditGoTo)
     , m_pcsearch(pcsearch)
 {
+    DEBUGTRACE();
+
     m_buffer.resize(m_cols_hex);
 
     SetInfo(0);
@@ -39,8 +46,6 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
     m_pVerticalScrollBarHexView->setPageStep(100);
 
     m_hexView->setVerticalHeader(new CHexViewVerticalHeader(Qt::Orientation::Vertical, pHexView));
-
-    m_pCPropertyView = new CPropertyView(pPropertyView);
     m_hexView->setModel(this);
     m_hexView->setSelectionModel(new CHexViewSelectionModel(this, pVerticalScrollBarHexView, pHexView));
 
@@ -55,14 +60,10 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
     headerVertical->setDefaultAlignment(Qt::AlignCenter | Qt::AlignJustify);
     headerVertical->setHighlightSections(true);
 
-    connect(m_hexView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CHexViewModel::UpdateSelectionModel);
     connect(m_pVerticalScrollBarHexView, &QScrollBar::valueChanged,              this, &CHexViewModel::RedrawDisplayArea);
     connect(m_lineEditGoTo,              &QLineEdit::textEdited,                 this, &CHexViewModel::lineEdit_goto_textEdited);
 
     m_lineEditGoTo->setValidator(new QRegExpValidator(QRegExp("^\\d{1,10}$"), this));
-
-    m_editview->setUpdateCallback([&](void)->void{ UpdateSelectionModel(); });
-    m_editview->setGetIndexCallback([&](void)->int64_t{ return GetCurrentPos(); });
 
     UpdateColorConfig();
 
@@ -70,11 +71,12 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
 
 CHexViewModel::~CHexViewModel()
 {
-    delete m_pCPropertyView;
+    DEBUGTRACE();
 }
 
 void CHexViewModel::UpdateColorConfig()
 {
+    DEBUGTRACE();
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
     m_color_overwrite = settings.value(DEFCFG_CLR_OVERWRITE, DEFCFG_CLR_OVERWRITE_DEF).value<QColor>();
     m_color_insert    = settings.value(DEFCFG_CLR_INSERT,    DEFCFG_CLR_INSERT_DEF).value<QColor>();
@@ -84,16 +86,13 @@ void CHexViewModel::UpdateColorConfig()
 
 QFile *CHexViewModel::GetFileHandler()
 {
+    DEBUGTRACE();
     return &m_file;
-}
-
-QFile *CHexViewModel::GetPropertyFileHandler()
-{
-    return m_pCPropertyView->GetFileHandler();
 }
 
 void CHexViewModel::UpdateTable(bool forceReformat)
 {
+    DEBUGTRACE();
 
     auto displayFont = m_hexView->font();
     auto fontMetric = QFontMetrics(displayFont);
@@ -118,8 +117,9 @@ void CHexViewModel::UpdateTable(bool forceReformat)
 
 }
 
-void CHexViewModel::OpenFile(const QString &path)
+bool CHexViewModel::OpenFile(const QString &path)
 {
+    DEBUGTRACE();
     m_cachePos = -1;
     m_cacheLen = 0;
 
@@ -129,7 +129,6 @@ void CHexViewModel::OpenFile(const QString &path)
     m_editview->Clear();
 	m_pcsearch->Clear();
 
-    m_pCPropertyView->Close();
     m_cachePos = -1;
     m_cacheLen = 0;
     m_lineEditInfo->setText("");
@@ -139,10 +138,7 @@ void CHexViewModel::OpenFile(const QString &path)
     if (!m_file.open(QIODevice::ReadOnly))
     {
         QMessageBox::critical(m_hexView, QObject::tr("Open"), m_file.errorString(), QMessageBox::Ok);
-    }
-    else
-    {
-        m_pCPropertyView->OpenFile(path);
+        return false;
     }
 
     const int64_t treshold32gb = 34359738368 - 1000000;
@@ -159,7 +155,7 @@ void CHexViewModel::OpenFile(const QString &path)
                               tr("Support up to\t") + QString::number(maxSupported / 1024 / 1024) + tr(" MB\n") +
                               tr("File size\t\t")   + QString::number(tmp          / 1024 / 1024) + tr(" MB"),
                               QMessageBox::Ok);
-        return;
+        return false;
     }
 
     if(m_file.size() > treshold32gb)
@@ -184,6 +180,7 @@ void CHexViewModel::OpenFile(const QString &path)
 
     layoutChanged();
     UpdateTable(true);
+    return true;
 }
 
 QTableView *CHexViewModel::GetTableView() const
@@ -214,6 +211,7 @@ int64_t CHexViewModel::GetRowCount() const
 
 void CHexViewModel::SetInfo(int64_t val) const
 {
+    DEBUGTRACE();
     if(!m_file.isOpen())
     {
         m_lineEditInfo->setText("");
@@ -279,7 +277,7 @@ QString CHexViewModel::dataEx(int64_t row, int64_t col) const
         if(col >= 0 && m_cacheLen > col)
         {
             auto charx = m_buffer[static_cast<uint32_t>(col)];
-            if(charx <= 0x1f)
+            if(charx <= 0x1F || charx >= 0x7F)
                 charx = '.';
 
             return QChar(charx);
@@ -308,6 +306,7 @@ QVariant CHexViewModel::data(const QModelIndex &index, int role) const
 
 QVariant CHexViewModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    //DEBUGTRACE();
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
         if(section >= m_cols_hex)
@@ -336,6 +335,7 @@ QVariant CHexViewModel::headerData(int section, Qt::Orientation orientation, int
 
 QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
 {
+    //DEBUGTRACE();
     auto indRow = static_cast<int64_t>(index.row()) + m_pVerticalScrollBarHexView->value();
 
     auto col = index.column();
@@ -361,57 +361,41 @@ QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
     return nullptr;
 }
 
-void CHexViewModel::UpdateSelectionModelEx(bool reset) const
+void CHexViewModel::Reset()
 {
+    DEBUGTRACE();
+    m_cachePos = -1;
+}
 
-    if(reset)
-        m_cachePos = -1;
-
+void CHexViewModel::RepaintDisplay() const
+{
+    DEBUGTRACE();
     m_hexView->viewport()->repaint();
-
-    auto selsection = static_cast<CHexViewSelectionModel*>(m_hexView->selectionModel());
-    if(!selsection)
-        return;
-
-    CHexViewSelectionModelItem item;
-    if(!selsection->GetSelectedEx(nullptr, &item))
-        return;
-
-    if( item.column >= m_cols_hex )
-        item.column -= m_cols_hex;
-
-    auto pos = item.row * m_cols_hex + item.column;
-    if(pos >=0)
-    {
-        SetInfo(pos);
-        m_pCPropertyView->DecodeValue(pos);
-    }
 }
 
 void CHexViewModel::SelectPosition(int64_t pos)
 {
+    DEBUGTRACE();
     auto scrollRow = pos / m_cols_hex;
     m_pVerticalScrollBarHexView->setValue(scrollRow);
 }
 
-void CHexViewModel::UpdateSelectionModel() const
-{
-    UpdateSelectionModelEx(false);
-}
-
 void CHexViewModel::RedrawDisplayArea()
 {
+    DEBUGTRACE();
     m_hexView->verticalHeader()->viewport()->update(0, 0, m_hexView->verticalHeader()->viewport()->width(), m_hexView->verticalHeader()->viewport()->height());
     m_hexView->viewport()->update(0, 0, m_hexView->viewport()->width(), m_hexView->viewport()->height());
 }
 
 void CHexViewModel::lineEdit_goto_textEdited(const QString &arg1)
 {
+    DEBUGTRACE();
     SelectPosition(arg1.toLongLong());
 }
 
 int64_t CHexViewModel::GetCurrentPos()
 {
+    DEBUGTRACE();
     auto selsection = static_cast<CHexViewSelectionModel*>(m_hexView->selectionModel());
     if(!selsection)
         return -1;
@@ -434,11 +418,13 @@ int64_t CHexViewModel::GetCurrentPos()
 
 bool CHexViewModel::EventHandler(QEvent *event) const
 {
+    //DEBUGTRACE();
     return m_pVerticalScrollBarHexView->event(event);
 }
 
 void CHexViewModel::UpdateScrollbarProps() const
 {
+    DEBUGTRACE();
     auto nRowsTotal = GetRowCount();
     auto nRowsVisible = rowCount(QModelIndex());
     auto nRowsRes = nRowsTotal - nRowsVisible;

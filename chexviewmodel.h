@@ -23,7 +23,6 @@ class CHexViewModel : public QAbstractTableModel
 
 public:
     explicit CHexViewModel(QTableView *pHexView,
-                           QTreeView  *pPropertyView,
                            QScrollBar *pVerticalScrollBarHexView,
                            QLineEdit  *pLineEditInfo,
                            CEditView  *pEditView,
@@ -33,7 +32,7 @@ public:
     ~CHexViewModel() override;
 
     void UpdateTable(bool forceReformat);
-    void OpenFile(const QString &path);
+    bool OpenFile(const QString &path);
     QTableView *GetTableView() const;
     bool isSelectedEx(int64_t col, int64_t row) const;
 
@@ -50,10 +49,10 @@ public:
 
     void UpdateColorConfig();
     QFile *GetFileHandler();
-    QFile *GetPropertyFileHandler();
-    void UpdateSelectionModelEx(bool reset) const;
+    void RepaintDisplay() const;
     int GetColHex() const {return m_cols_hex;}
     void SelectPosition(int64_t pos);
+    void Reset();
 private:
 
     mutable QFile m_file;
@@ -63,7 +62,6 @@ private:
 
     QTableView                  *m_hexView                   = nullptr;
     CEditView                   *m_editview                  = nullptr;
-    CPropertyView               *m_pCPropertyView            = nullptr;
     QScrollBar                  *m_pVerticalScrollBarHexView = nullptr;
     QLineEdit                   *m_lineEditInfo              = nullptr;
     QLineEdit                   *m_lineEditGoTo              = nullptr;
@@ -80,7 +78,6 @@ private:
     void SetInfo(int64_t val) const;
 
 public slots:
-    void UpdateSelectionModel() const;
     void RedrawDisplayArea();
     //void HistorySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void lineEdit_goto_textEdited(const QString &arg1);

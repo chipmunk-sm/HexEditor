@@ -22,6 +22,7 @@ public:
 
 private:
     Ui::MainWindow *m_ui;
+    CPropertyView  *m_pcpropertyview = nullptr;
     CHexViewModel  *m_pchexview = nullptr;
     CEditView      *m_pceditview = nullptr;
     CSearch        *m_pcsearch = nullptr;
@@ -34,8 +35,12 @@ private:
     void CloseConfig();
     void searchSelectionModelChanged(const QItemSelection &selected, const QItemSelection &);
     uint32_t HexChartoInt(uint32_t x);
-    std::vector<uint8_t> ConvertHexTextToByteArray(const QString &src);
+    std::vector<uint8_t> ConvertHexTextToByteArray(const QString &src, int *firstErrorPos);
     QString ConvertByteArrayToHexText(const std::vector<uint8_t> &byteArray);
+    void CollectCodecs();
+    bool DecodeText(const QString &sourceString, QLabel *info, bool bHex, int *firstErrorPos);
+    void HighlightError(int firstErrorPos, QLineEdit *pEdit);
+    void HighlightError(int firstErrorPos, QPlainTextEdit *pEdit);
 protected:
     void closeEvent(QCloseEvent *event) override;
     void changeEvent(QEvent *e) override;
@@ -52,7 +57,13 @@ private slots:
     void on_pushButton_abortSearch_clicked();
     void on_lineEdit_searchtext_textChanged(const QString &arg1);
     void on_lineEdit_searchtext_textEdited(const QString &arg1);
-    void on_radioButton_search_text_toggled(bool checked);
+    void on_comboBox_textcodec_currentIndexChanged(int index);
+    void on_checkBox_hexCoded_stateChanged(int arg1);
+    void on_textDataEditor_textChanged();
+    void on_spinBox_bytesCountToDelete_valueChanged(int arg1);
+    void SelectionChange();
+
+    void on_checkBox_displayDecodedText_stateChanged(int arg1);
 
 signals:
     void callUpdateConfig();

@@ -27,6 +27,9 @@ public slots:
     virtual void reset() override;
     virtual void clearCurrentIndex() override;
 
+signals:
+    void selectionChangedEx();
+
 private:
     QScrollBar* m_pSlider = nullptr;
     int64_t m_offset = -1;

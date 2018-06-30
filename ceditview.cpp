@@ -3,7 +3,6 @@
 #include "cconfigdialog.h"
 #include "ceditview.h"
 
-#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -13,58 +12,35 @@
 
 #include "defines.h"
 
-CEditView::CEditView(QLabel *labelOperationInfo,
-                     QPlainTextEdit *textEdit,
-                     QSpinBox* spinBox_bytesCountToDelete,
-                     QButtonGroup *buttonGroup_EditInputType,
-                     QButtonGroup *buttonGroup_EditOverwrite)
-
-    : QObject(labelOperationInfo)
-    , m_pLabelOperationInfo(labelOperationInfo)
-    , m_pQTextEdit(textEdit)
-    , m_pSpinBox_bytesCountToDelete(spinBox_bytesCountToDelete)
-    , m_buttonGroup_EditInputType(buttonGroup_EditInputType)
-    , m_buttonGroup_EditOverwrite(buttonGroup_EditOverwrite)
+CEditView::CEditView(QObject *parent)
+    : QObject(parent)
 {
-
-    connect(buttonGroup_EditInputType,  SIGNAL(buttonClicked(QAbstractButton *)), this, SLOT(validateInput()));
-    connect(buttonGroup_EditOverwrite,  SIGNAL(buttonClicked(QAbstractButton *)), this, SLOT(validateInput()));
-    connect(textEdit,                   SIGNAL(textChanged()),                    this, SLOT(validateInput()));
-    connect(spinBox_bytesCountToDelete, SIGNAL(valueChanged(int)),                this, SLOT(validateInput()));
-    //connect(textEdit,                   SIGNAL(cursorPositionChanged()),          this, SLOT(validateInput()));
-
-    validateInput();
 }
 
-void CEditView::setUpdateCallback(std::function<void (void)> callbackUpdate)
+void CEditView::SetOperation(int64_t pos, CEditEvent event, int byitesToDelete, const std::vector<uint8_t> &byteArray)
 {
-    m_callbackUpdate = callbackUpdate;
-}
-
-void CEditView::setGetIndexCallback(std::function<int64_t (void)> callbackGetIndex)
-{
-    m_callbackGetIndex = callbackGetIndex;
+    m_event.event = event;
+    if(event == CEditEvent::CEditEventDelete)
+    {
+        m_event.deleteSize = byitesToDelete;
+        m_event.data.clear();
+    }
+    else
+    {
+        m_event.deleteSize = -1;
+        m_event.data = byteArray;
+    }
+    m_event.pos = pos;
+    m_event.valid = true;
 }
 
 void CEditView::Clear()
 {
-    m_pQTextEdit->clear();
     m_event.clear();
-    m_pLabelOperationInfo->clear();
 }
 
 bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog)
 {
-    auto errPos = validateInput();
-    if(errPos != -1)
-    {
-        auto tmpCursor = m_pQTextEdit->textCursor();
-        tmpCursor.setPosition(errPos);
-        m_pQTextEdit->setTextCursor(tmpCursor);
-        infoDialog->setError(QObject::tr("Unable convert to hexadecimal"));
-        m_pQTextEdit->setFocus();
-        return false;
-    }
 
     if(!m_event.valid || m_event.pos < 0 || !pFileA->isOpen())
     {
@@ -216,141 +192,7 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog
         }
     }
 
-
     return false;
-}
-
-int CEditView::HighlightError(const QString &src)
-{
-    QList<QTextEdit::ExtraSelection> extraSelections;
-
-    auto errorIndex = 0;
-    auto firstErrorPosition = -1;
-    for (auto ind = 0; ind < src.length(); ind++)
-    {
-        if(src[ind].isSpace() || isxdigit(src[ind].toLatin1()))
-            continue;
-
-        QTextEdit::ExtraSelection selection;
-        selection.format.setBackground(m_pQTextEdit->palette().background());
-        selection.format.setProperty(QTextFormat::FullWidthSelection, false);
-        selection.cursor = m_pQTextEdit->textCursor();
-        selection.cursor.clearSelection();
-        selection.cursor.setPosition(ind);
-        selection.cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 1);
-
-        extraSelections.append(selection);
-
-        if(firstErrorPosition < 0)
-            firstErrorPosition = ind;
-
-        errorIndex++;
-        if(errorIndex > 100)
-            break;
-    }
-
-    m_pQTextEdit->setExtraSelections(extraSelections);
-
-    return firstErrorPosition;
-}
-
-void CEditView::ClearHighlightChar()
-{
-    QList<QTextEdit::ExtraSelection> extraSelections;
-    m_pQTextEdit->setExtraSelections(extraSelections);
-}
-
-
-uint32_t HexChartoInt(uint32_t x)
-{
-    uint32_t const xval = x;
-    if(xval < 65)
-        return xval - 48;
-    if(xval < 97)
-        return xval - (65 - 10);
-    return xval - (97 - 10);
-}
-
-
-void CEditView::ConvertHexText(QString &src, std::vector<uint8_t> &data)
-{
-
-    data.clear();
-
-    uint32_t tmp[2] = {0};
-    auto tmpInd = 0;
-
-    for (auto ind = 0; ind < src.length(); ind++)
-    {
-        if(src[ind].isSpace())
-            continue;
-        auto val = src[ind].toLatin1();
-        if(!isxdigit(val))
-            continue;
-
-        tmp[tmpInd++] = static_cast<uint32_t>(val);
-        if(tmpInd == 2)
-        {
-            data.push_back(static_cast<uint8_t>(HexChartoInt(tmp[0]) << 4 | HexChartoInt(tmp[1])));
-            tmpInd = 0;
-        }
-    }
-
-}
-
-int CEditView::validateInput()
-{
-
-    auto isText      = m_buttonGroup_EditInputType->checkedButton()->objectName().compare("radioButton_TEXT") == 0;
-    auto isOverwrite = m_buttonGroup_EditOverwrite->checkedButton()->objectName().compare("radioButton_overwrite") == 0;
-    auto isDelete    = m_buttonGroup_EditOverwrite->checkedButton()->objectName().compare("radioButton_delete") == 0;
-
-    auto  firstErrorPosition = -1;
-
-    m_event.event =  isOverwrite ? CEditEventOverwrite : isDelete ? CEditEventDelete : CEditEventInsert;
-
-    m_pQTextEdit->setEnabled(!isDelete);
-    m_pSpinBox_bytesCountToDelete->setEnabled(isDelete);
-
-    if(m_callbackGetIndex == nullptr)
-        return -1;
-
-    auto pos = m_callbackGetIndex();
-    if(pos < 0)
-        return -1;
-
-    m_event.pos = pos;
-
-    if(isDelete)
-    {
-        m_event.deleteSize = m_pSpinBox_bytesCountToDelete->value();
-        //m_event.data.clear();
-    }
-    else
-    {
-        m_event.deleteSize = -1;
-        if(isText)
-        {
-            ClearHighlightChar();
-            auto src = m_pQTextEdit->toPlainText();
-            const QByteArray &val = src.toLatin1();
-            m_event.data.assign(val.begin(),val.end());
-        }
-        else
-        {
-            auto src = m_pQTextEdit->toPlainText();
-            firstErrorPosition = HighlightError(src);
-            ConvertHexText(src, m_event.data);
-        }
-    }
-
-    m_event.valid = true;
-
-    m_pLabelOperationInfo->setText(m_event.GetInfo());
-
-    m_callbackUpdate();
-
-    return firstErrorPosition;
 }
 
 QString CEditView::GetEditStatus(int64_t row, int col, int cols_hex)
@@ -369,14 +211,14 @@ QString CEditView::GetEditStatus(int64_t row, int col, int cols_hex)
         if(col >= cols_hex)
         {
             col -= cols_hex;
-            auto charx = m_event.data[pos - m_event.pos];
-            if(charx <= 0x1f)
+            auto charx = m_event.data[static_cast<uint64_t>(pos - m_event.pos)];
+            if(charx <= 0x1F || charx >= 0x7F)
                 charx = '.';
             return QChar(charx);
         }
         else
         {
-            return QString("%1").arg(m_event.data[pos - m_event.pos], 2, 16, QLatin1Char('0')).toUpper();
+            return QString("%1").arg(m_event.data[static_cast<uint64_t>(pos - m_event.pos)], 2, 16, QLatin1Char('0')).toUpper();
         }
     }
 

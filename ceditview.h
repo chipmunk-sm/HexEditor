@@ -35,7 +35,7 @@ struct CEditItem
     QString GetInfo() const
     {
 
-        if(!valid)
+        if(!valid || pos == -1)
             return "";
 
         QString str;
@@ -71,44 +71,17 @@ struct CEditItem
 
 class CEditView : public QObject
 {
-
     Q_OBJECT
-
 public:
-    explicit CEditView(QLabel *labelOperationInfo,
-                       QPlainTextEdit *textEdit,
-                       QSpinBox *spinBox_bytesCountToDelete,
-                       QButtonGroup *buttonGroup_EditInputType,
-                       QButtonGroup *buttonGroup_EditOverwrite);
-
+    explicit CEditView(QObject *parent);
     void Clear();
     bool Apply(QFile *pFile1, QFile *pFile2, DialogSaveToFile *infoDialog);
     CEditEvent GetCellStatus(int64_t pos);
     QString GetEditStatus(int64_t row, int col, int cols_hex);
-    void setUpdateCallback(std::function<void(void)> callbackUpdate);
-    void setGetIndexCallback(std::function<int64_t(void)> callbackGetIndex);
-
-public slots:
-    int validateInput();
-
+    void SetOperation(int64_t pos, CEditEvent event, int byitesToDelete, const std::vector<uint8_t> &byteArray);
+    QString GetInfo(){return  m_event.GetInfo();}
 private:
-    int HighlightError(const QString &src);
-    void ClearHighlightChar();
-    void ConvertHexText(QString &src, std::vector<uint8_t> &data);
-
-private:
-    QLabel         *m_pLabelOperationInfo;
-    QPlainTextEdit *m_pQTextEdit;
-    QSpinBox       *m_pSpinBox_bytesCountToDelete;
-
     CEditItem       m_event;
-
-    QButtonGroup *m_buttonGroup_EditInputType;
-    QButtonGroup *m_buttonGroup_EditOverwrite;
-
-    std::function<void(void)>    m_callbackUpdate;
-    std::function<int64_t(void)> m_callbackGetIndex;
-
 };
 
 #endif // CEDITVIEW_H

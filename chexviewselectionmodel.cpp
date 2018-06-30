@@ -3,11 +3,19 @@
 #include "chexviewselectionmodel.h"
 #include "chexviewmodel.h"
 
+#if 0
+#   include <QDebug>
+#   define DEBUGTRACE() qDebug() << Q_FUNC_INFO
+#else
+#   define DEBUGTRACE()
+#endif
+
 CHexViewSelectionModel::CHexViewSelectionModel(QAbstractItemModel *model, QScrollBar *pSlider, QObject *parent)
     : QItemSelectionModel(model, parent)
     , m_pSlider(pSlider)
     , m_offset(-1)
 {
+    DEBUGTRACE();
     m_selectFirst.column = 0;
     m_selectFirst.row = 0;
     m_selectSecond.column = 0;
@@ -56,6 +64,7 @@ void CHexViewSelectionModel::scrollSelection()
 
 void CHexViewSelectionModel::select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command)
 {
+    DEBUGTRACE();
 
     Q_UNUSED(selection);
 
@@ -80,22 +89,26 @@ void CHexViewSelectionModel::select(const QItemSelection &selection, QItemSelect
         m_offset = -1;
     }
 
-    qobject_cast<const CHexViewModel*>(model())->UpdateSelectionModel();
+    emit selectionChangedEx();
+    qobject_cast<const CHexViewModel*>(model())->RepaintDisplay();
 }
 
 void CHexViewSelectionModel::clear()
 {
+    DEBUGTRACE();
     m_offset = -1;
     QItemSelectionModel::clear();
 }
 
 void CHexViewSelectionModel::reset()
 {
+    DEBUGTRACE();
     //QItemSelectionModel::reset();
 }
 
 void CHexViewSelectionModel::clearCurrentIndex()
 {
+    DEBUGTRACE();
     m_offset = -1;
     QItemSelectionModel::clearCurrentIndex();
 }

@@ -7,10 +7,10 @@
 #include <QColorDialog>
 #include <QSettings>
 #include <QMessageBox>
-#include <QDebug>
 #include <QTextEdit>
 #include <QFile>
 #include <QDir>
+#include <QTextStream>
 
 #include "versionhelper.h"
 CConfigDialog::CConfigDialog(std::function<void ()> callbackUpdate, std::function<void ()> callbackClose, QWidget *parent)

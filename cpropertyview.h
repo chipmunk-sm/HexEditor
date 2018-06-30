@@ -47,6 +47,7 @@ public:
     void OpenFile(const QString &path);
     void Close();
     QFile *GetFileHandler();
+    void SetDisplayText(bool displayText);
 private:
     void Init();
     void DecodeValue(char* pBuffer, unsigned int bufferSize);
@@ -55,6 +56,7 @@ private:
     QFile       m_file;
     mutable std::vector<unsigned char> m_buffer;
     const uint32_t m_string_len = 256;
+    bool m_displayText = true;
 };
 
 #endif // CPROPERTYVIEW_H

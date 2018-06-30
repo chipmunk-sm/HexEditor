@@ -79,7 +79,6 @@ void CPropertyView::Init()
 
         pModel->appendRow(items);
     }
-
 }
 
 void CPropertyView::OpenFile(const QString &path)
@@ -94,20 +93,25 @@ void CPropertyView::OpenFile(const QString &path)
         QMessageBox::critical(m_propertyView, QObject::tr("Open"), m_file.errorString(), QMessageBox::Ok);
         return;
     }
-
-    m_propertyView->model()->layoutChanged();
-    m_propertyView->update();
 }
 
 void CPropertyView::Close()
 {
     if( m_file.isOpen() )
         m_file.close();
+    DecodeValue(nullptr, 0);
 }
 
 QFile *CPropertyView::GetFileHandler()
 {
     return &m_file;
+}
+
+void CPropertyView::SetDisplayText(bool displayText)
+{
+    m_displayText = displayText;
+//    if(!displayText)
+//        DecodeValue(nullptr, 0);
 }
 
 void CPropertyView::DecodeValue(int64_t pos)
@@ -182,6 +186,14 @@ void CPropertyView::DecodeValue(char *pBuffer, unsigned int bufferSize)
 #undef  MACRO_PROP
 
     QString str;
+    if(!m_displayText)
+    {
+        pModel->setData(pModel->index(index++, m_value_column), str);
+        pModel->setData(pModel->index(index++, m_value_column), str);
+        pModel->setData(pModel->index(index++, m_value_column), str);
+        pModel->setData(pModel->index(index++, m_value_column), str);
+        return;
+    }
 
     try { str = QString::fromLatin1(pBuffer); } catch (...){ str = "-"; }
     pModel->setData(pModel->index(index++, m_value_column), str);
