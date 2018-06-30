@@ -71,6 +71,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     CollectCodecs();
 
+//    auto buttonStyle = "QPushButton{border:none;}";
+//    m_ui->pushButton_update_position->setStyleSheet(buttonStyle);
+    m_ui->pushButton_update_position->setText("");
+
 }
 
 MainWindow::~MainWindow()
@@ -681,11 +685,18 @@ void MainWindow::on_spinBox_bytesCountToDelete_valueChanged(int)
 void MainWindow::SelectionChange()
 {
     DEBUGTRACE();
-    m_pcpropertyview->DecodeValue(m_pchexview->GetCurrentPos());
+    auto pos = m_pchexview->GetCurrentPos();
+    m_pcpropertyview->DecodeValue(pos);
+    m_pchexview->SetInfo(pos);
 }
 
 void MainWindow::on_checkBox_displayDecodedText_stateChanged(int)
 {
     DEBUGTRACE();
     m_pcpropertyview->SetDisplayText(m_ui->checkBox_displayDecodedText->isChecked());
+}
+
+void MainWindow::on_pushButton_update_position_clicked()
+{
+    on_textDataEditor_textChanged();
 }

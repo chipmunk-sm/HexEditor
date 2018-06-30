@@ -65,6 +65,8 @@ private slots:
 
     void on_checkBox_displayDecodedText_stateChanged(int arg1);
 
+    void on_pushButton_update_position_clicked();
+
 signals:
     void callUpdateConfig();
     void callCloseConfig();

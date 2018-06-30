@@ -53,6 +53,7 @@ public:
     int GetColHex() const {return m_cols_hex;}
     void SelectPosition(int64_t pos);
     void Reset();
+    void SetInfo(int64_t val) const;
 private:
 
     mutable QFile m_file;
@@ -75,7 +76,6 @@ private:
     int m_cols_hex = COLS_HEX;
 
     int64_t GetRowCount() const;
-    void SetInfo(int64_t val) const;
 
 public slots:
     void RedrawDisplayArea();
