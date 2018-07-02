@@ -632,6 +632,30 @@
    <header>chexviewcustom.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>propertyView</tabstop>
+  <tabstop>checkBox_displayDecodedText</tabstop>
+  <tabstop>hexView</tabstop>
+  <tabstop>pushButton_update_position</tabstop>
+  <tabstop>textDataEditor</tabstop>
+  <tabstop>spinBox_bytesCountToDelete</tabstop>
+  <tabstop>radioButton_overwrite</tabstop>
+  <tabstop>radioButton_insert</tabstop>
+  <tabstop>radioButton_delete</tabstop>
+  <tabstop>pushButton_apply</tabstop>
+  <tabstop>lineEdit_searchtext</tabstop>
+  <tabstop>pushButton_search</tabstop>
+  <tabstop>treeView_searchResult</tabstop>
+  <tabstop>pushButton_abortSearch</tabstop>
+  <tabstop>lineEdit_goto</tabstop>
+  <tabstop>lineEdit_info</tabstop>
+  <tabstop>comboBox_textcodec</tabstop>
+  <tabstop>checkBox_hexCoded</tabstop>
+  <tabstop>pushButton_config</tabstop>
+  <tabstop>pushButton_SaveSelected</tabstop>
+  <tabstop>pushButtonOpen</tabstop>
+  <tabstop>horizontalSlider_Zoom</tabstop>
+ </tabstops>
  <resources>
   <include location="hexeditor.qrc"/>
  </resources>
