@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>398</width>
-    <height>616</height>
+    <height>642</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -221,6 +221,20 @@ Copyright (C) chipmunk-sm&lt;br&gt;
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>pushButton_releaseNote</tabstop>
+  <tabstop>pushButton_color_search</tabstop>
+  <tabstop>pushButton_color_overwrite</tabstop>
+  <tabstop>pushButton_color_insert</tabstop>
+  <tabstop>pushButton_color_delete</tabstop>
+  <tabstop>checkBox_BackupOnSave</tabstop>
+  <tabstop>checkBox_alternatingRowColors</tabstop>
+  <tabstop>checkBox_showGrid</tabstop>
+  <tabstop>fontComboBox</tabstop>
+  <tabstop>horizontalSlider_Zoom</tabstop>
+  <tabstop>pushButton_close</tabstop>
+  <tabstop>pushButton_restore_default</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
