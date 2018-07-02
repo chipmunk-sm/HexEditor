@@ -18,6 +18,8 @@ protected:
     virtual void paintEvent(QPaintEvent *event) override;
     void drawCell(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
     bool UseScrollbar(int keyX);
+signals:
+    void selectionChangedEx();
 
 };
 

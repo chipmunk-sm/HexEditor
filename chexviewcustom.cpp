@@ -35,6 +35,7 @@ bool CHexViewCustom::event(QEvent *event)
                     static_cast<const CHexViewModel*>(model())->EventHandler(event);
                     QTableView::event(event);
                     static_cast<CHexViewSelectionModel*>(selectionModel())->scrollSelection();
+                    emit selectionChangedEx();
                     //static_cast<const CHexViewModel*>(model())->RepaintDisplay();
                     return true;
                 }

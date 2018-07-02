@@ -76,6 +76,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(static_cast<CHexViewSelectionModel*>(m_ui->hexView->selectionModel()), &CHexViewSelectionModel::selectionChangedEx,
             this, &MainWindow::SelectionChange);
 
+    connect(m_ui->hexView, &CHexViewCustom::selectionChangedEx,
+            this, &MainWindow::SelectionChange);
+
     CollectCodecs();
 
     m_ui->pushButton_update_position->setText("");
