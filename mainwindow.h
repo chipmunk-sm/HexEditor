@@ -27,6 +27,10 @@ private:
     CEditView      *m_pceditview = nullptr;
     CSearch        *m_pcsearch = nullptr;
 
+    bool           m_searchInProgress = false;
+    bool           m_editInactive = false;
+    bool           m_disableGoToUpdate = false;
+
     CCFontSize     m_ccfontsize;
     QString        m_filename;
     QString        m_PathFilename;
@@ -41,6 +45,7 @@ private:
     bool DecodeText(const QString &sourceString, QLabel *info, bool bHex, int *firstErrorPos);
     void HighlightError(int firstErrorPos, QLineEdit *pEdit);
     void HighlightError(int firstErrorPos, QPlainTextEdit *pEdit);
+    void LockInterfaceWhileSearch(bool lock);
 protected:
     void closeEvent(QCloseEvent *event) override;
     void changeEvent(QEvent *e) override;
@@ -62,10 +67,11 @@ private slots:
     void on_textDataEditor_textChanged();
     void on_spinBox_bytesCountToDelete_valueChanged(int arg1);
     void SelectionChange();
-
     void on_checkBox_displayDecodedText_stateChanged(int arg1);
-
     void on_pushButton_update_position_clicked();
+    void on_verticalScrollBarHexView_valueChanged(int value);
+    void on_lineEdit_goto_textChanged(const QString &arg1);
+    void on_lineEdit_goto_textEdited(const QString &arg1);
 
 signals:
     void callUpdateConfig();

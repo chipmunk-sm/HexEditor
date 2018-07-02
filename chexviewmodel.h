@@ -24,9 +24,7 @@ class CHexViewModel : public QAbstractTableModel
 public:
     explicit CHexViewModel(QTableView *pHexView,
                            QScrollBar *pVerticalScrollBarHexView,
-                           QLineEdit  *pLineEditInfo,
                            CEditView  *pEditView,
-                           QLineEdit  *pLineEditGoTo,
                            CSearch    *pcsearch);
 
     ~CHexViewModel() override;
@@ -51,21 +49,21 @@ public:
     QFile *GetFileHandler();
     void RepaintDisplay() const;
     int GetColHex() const {return m_cols_hex;}
-    void SelectPosition(int64_t pos);
     void Reset();
-    void SetInfo(int64_t val) const;
+    void SetInfo(int64_t val, QLineEdit *pInfo, QLineEdit *pGoTo) const;
+    void UpdateScrollbarPos(int64_t scrollbarPosition);
 private:
 
     mutable QFile m_file;
     mutable std::vector<unsigned char> m_buffer;
-    mutable int64_t m_cachePos;
-    mutable int64_t m_cacheLen;
+    mutable int64_t m_cachePos = 0;
+    mutable int64_t m_cacheLen = 0;
+    mutable int64_t m_scrollbarMax = 0;
+    int64_t m_scrollbarPosition = 0;
 
     QTableView                  *m_hexView                   = nullptr;
     CEditView                   *m_editview                  = nullptr;
     QScrollBar                  *m_pVerticalScrollBarHexView = nullptr;
-    QLineEdit                   *m_lineEditInfo              = nullptr;
-    QLineEdit                   *m_lineEditGoTo              = nullptr;
     CSearch                     *m_pcsearch                  = nullptr;
 
     QColor                      m_color_overwrite;
@@ -78,9 +76,8 @@ private:
     int64_t GetRowCount() const;
 
 public slots:
-    void RedrawDisplayArea();
+    //void RedrawDisplayArea();
     //void HistorySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    void lineEdit_goto_textEdited(const QString &arg1);
 };
 
 #endif // CHEXVIEWMODEL_H

@@ -32,19 +32,24 @@ MainWindow::MainWindow(QWidget *parent) :
     DEBUGTRACE();
     m_ui->setupUi(this);
 
+    setWindowIcon(QPixmap(":/data/hexeditor_logo.png"));
+    m_windowTitle = windowTitle();
+
     m_pcpropertyview = new CPropertyView(m_ui->propertyView);
     m_pcsearch = new CSearch(this);
     m_pceditview = new CEditView(this);
+
+    m_ui->verticalScrollBarHexView->setMinimum(0);
+    m_ui->verticalScrollBarHexView->setMaximum(0);
+    m_ui->verticalScrollBarHexView->setSingleStep(1);
+    m_ui->verticalScrollBarHexView->setPageStep(100);
+
     m_pchexview = new CHexViewModel(m_ui->hexView,
                                     m_ui->verticalScrollBarHexView,
-                                    m_ui->label_info,
                                     m_pceditview,
-                                    m_ui->lineEdit_goto,
                                     m_pcsearch);
 
-    setWindowIcon(QPixmap(":/data/hexeditor_logo.png"));
-
-    m_windowTitle = windowTitle();
+    m_ui->lineEdit_goto->setValidator(new QRegExpValidator(QRegExp("^\\d{1,16}$"), this));
 
     connect(this, &MainWindow::callCloseConfig,       this, &MainWindow::CloseConfig);
     connect(this, &MainWindow::callUpdateConfig,      this, &MainWindow::UpdateConfig);
@@ -59,20 +64,20 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->treeView_searchResult->setModel(new QStandardItemModel(0, 1, this));
     m_ui->treeView_searchResult->model()->setHeaderData(0, Qt::Horizontal, tr("Position"));
 
-    connect(m_ui->treeView_searchResult->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::searchSelectionModelChanged);
+    connect(m_ui->treeView_searchResult->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &MainWindow::searchSelectionModelChanged);
 
     m_pcsearch->SetControl(qobject_cast<QStandardItemModel*>(m_ui->treeView_searchResult->model()), m_ui->progressBar_search);
     m_ui->progressBar_search->setVisible(false);
     m_ui->pushButton_abortSearch->setVisible(false);
 
-    connect(m_ui->buttonGroup_EditOverwrite,  SIGNAL(buttonClicked(QAbstractButton *)), this, SLOT(on_textDataEditor_textChanged()));
+    connect(m_ui->buttonGroup_EditOverwrite,  SIGNAL(buttonClicked(QAbstractButton *)),
+            this, SLOT(on_textDataEditor_textChanged()));
     connect(static_cast<CHexViewSelectionModel*>(m_ui->hexView->selectionModel()), &CHexViewSelectionModel::selectionChangedEx,
             this, &MainWindow::SelectionChange);
 
     CollectCodecs();
 
-//    auto buttonStyle = "QPushButton{border:none;}";
-//    m_ui->pushButton_update_position->setStyleSheet(buttonStyle);
     m_ui->pushButton_update_position->setText("");
 
 }
@@ -189,10 +194,15 @@ void MainWindow::on_pushButtonOpen_clicked()
             QFileInfo fileinfo(m_PathFilename);
             m_filename = fileinfo.baseName();
             setWindowTitle(m_windowTitle + " [" + m_PathFilename + "]") ;
+
+            m_ui->lineEdit_info->setText("");
+            m_ui->verticalScrollBarHexView->setValue(0);
+
             if(m_pchexview->OpenFile(m_PathFilename))
             {
                 m_pcpropertyview->Close();
                 m_pcpropertyview->OpenFile(m_PathFilename);
+                SelectionChange();
             }
             else
             {
@@ -358,9 +368,15 @@ void MainWindow::on_pushButton_apply_clicked()
     infoDialog->raise();
     infoDialog->activateWindow();
 
+    m_ui->pushButton_apply->setEnabled(false);
+    m_ui->label_operationInfo->setEnabled(false);
+
     if(!m_pceditview->Apply(m_pchexview->GetFileHandler(), m_pcpropertyview->GetFileHandler(), infoDialog))
     {
-        //        QMessageBox::critical(this, QObject::tr("Apply changes"), errorInfo, QMessageBox::Ok);
+        //QMessageBox::critical(this, QObject::tr("Apply changes"), errorInfo, QMessageBox::Ok);
+        m_ui->pushButton_apply->setEnabled(true);
+        m_ui->label_operationInfo->setEnabled(true);
+        m_editInactive = true;
     }
     else
     {
@@ -383,12 +399,7 @@ void MainWindow::on_pushButton_search_clicked()
     if(bytesToSearch.size() < 1 || firstErrorPos != -1)
         return;
 
-    m_ui->lineEdit_searchtext->setEnabled(false);
-    m_ui->pushButton_search->setEnabled(false);
-    m_ui->progressBar_search->setVisible(true);
-    m_ui->pushButton_abortSearch->setVisible(true);
-	m_ui->pushButtonOpen->setEnabled(false);
-	m_ui->pushButton_apply->setEnabled(false);
+    LockInterfaceWhileSearch(true);
 
     auto timeStart = std::chrono::high_resolution_clock::now();
 
@@ -403,14 +414,11 @@ void MainWindow::on_pushButton_search_clicked()
         QMessageBox::critical(nullptr, QObject::tr("Open"), m_pcsearch->GetErrorString(), QMessageBox::Ok);
     }
 
-    m_ui->pushButton_apply->setEnabled(true);
-	m_ui->pushButtonOpen->setEnabled(true);
-    m_ui->lineEdit_searchtext->setEnabled(true);
-    m_ui->pushButton_search->setEnabled(true);
-    m_ui->progressBar_search->setVisible(false);
-    m_ui->pushButton_abortSearch->setVisible(false);
-	m_pchexview->layoutChanged();
-	m_pchexview->UpdateTable(false);
+    LockInterfaceWhileSearch(false);
+
+    m_pchexview->layoutChanged();
+    m_pchexview->UpdateTable(false);
+
 }
 
 void MainWindow::on_pushButton_abortSearch_clicked()
@@ -429,8 +437,9 @@ void MainWindow::searchSelectionModelChanged(const QItemSelection &selected, con
         auto list = val.split(' ', QString::SplitBehavior::SkipEmptyParts);
         foreach (auto &tmpstr, list)
         {
-            auto tmpv = tmpstr.toLongLong();
-            m_pchexview->SelectPosition(tmpv);
+            auto pos = tmpstr.toLongLong();
+            auto scrollRow = pos / m_pchexview->GetColHex();
+            m_ui->verticalScrollBarHexView->setValue(scrollRow);
             break;
         }
         break;
@@ -653,13 +662,15 @@ void MainWindow::on_textDataEditor_textChanged()
 {
     DEBUGTRACE();
     auto firstErrorPos = -1;
-    auto res = DecodeText(m_ui->textDataEditor->toPlainText(), m_ui->label_edit_info, m_ui->checkBox_hexCoded->isChecked(), &firstErrorPos);
+    auto resSucceeded = DecodeText(m_ui->textDataEditor->toPlainText(), m_ui->label_edit_info, m_ui->checkBox_hexCoded->isChecked(), &firstErrorPos);
     HighlightError(firstErrorPos, m_ui->textDataEditor);
 
     if(firstErrorPos != -1)
-        res = false;
+        resSucceeded = false;
 
-    m_ui->pushButton_apply->setEnabled(res);
+    m_editInactive = !resSucceeded;
+    m_ui->pushButton_apply->setEnabled(resSucceeded && !m_searchInProgress);
+    m_ui->label_operationInfo->setEnabled(resSucceeded);
 
     auto isOverwrite = m_ui->radioButton_overwrite->isChecked();
     auto isDelete    = m_ui->radioButton_delete->isChecked();
@@ -685,9 +696,11 @@ void MainWindow::on_spinBox_bytesCountToDelete_valueChanged(int)
 void MainWindow::SelectionChange()
 {
     DEBUGTRACE();
+    m_disableGoToUpdate = true;
     auto pos = m_pchexview->GetCurrentPos();
     m_pcpropertyview->DecodeValue(pos);
-    m_pchexview->SetInfo(pos);
+    m_pchexview->SetInfo(pos, m_ui->lineEdit_info, m_ui->lineEdit_goto);
+    m_disableGoToUpdate = false;
 }
 
 void MainWindow::on_checkBox_displayDecodedText_stateChanged(int)
@@ -699,4 +712,39 @@ void MainWindow::on_checkBox_displayDecodedText_stateChanged(int)
 void MainWindow::on_pushButton_update_position_clicked()
 {
     on_textDataEditor_textChanged();
+}
+
+void MainWindow::LockInterfaceWhileSearch(bool lock)
+{
+    m_searchInProgress = lock;
+
+    m_ui->lineEdit_searchtext->setEnabled(!lock);
+    m_ui->pushButton_search->setEnabled(!lock);
+    m_ui->pushButtonOpen->setEnabled(!lock);
+    m_ui->pushButton_apply->setEnabled(!lock && !m_editInactive);
+    m_ui->checkBox_hexCoded->setEnabled(!lock);
+    m_ui->comboBox_textcodec->setEnabled(!lock);
+
+    m_ui->progressBar_search->setVisible(lock);
+    m_ui->pushButton_abortSearch->setVisible(lock);
+}
+
+void MainWindow::on_verticalScrollBarHexView_valueChanged(int value)
+{
+    m_pchexview->UpdateScrollbarPos(value);
+}
+
+void MainWindow::on_lineEdit_goto_textChanged(const QString &arg1)
+{
+    if(m_disableGoToUpdate)
+        return;
+
+    auto pos = arg1.toLongLong();
+    auto scrollRow = pos / m_pchexview->GetColHex();
+    m_ui->verticalScrollBarHexView->setValue(scrollRow);
+}
+
+void MainWindow::on_lineEdit_goto_textEdited(const QString &arg1)
+{
+    on_lineEdit_goto_textChanged(arg1);
 }

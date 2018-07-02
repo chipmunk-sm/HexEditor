@@ -19,9 +19,7 @@
 
 CHexViewModel::CHexViewModel(QTableView *pHexView,
                              QScrollBar *pVerticalScrollBarHexView,
-                             QLineEdit  *pLineEditInfo,
                              CEditView  *pEditView,
-                             QLineEdit  *pLineEditGoTo,
                              CSearch    *pcsearch)
 
     : QAbstractTableModel(pHexView)
@@ -30,20 +28,12 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
     , m_hexView(pHexView)
     , m_editview(pEditView)
     , m_pVerticalScrollBarHexView(pVerticalScrollBarHexView)
-    , m_lineEditInfo(pLineEditInfo)
-    , m_lineEditGoTo(pLineEditGoTo)
     , m_pcsearch(pcsearch)
 {
     DEBUGTRACE();
 
     m_buffer.resize(m_cols_hex);
 
-    SetInfo(0);
-
-    m_pVerticalScrollBarHexView->setMinimum(0);
-    m_pVerticalScrollBarHexView->setMaximum(0);
-    m_pVerticalScrollBarHexView->setSingleStep(1);
-    m_pVerticalScrollBarHexView->setPageStep(100);
 
     m_hexView->setVerticalHeader(new CHexViewVerticalHeader(Qt::Orientation::Vertical, pHexView));
     m_hexView->setModel(this);
@@ -59,11 +49,6 @@ CHexViewModel::CHexViewModel(QTableView *pHexView,
     headerVertical->setSectionResizeMode(QHeaderView::Fixed);
     headerVertical->setDefaultAlignment(Qt::AlignCenter | Qt::AlignJustify);
     headerVertical->setHighlightSections(true);
-
-    connect(m_pVerticalScrollBarHexView, &QScrollBar::valueChanged,              this, &CHexViewModel::RedrawDisplayArea);
-    connect(m_lineEditGoTo,              &QLineEdit::textEdited,                 this, &CHexViewModel::lineEdit_goto_textEdited);
-
-    m_lineEditGoTo->setValidator(new QRegExpValidator(QRegExp("^\\d{1,10}$"), this));
 
     UpdateColorConfig();
 
@@ -131,7 +116,9 @@ bool CHexViewModel::OpenFile(const QString &path)
 
     m_cachePos = -1;
     m_cacheLen = 0;
-    m_lineEditInfo->setText("");
+
+    m_scrollbarPosition = 0;
+    m_scrollbarMax = 0;
 
     m_file.setFileName(path);
 
@@ -166,7 +153,6 @@ bool CHexViewModel::OpenFile(const QString &path)
 
     m_buffer.resize(m_cols_hex);
 
-    m_pVerticalScrollBarHexView->setValue(0);
     UpdateScrollbarProps();
 
     m_hexView->reset();
@@ -175,8 +161,6 @@ bool CHexViewModel::OpenFile(const QString &path)
     m_hexView->selectionModel()->select(newIndex, QItemSelectionModel::ClearAndSelect);
     m_hexView->setCurrentIndex(newIndex);
     m_hexView->setFocus();
-
-    SetInfo(0);
 
     layoutChanged();
     UpdateTable(true);
@@ -209,12 +193,12 @@ int64_t CHexViewModel::GetRowCount() const
     return rows;
 }
 
-void CHexViewModel::SetInfo(int64_t val) const
+void CHexViewModel::SetInfo(int64_t val, QLineEdit *pInfo, QLineEdit *pGoTo) const
 {
     DEBUGTRACE();
     if(!m_file.isOpen())
     {
-        m_lineEditInfo->setText("");
+        pInfo->setText("");
         return;
     }
 
@@ -226,8 +210,8 @@ void CHexViewModel::SetInfo(int64_t val) const
             .arg(val, 8, 16, QLatin1Char('0')).toUpper()
             .arg(size, 8, 16, QLatin1Char('0')).toUpper();
 
-    m_lineEditInfo->setText(str);
-    m_lineEditGoTo->setText(QString("%1").arg(val, 8, 10, QLatin1Char('0')));
+    pInfo->setText(str);
+    pGoTo->setText(QString("%1").arg(val, 8, 10, QLatin1Char('0')));
 
 }
 
@@ -295,7 +279,7 @@ QVariant CHexViewModel::data(const QModelIndex &index, int role) const
 {
     if(role == Qt::DisplayRole)
     {
-        auto indRow = static_cast<int64_t>(index.row()) + m_pVerticalScrollBarHexView->value();
+        auto indRow = static_cast<int64_t>(index.row()) + m_scrollbarPosition;
         auto val = m_editview->GetEditStatus(indRow, index.column(), m_cols_hex);
         if(!val.isNull())
             return val;
@@ -318,9 +302,9 @@ QVariant CHexViewModel::headerData(int section, Qt::Orientation orientation, int
     }
     else if(orientation == Qt::Vertical && role == Qt::DisplayRole)
     {
-        section += m_pVerticalScrollBarHexView->value();
+        section += m_scrollbarPosition;
 
-        if(section >= (m_pVerticalScrollBarHexView->maximum() + rowCount(QModelIndex())))
+        if(section >= (m_scrollbarMax + rowCount(QModelIndex())))
             return "";
 
         auto val = static_cast<uint64_t>(section) * static_cast<uint64_t>(m_cols_hex);
@@ -336,7 +320,7 @@ QVariant CHexViewModel::headerData(int section, Qt::Orientation orientation, int
 QColor CHexViewModel::GetCellStatus(const QModelIndex &index) const
 {
     //DEBUGTRACE();
-    auto indRow = static_cast<int64_t>(index.row()) + m_pVerticalScrollBarHexView->value();
+    auto indRow = static_cast<int64_t>(index.row()) + m_scrollbarPosition;
 
     auto col = index.column();
     auto pos = indRow * m_cols_hex;
@@ -373,24 +357,12 @@ void CHexViewModel::RepaintDisplay() const
     m_hexView->viewport()->repaint();
 }
 
-void CHexViewModel::SelectPosition(int64_t pos)
+void CHexViewModel::UpdateScrollbarPos(int64_t scrollbarPosition)
 {
     DEBUGTRACE();
-    auto scrollRow = pos / m_cols_hex;
-    m_pVerticalScrollBarHexView->setValue(scrollRow);
-}
-
-void CHexViewModel::RedrawDisplayArea()
-{
-    DEBUGTRACE();
+    m_scrollbarPosition = scrollbarPosition;
     m_hexView->verticalHeader()->viewport()->update(0, 0, m_hexView->verticalHeader()->viewport()->width(), m_hexView->verticalHeader()->viewport()->height());
     m_hexView->viewport()->update(0, 0, m_hexView->viewport()->width(), m_hexView->viewport()->height());
-}
-
-void CHexViewModel::lineEdit_goto_textEdited(const QString &arg1)
-{
-    DEBUGTRACE();
-    SelectPosition(arg1.toLongLong());
 }
 
 int64_t CHexViewModel::GetCurrentPos()
@@ -432,6 +404,8 @@ void CHexViewModel::UpdateScrollbarProps() const
         nRowsRes = 0;
 
     m_pVerticalScrollBarHexView->setMaximum(nRowsRes);
+    m_scrollbarMax = nRowsRes;
+
 }
 
 

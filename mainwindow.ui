@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1079</width>
+    <width>1095</width>
     <height>637</height>
    </rect>
   </property>
@@ -473,13 +473,22 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>86</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maxLength">
         <number>32</number>
+       </property>
+       <property name="placeholderText">
+        <string notr="true"/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="label_info">
+      <widget class="QLineEdit" name="lineEdit_info">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -492,10 +501,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_textcodec"/>
+      <widget class="QComboBox" name="comboBox_textcodec">
+       <property name="toolTip">
+        <string>set &quot;text encoding&quot; for &quot;EDIT&quot; and &quot;SEARCH&quot;</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="checkBox_hexCoded">
+       <property name="toolTip">
+        <string>set &quot;TEXT&quot; or &quot;HEX&quot; mode for &quot;EDIT&quot; and &quot;SEARCH&quot;</string>
+       </property>
        <property name="text">
         <string>HEX</string>
        </property>
@@ -553,6 +569,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string/>
        </property>
        <property name="text">
         <string>Save selected</string>
