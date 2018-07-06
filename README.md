@@ -50,9 +50,8 @@ GNU General Public License for more details
 ### Search (text)
 ![search_txt_ed](https://user-images.githubusercontent.com/29524958/42353553-d6bb5700-80c9-11e8-80cb-fff05a09ca0a.png)
 
-
 ### Search (HEX) 
-
+![search_hex_ed](https://user-images.githubusercontent.com/29524958/42383452-ee8458b6-813f-11e8-9c73-1b59b0435246.png)
 
 ### Edit (Overwrite)
 ![edit_txt_ed](https://user-images.githubusercontent.com/29524958/42349585-e9027718-80b5-11e8-9228-d721ec9169e4.png)
