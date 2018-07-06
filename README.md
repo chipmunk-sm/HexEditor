@@ -42,6 +42,12 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details
 
+## Screenshot
+![sample1](https://user-images.githubusercontent.com/29524958/42383939-651f2108-8141-11e8-820f-7420aad16661.png)
+
+![sample2](https://user-images.githubusercontent.com/29524958/42384098-c5debd0a-8141-11e8-9197-244e4236e4c0.png)
+
+
 ## How-to
 
 ### Save Selected to File:
