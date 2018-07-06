@@ -668,17 +668,17 @@ void MainWindow::on_textDataEditor_textChanged()
     auto resSucceeded = DecodeText(m_ui->textDataEditor->toPlainText(), m_ui->label_edit_info, m_ui->checkBox_hexCoded->isChecked(), &firstErrorPos);
     HighlightError(firstErrorPos, m_ui->textDataEditor);
 
-    if(firstErrorPos != -1)
+    auto isOverwrite = m_ui->radioButton_overwrite->isChecked();
+    auto isDelete    = m_ui->radioButton_delete->isChecked();
+    auto event = isOverwrite ? CEditEvent::CEditEventOverwrite :
+                               isDelete ? CEditEvent::CEditEventDelete : CEditEvent::CEditEventInsert;
+
+    if(!isDelete && firstErrorPos != -1)
         resSucceeded = false;
 
     m_editInactive = !resSucceeded;
     m_ui->pushButton_apply->setEnabled(resSucceeded && !m_searchInProgress);
     m_ui->label_operationInfo->setEnabled(resSucceeded);
-
-    auto isOverwrite = m_ui->radioButton_overwrite->isChecked();
-    auto isDelete    = m_ui->radioButton_delete->isChecked();
-    auto event = isOverwrite ? CEditEvent::CEditEventOverwrite :
-                               isDelete ? CEditEvent::CEditEventDelete : CEditEvent::CEditEventInsert;
 
     m_ui->textDataEditor->setEnabled(!isDelete);
     m_ui->spinBox_bytesCountToDelete->setEnabled(isDelete);
