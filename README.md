@@ -30,7 +30,7 @@ Supported Features:
 Insert
 Overwrite
 Delete
-Search - (The current release limited to Latin character sets)
+Search
 The maximum file size HexEditor can edit is 64 GB
 ```
 
@@ -42,8 +42,27 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details
 
-## Screenshot
+## How-to
 
-![hexeditor](https://user-images.githubusercontent.com/29524958/42015778-6927b206-7ab1-11e8-8183-c5dfbcb6a2a4.png)
+### Save Selected to File:
+![saveselected_ed](https://user-images.githubusercontent.com/29524958/42350919-3dfbfd20-80bb-11e8-949c-3a01c7a885dc.png)
 
-![hexeditor1](https://user-images.githubusercontent.com/29524958/41941248-15681b78-79a4-11e8-9636-44c974ec53c9.png)
+### Search (text)
+![search_txt_ed](https://user-images.githubusercontent.com/29524958/42353553-d6bb5700-80c9-11e8-80cb-fff05a09ca0a.png)
+
+
+### Search (HEX) 
+
+
+### Edit (Overwrite)
+![edit_txt_ed](https://user-images.githubusercontent.com/29524958/42349585-e9027718-80b5-11e8-9228-d721ec9169e4.png)
+
+### Edit (Insert)
+![edit_txt_ins_ed](https://user-images.githubusercontent.com/29524958/42350175-01b85a6e-80b8-11e8-9e86-9ee4152f7e45.png)
+
+### Edit (Delete)
+![edit_txt_del_ed](https://user-images.githubusercontent.com/29524958/42350564-b441ca0c-80b9-11e8-8e1f-19e1bea4dafd.png)
+
+## Known Issues
+Overwrite mode, backup step: progress bar not yet implemented.
+
