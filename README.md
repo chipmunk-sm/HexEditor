@@ -69,6 +69,7 @@ GNU General Public License for more details
 ```
 *Step #3. Optional. Set character encoding. Set mode: Text, Hex.
 *Step #4. Optional. Update the position for editing.
+#6. Warning! The data is inserted before the selected position.
 ```
 ![edit_txt_ins_ed](https://user-images.githubusercontent.com/29524958/42350175-01b85a6e-80b8-11e8-9e86-9ee4152f7e45.png)
 
