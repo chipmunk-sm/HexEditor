@@ -25,7 +25,8 @@ SOURCES += \
     dialogsavetofile.cpp \
     ceditview.cpp \
     csearch.cpp \
-    cmemorymappedfile.cpp
+    cmemorymappedfile.cpp \
+    clanguage.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -42,7 +43,8 @@ HEADERS += \
     ver.h \
     versionhelper.h \
     csearch.h \
-    cmemorymappedfile.h
+    cmemorymappedfile.h \
+    clanguage.h
 
 FORMS += \
         mainwindow.ui \
@@ -72,3 +74,96 @@ win32 {
   RC_FILE     += hexeditor.rc
   OTHER_FILES += hexeditor.rc
 }
+
+# lupdate -no-obsolete -verbose -pro *.pro
+
+# cd translations
+
+# linguist language_en.ts language_cs.ts language_de.ts language_fr.ts language_ja.ts language_pl.ts language_ru.ts language_sl.ts language_zh_CN.ts language_zh_TW.ts
+
+# cd ..
+
+# lrelease -removeidentical -compress *.pro
+
+TRANSLATIONS += \
+    translations/language_en.ts \
+    translations/language_cs.ts \
+    translations/language_de.ts \
+    translations/language_fr.ts \
+    translations/language_ja.ts \
+    translations/language_pl.ts \
+    translations/language_ru.ts \
+    translations/language_sl.ts \
+    translations/language_zh_CN.ts \
+    translations/language_zh_TW.ts
+
+
+#af		Afrikaans
+#sq		Albanian
+#ar		Arabic
+#eu		Basque
+#be		Belarusian
+#bs		Bosnian
+#bg		Bulgarian
+#ca		Catalan
+#hr		Croatian
+#zh_cn		Chinese (Simplified)
+#zh_tw		Chinese (Traditional)
+#cs		Czech
+#da		Danish
+#nl		Dutch
+#en		English
+#en_us		English (US)
+#et		Estonian
+#fa		Farsi
+#fil		Filipino
+#fi		Finnish
+#fr		French
+#fr_ca		French (Canada)
+#ga		Gaelic
+#gl		Gallego
+#ka		Georgian
+#de		German
+#de_du		German (Personal)
+#el		Greek
+#gu		Gujarati
+#he		Hebrew
+#hi		Hindi
+#hu		Hungarian
+#is		Icelandic
+#id		Indonesian
+#it		Italian
+#ja		Japanese
+#kn		Kannada
+#km		Khmer
+#ko		Korean
+#lo		Lao
+#lt		Lithuanian
+#lv		Latvian
+#ml		Malayalam
+#ms		Malaysian
+#mi_tn		Maori (Ngai Tahu)
+#mi_wwow	Maori (Waikoto Uni)
+#mn		Mongolian
+#no		Norwegian
+#no_gr		Norwegian (Primary)
+#nn		Nynorsk
+#pl		Polish
+#pt		Portuguese
+#pt_br		Portuguese (Brazil)
+#ro		Romanian
+#ru		Russian
+#sm		Samoan
+#sr		Serbian
+#sk		Slovak
+#sl		Slovenian
+#so		Somali
+#es		Spanish (International)
+#sv		Swedish
+#tl		Tagalog
+#ta		Tamil
+#th		Thai
+#to		Tongan
+#tr		Turkish
+#uk		Ukrainian
+#vi		Vietnamese
