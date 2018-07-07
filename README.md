@@ -1,8 +1,13 @@
 # HexEditor
-Hex Editor GUI
-
-## under development!!!
-
+Cross-platform Hex Editor GUI
+```
+Supported Features:
+Insert
+Overwrite
+Delete
+Search
+The maximum file size HexEditor can edit is 64 GB
+```
 ### Linux
 To get the last release version, please use the PPA:
 
@@ -21,18 +26,6 @@ Release version: https://github.com/chipmunk-sm/HexEditor/releases
 https://github.com/chipmunk-sm/hexeditor
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ig500t2beurjfivx?svg=true)](https://ci.appveyor.com/project/chipmunk-sm/hexeditor)
-
-## Description
-Cross-platform Hex Editor GUI
-
-```
-Supported Features:
-Insert
-Overwrite
-Delete
-Search
-The maximum file size HexEditor can edit is 64 GB
-```
 
 ## License
 GPL v3.0
@@ -68,6 +61,4 @@ GNU General Public License for more details
 ### Edit (Delete)
 ![edit_txt_del_ed](https://user-images.githubusercontent.com/29524958/42350564-b441ca0c-80b9-11e8-8e1f-19e1bea4dafd.png)
 
-## Known Issues
-Overwrite mode, backup step: progress bar not yet implemented.
 
