@@ -5,6 +5,7 @@
 
 #include <QDialog>
 #include <QFile>
+#include <functional>
 
 namespace Ui {
     class DialogSaveToFile;
@@ -19,10 +20,12 @@ public:
     ~DialogSaveToFile();
     void DumpSelectionAsText(const QString &inFile, const QString &outFile,
                              int64_t top, int64_t left, int64_t bottom, int64_t right, int cols_hex);
-    bool EditBytes(const QString &inFile, const QString &outFile,
-                   int64_t pos, std::vector<uint8_t> &data, int64_t deleteSize);
+    bool EditFile(const QString &inFile, const QString &outFile,
+                   int64_t editPos, std::vector<uint8_t> &data, int64_t deleteSize);
 
-    void setError(const QString &errString);
+    bool CopyFile(const QString &sInFile, const QString &sOutFile, QString &sError);
+
+    void setInfo(const QString &infoString);
 private slots:
     void on_pushButton_cancel_clicked();
     void on_pushButton_exit_clicked();
@@ -30,13 +33,13 @@ private slots:
 private:
     Ui::DialogSaveToFile *ui;
     bool m_cancel = false;
-    bool m_exit = false;
+    bool m_exit = true;
     QString m_error;
 
     QString m_InFile;
     QString m_OutFile;
 
-    int64_t m_pos = -1;
+    int64_t m_editPos = -1;
     double m_progressInc = 0.0;
 
     int64_t m_top = 0;
@@ -49,11 +52,13 @@ private:
     std::vector<uint8_t> m_data;
     int64_t m_deleteSize = -1;
 
-    void RunDumpThread();
-    void CopyThread();
-    bool EditBytes();
-    bool InsertBytes(QFile *pSrc, QFile *pDst, int64_t length);
+    std::function<void(int)> m_callbackProgress;
 
+    bool RunDumpThread();
+    void CopyThread();
+    bool EditFile();
+    bool CopyBlock(QFile *pSrc, QFile *pDst, int64_t length);
+    QString GetFileError(const QFile &inFile, const QFile &outFile);
 };
 
 #endif // DIALOGSAVETOFILE_H

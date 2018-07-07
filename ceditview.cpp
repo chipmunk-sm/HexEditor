@@ -44,32 +44,32 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog
 
     if(!m_event.valid || m_event.pos < 0 || !pFileA->isOpen())
     {
-        infoDialog->setError(QObject::tr("Nothing to do"));
+        infoDialog->setInfo(QObject::tr("Nothing to do"));
         return false;
     }
 
     if((m_event.event == CEditEventOverwrite || m_event.event == CEditEventInsert) && m_event.data.size() < 1)
     {
-        infoDialog->setError(QObject::tr("Nothing to do"));
+        infoDialog->setInfo(QObject::tr("Nothing to do"));
         return false;
     }
 
     if(m_event.event == CEditEventDelete && m_event.deleteSize < 1)
     {
-        infoDialog->setError(QObject::tr("Nothing to do"));
+        infoDialog->setInfo(QObject::tr("Nothing to do"));
         return false;
     }
 
     auto sourceSize = pFileA->size();
     if(m_event.pos > sourceSize)
     {
-        infoDialog->setError(QObject::tr("Error: seek position exceeds file size"));
+        infoDialog->setInfo(QObject::tr("Error: seek position exceeds file size"));
         return false;
     }
 
     if(m_event.event == CEditEventDelete && (m_event.pos + m_event.deleteSize) > sourceSize)
     {
-        infoDialog->setError(QObject::tr("Error delete: request out of range"));
+        infoDialog->setInfo(QObject::tr("Error: request out of range"));
         return false;
     }
 
@@ -79,7 +79,7 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog
         auto endRange = (m_event.pos + static_cast<int64_t>(m_event.data.size()));
         if(endRange > sourceSize)
         {
-            infoDialog->setError(QObject::tr("Error: data size out of range"));
+            infoDialog->setInfo(QObject::tr("Error: data size out of range"));
             return false;
         }
 
@@ -95,9 +95,10 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog
 				bacPathName = pFileA->fileName() + "." + QString::number(incr++) + ".old";
 			} while (dir.exists(bacPathName));
 
-			if (!QFile::copy(srcPathName, bacPathName))
+            QString sError;
+            if (!infoDialog->CopyFile(srcPathName, bacPathName, sError))
 			{
-				infoDialog->setError(QObject::tr("Error: failed copy to\n") + bacPathName);
+                infoDialog->setInfo(sError);
 				return false;
 			}
 		}
@@ -106,32 +107,32 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog
 
         if(!srcFile.open(QIODevice::ReadWrite))
         {
-            infoDialog->setError(QObject::tr("Failed open file\n") + srcFile.errorString());
+            infoDialog->setInfo(QObject::tr("Failed open file\n") + srcFile.errorString());
             return false;
         }
 
         if(!srcFile.seek(m_event.pos))
         {
-            infoDialog->setError(QObject::tr("Failed on seek position in file"));
+            infoDialog->setInfo(QObject::tr("Failed on seek position in file"));
             return false;
         }
 
         auto res = srcFile.write(reinterpret_cast<const char *>(m_event.data.data()), static_cast<qint64>(m_event.data.size()));
         if(res == -1)
         {
-            infoDialog->setError(srcFile.errorString());
+            infoDialog->setInfo(srcFile.errorString());
             return false;
         }
 
         if(res != static_cast<qint64>(m_event.data.size()))
         {
-            infoDialog->setError(QObject::tr("Failed write to file"));
+            infoDialog->setInfo(QObject::tr("Failed write to file"));
             return false;
         }
 
         m_event.valid = false;
 
-        infoDialog->setError(QObject::tr("Successfully saved"));
+        infoDialog->setInfo(QObject::tr("Successfully saved"));
 
         return true;
     }
@@ -154,7 +155,7 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile *infoDialog
         if(m_event.event == CEditEventInsert)
             m_event.deleteSize = -1;
 
-        if(infoDialog->EditBytes(srcPathName, tmpPathName, m_event.pos, m_event.data, m_event.deleteSize))
+        if(infoDialog->EditFile(srcPathName, tmpPathName, m_event.pos, m_event.data, m_event.deleteSize))
         {
             pFileA->close();
             pFileB->close();
