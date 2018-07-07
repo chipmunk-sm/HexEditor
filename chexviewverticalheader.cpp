@@ -1,4 +1,4 @@
-/* Copyright (C) 2017 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
 
 #include "chexviewmodel.h"
 #include "chexviewverticalheader.h"
