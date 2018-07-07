@@ -53,12 +53,21 @@ GNU General Public License for more details
 ![search_hex_ed](https://user-images.githubusercontent.com/29524958/42383452-ee8458b6-813f-11e8-9c73-1b59b0435246.png)
 
 ### Edit (Overwrite)
+
+*Step #4. Optional. Update the position for editing.
+
 ![edit_txt_ed](https://user-images.githubusercontent.com/29524958/42349585-e9027718-80b5-11e8-9228-d721ec9169e4.png)
 
 ### Edit (Insert)
+
+*Step #4. Optional. Update the position for editing.
+
 ![edit_txt_ins_ed](https://user-images.githubusercontent.com/29524958/42350175-01b85a6e-80b8-11e8-9e86-9ee4152f7e45.png)
 
 ### Edit (Delete)
+
+*Step #3. Optional. Update the position for editing.
+
 ![edit_txt_del_ed](https://user-images.githubusercontent.com/29524958/42350564-b441ca0c-80b9-11e8-8e1f-19e1bea4dafd.png)
 
 
