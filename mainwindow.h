@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include "ccfontsize.h"
 #include "chexviewmodel.h"
+#include "clanguage.h"
 #include "csearch.h"
 
 namespace Ui {
@@ -34,6 +35,7 @@ private:
     CCFontSize     m_ccfontsize;
     QString        m_filename;
     QString        m_PathFilename;
+    CLanguage      m_lang;
 
     void UpdateConfig();
     void CloseConfig();

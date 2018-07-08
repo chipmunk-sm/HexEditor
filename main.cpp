@@ -22,8 +22,6 @@ int main(int argc, char *argv[])
     //    if (translator->load(translatorFileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
     //        app.installTranslator(translator);
 
-    CLanguage        m_lang;
-    m_lang.SetLangByLocale();
 
     MainWindow w;
     w.show();

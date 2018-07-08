@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
     DEBUGTRACE();
     m_ui->setupUi(this);
 
+    m_lang.SetLangByConfig();
+
     setWindowIcon(QPixmap(":/data/hexeditor_logo.png"));
     m_windowTitle = windowTitle();
 
@@ -243,6 +245,9 @@ void MainWindow::on_pushButton_config_clicked()
 void MainWindow::UpdateConfig()
 {
     DEBUGTRACE();
+
+    m_lang.SetLangByConfig();
+
     m_ui->hexView->setShowGrid(            CConfigDialog::LoadChklBox(nullptr, CONFIG_SHOWGRID, CONFIG_SHOWGRID_DEF));
     m_ui->hexView->setAlternatingRowColors(CConfigDialog::LoadChklBox(nullptr, CONFIG_ROWCOLORS, CONFIG_ROWCOLORS_DEF));
     m_ccfontsize.LoadConfig();

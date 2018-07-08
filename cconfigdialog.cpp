@@ -22,16 +22,11 @@ CConfigDialog::CConfigDialog(std::function<void ()> callbackUpdate, std::functio
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_ui->label_app_version->setText(tr("Application version: ") + QCoreApplication::applicationVersion() + "\n" +
-             tr("Build Time: ") + BUILDDATETIME);
-
-    m_ui->label_qt_version->setText(tr("Qt version: ") +
-                                    " Runtime: " + qVersion() +
-                                    " Build: " + QT_VERSION_STR);
-
     m_callbackUpdate = callbackUpdate;
     m_callbackClose = callbackClose;
     m_ccfontsize.SetUpdateCallback(callbackUpdate);
+
+    m_lang.InitCombo(m_ui->comboBox_language, m_callbackUpdate);
 
     LoadConfig();
 
@@ -49,7 +44,10 @@ void CConfigDialog::changeEvent(QEvent *e)
     switch (e->type())
     {
         case QEvent::LanguageChange:
+        {
             m_ui->retranslateUi(this);
+            LoadConfig();
+        }
         break;
         default:
         break;
@@ -113,6 +111,14 @@ void CConfigDialog::LoadConfig()
     LoadColor(m_ui->label_color_insert,    DEFCFG_CLR_INSERT, DEFCFG_CLR_INSERT_DEF);
     LoadColor(m_ui->label_color_delete,    DEFCFG_CLR_DELETE, DEFCFG_CLR_DELETE_DEF);
     LoadColor(m_ui->label_color_search,    DEFCFG_CLR_SEARCH, DEFCFG_CLR_SEARCH_DEF);
+
+    m_ui->label_app_version->setText(tr("Application version: ") + QCoreApplication::applicationVersion() + "\n" +
+             tr("Build Time: ") + BUILDDATETIME);
+
+    m_ui->label_qt_version->setText(tr("Qt version: ") +
+                                    " Runtime: " + qVersion() +
+                                    " Build: " + QT_VERSION_STR);
+
 }
 
 void CConfigDialog::on_pushButton_restore_default_clicked()
@@ -221,3 +227,4 @@ void CConfigDialog::on_pushButton_releaseNote_clicked()
     infoDialog->activateWindow();
 
 }
+

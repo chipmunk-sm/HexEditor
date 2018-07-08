@@ -4,6 +4,7 @@
 #define CCONFIGDIALOG_H
 
 #include "ccfontsize.h"
+#include "clanguage.h"
 
 #include <QCheckBox>
 #include <QDialog>
@@ -47,7 +48,6 @@ private slots:
     void on_pushButton_color_insert_clicked();
     void on_pushButton_color_delete_clicked();
     void on_pushButton_color_search_clicked();
-
     void on_pushButton_releaseNote_clicked();
 
 private:
@@ -61,6 +61,7 @@ private:
     std::function<void(void)> m_callbackClose;
 
     void ColorUpdateDialog(const char *configName);
+    CLanguage m_lang;
 };
 
 #endif // CCONFIGDIALOG_H

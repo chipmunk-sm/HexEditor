@@ -4,62 +4,52 @@
 <context>
     <name>CConfigDialog</name>
     <message>
-        <location filename="../cconfigdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../cconfigdialog.ui" line="22"/>
+        <location filename="../cconfigdialog.ui" line="32"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="42"/>
-        <source>Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../cconfigdialog.ui" line="51"/>
+        <location filename="../cconfigdialog.ui" line="128"/>
         <source>Color сonfiguration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="67"/>
+        <location filename="../cconfigdialog.ui" line="144"/>
         <source>Search </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="84"/>
+        <location filename="../cconfigdialog.ui" line="161"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="101"/>
+        <location filename="../cconfigdialog.ui" line="178"/>
         <source>Insert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="118"/>
+        <location filename="../cconfigdialog.ui" line="195"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="128"/>
-        <source>app version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../cconfigdialog.ui" line="135"/>
+        <location filename="../cconfigdialog.ui" line="23"/>
         <source>Font size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="142"/>
+        <location filename="../cconfigdialog.ui" line="52"/>
+        <source>Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cconfigdialog.ui" line="98"/>
         <source>Show grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="152"/>
+        <location filename="../cconfigdialog.ui" line="205"/>
         <source>&lt;html&gt;
 &lt;head/&gt;
 &lt;body&gt;
@@ -70,38 +60,38 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="168"/>
+        <location filename="../cconfigdialog.ui" line="88"/>
         <source>Alternating row colors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="185"/>
-        <source>qt version</source>
+        <location filename="../cconfigdialog.ui" line="14"/>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="208"/>
+        <location filename="../cconfigdialog.ui" line="61"/>
         <source>Backup on save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="218"/>
-        <location filename="../cconfigdialog.cpp" line="198"/>
+        <location filename="../cconfigdialog.ui" line="81"/>
+        <location filename="../cconfigdialog.cpp" line="204"/>
         <source>Release note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.cpp" line="25"/>
+        <location filename="../cconfigdialog.cpp" line="115"/>
         <source>Application version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.cpp" line="26"/>
+        <location filename="../cconfigdialog.cpp" line="116"/>
         <source>Build Time: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.cpp" line="28"/>
+        <location filename="../cconfigdialog.cpp" line="118"/>
         <source>Qt version: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -262,83 +252,83 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     </message>
     <message>
         <location filename="../mainwindow.ui" line="264"/>
-        <location filename="../mainwindow.ui" line="301"/>
+        <location filename="../mainwindow.ui" line="304"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="348"/>
+        <location filename="../mainwindow.ui" line="351"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="365"/>
+        <location filename="../mainwindow.ui" line="368"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="403"/>
+        <location filename="../mainwindow.ui" line="406"/>
         <source>Display text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="427"/>
+        <location filename="../mainwindow.ui" line="430"/>
         <source>Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="464"/>
+        <location filename="../mainwindow.ui" line="467"/>
         <source>GOTO:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="506"/>
+        <location filename="../mainwindow.ui" line="512"/>
         <source>set &quot;text encoding&quot; for &quot;EDIT&quot; and &quot;SEARCH&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="513"/>
+        <location filename="../mainwindow.ui" line="519"/>
         <source>set &quot;TEXT&quot; or &quot;HEX&quot; mode for &quot;EDIT&quot; and &quot;SEARCH&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="516"/>
+        <location filename="../mainwindow.ui" line="522"/>
         <source>HEX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="545"/>
+        <location filename="../mainwindow.ui" line="551"/>
         <source>Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="577"/>
+        <location filename="../mainwindow.ui" line="583"/>
         <source>Save selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="606"/>
+        <location filename="../mainwindow.ui" line="612"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="65"/>
+        <location filename="../mainwindow.cpp" line="67"/>
         <source>Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="236"/>
+        <location filename="../mainwindow.cpp" line="238"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="328"/>
-        <location filename="../mainwindow.cpp" line="368"/>
+        <location filename="../mainwindow.cpp" line="333"/>
+        <location filename="../mainwindow.cpp" line="373"/>
         <source>Save to </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="412"/>
+        <location filename="../mainwindow.cpp" line="417"/>
         <source>Found %1 in %2 seconds.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -348,8 +338,8 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     <message>
         <location filename="../dialogsavetofile.cpp" line="87"/>
         <location filename="../dialogsavetofile.cpp" line="120"/>
-        <location filename="../mainwindow.cpp" line="225"/>
-        <location filename="../mainwindow.cpp" line="346"/>
+        <location filename="../mainwindow.cpp" line="227"/>
+        <location filename="../mainwindow.cpp" line="351"/>
         <source>Unexpected exception</source>
         <translation type="unfinished"></translation>
     </message>
@@ -400,11 +390,11 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <location filename="../chexviewmodel.cpp" line="127"/>
         <location filename="../chexviewmodel.cpp" line="140"/>
         <location filename="../cpropertyview.cpp" line="93"/>
-        <location filename="../mainwindow.cpp" line="186"/>
-        <location filename="../mainwindow.cpp" line="217"/>
-        <location filename="../mainwindow.cpp" line="221"/>
-        <location filename="../mainwindow.cpp" line="225"/>
-        <location filename="../mainwindow.cpp" line="417"/>
+        <location filename="../mainwindow.cpp" line="188"/>
+        <location filename="../mainwindow.cpp" line="219"/>
+        <location filename="../mainwindow.cpp" line="223"/>
+        <location filename="../mainwindow.cpp" line="227"/>
+        <location filename="../mainwindow.cpp" line="422"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -424,34 +414,60 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="308"/>
-        <location filename="../mainwindow.cpp" line="323"/>
-        <location filename="../mainwindow.cpp" line="338"/>
-        <location filename="../mainwindow.cpp" line="342"/>
-        <location filename="../mainwindow.cpp" line="346"/>
+        <location filename="../mainwindow.cpp" line="313"/>
+        <location filename="../mainwindow.cpp" line="328"/>
+        <location filename="../mainwindow.cpp" line="343"/>
+        <location filename="../mainwindow.cpp" line="347"/>
+        <location filename="../mainwindow.cpp" line="351"/>
         <source>Save as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="328"/>
         <source>Access denied
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="359"/>
+        <location filename="../mainwindow.cpp" line="364"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="359"/>
+        <location filename="../mainwindow.cpp" line="364"/>
         <source>Apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clanguage.cpp" line="116"/>
-        <location filename="../clanguage.cpp" line="121"/>
-        <source>English</source>
+        <location filename="../clanguage.cpp" line="218"/>
+        <location filename="../clanguage.cpp" line="224"/>
+        <source>English_us</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ceditview.h" line="45"/>
+        <source>Overwrite </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ceditview.h" line="45"/>
+        <location filename="../ceditview.h" line="51"/>
+        <source> byte(s) From </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ceditview.h" line="48"/>
+        <source>Insert </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ceditview.h" line="48"/>
+        <source> byte(s) Before </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ceditview.h" line="51"/>
+        <source>Delete </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

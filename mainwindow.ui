@@ -290,6 +290,9 @@
          <property name="maxLength">
           <number>64</number>
          </property>
+         <property name="placeholderText">
+          <string notr="true"/>
+         </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
@@ -478,6 +481,9 @@
          <width>86</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="inputMask">
+        <string notr="true"/>
        </property>
        <property name="maxLength">
         <number>32</number>

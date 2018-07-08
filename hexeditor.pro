@@ -76,14 +76,24 @@ win32 {
 }
 
 # lupdate -no-obsolete -verbose -pro *.pro
-
 # cd translations
-
-# linguist language_en.ts language_cs.ts language_de.ts language_fr.ts language_ja.ts language_pl.ts language_ru.ts language_sl.ts language_zh_CN.ts language_zh_TW.ts
-
+# linguist *.ts
 # cd ..
-
 # lrelease -removeidentical -compress *.pro
+
+
+#prepare for spell checker
+#
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_en.ts > language_en.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_cs.ts > language_cs.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_de.ts > language_de.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_fr.ts > language_fr.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_ja.ts > language_ja.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_pl.ts > language_pl.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_ru.ts > language_ru.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_sl.ts > language_sl.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_zh_CN.ts > language_zh_CN.txt
+# xmlstarlet sel -t -v "//translation[not(@type)]"  language_zh_TW.ts > language_zh_TW.txt
 
 TRANSLATIONS += \
     translations/language_en.ts \

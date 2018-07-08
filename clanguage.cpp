@@ -9,6 +9,10 @@
 #include <QCoreApplication>
 #include <QLocale>
 #include <iostream>
+#include <QSettings>
+
+#define DEFCFG_LANGUAGE "base/LANGUAGE"
+
 
 #if 0
 #   include <QDebug>
@@ -19,7 +23,8 @@
 
 #define ADDLANG(langPrefix, langName) m_langNamesList.insert(#langPrefix, #langName)
 
-CLanguage::CLanguage()
+CLanguage::CLanguage(QObject *parent)
+    : QObject(parent)
 {
     DEBUGTRACE();
 /*
@@ -99,6 +104,11 @@ CLanguage::CLanguage()
 
 }
 
+CLanguage::~CLanguage()
+{
+
+}
+
 void CLanguage::LoadTranslations(const QDir &dir)
 {
     DEBUGTRACE();
@@ -122,18 +132,19 @@ void CLanguage::LoadTranslations(const QDir &dir)
 
 }
 
-void CLanguage::SetLang(const QString &langName)
+bool CLanguage::SetLang(const QString &langName)
 {
     DEBUGTRACE();
 
     auto it= m_langList.find(langName);
     if(it == m_langList.end())
-        return;
+        return false;
 
     if (!m_translator.load(it.value()))
-        return;
+        return false;
 
     QCoreApplication::instance()->installTranslator(&m_translator);
+    return true;
 }
 
 void CLanguage::SetLangByLocale()
@@ -153,6 +164,22 @@ void CLanguage::SetLangByLocale()
             return;
         break;
     }
+
+}
+
+void CLanguage::SetLangByConfig()
+{
+    DEBUGTRACE();
+
+    QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    auto languageName = settings.value(QString(DEFCFG_LANGUAGE), "").toString();
+    if(!languageName.isEmpty())
+    {
+        if(SetLang(languageName))
+            return;
+    }
+
+    SetLangByLocale();
 
 }
 
@@ -188,13 +215,49 @@ QString CLanguage::ExtractLanguageName(const QString &fileName)
 {
     DEBUGTRACE();
 
-    auto writeLanguageName = QObject::tr("English");// !!! Change the "English" to the current language name in the file !!!
+    auto writeLanguageName = QObject::tr("English_us");// !!! Change the "English_us" to the current language name in the file !!!
 
     Q_UNUSED(writeLanguageName);
 
     QTranslator translator;
     translator.load(fileName);
-    return translator.translate("QObject", "English");
+    return translator.translate("QObject", "English_us");
+}
+
+void CLanguage::InitCombo(QComboBox *comboBox_language, std::function<void()> callbackUpdate)
+{
+    DEBUGTRACE();
+
+    m_callbackUpdate = callbackUpdate;
+
+    comboBox_language->addItem("Language: auto");
+
+    foreach (const auto &codec, GetListLangNames())
+    {
+        comboBox_language->addItem(codec);
+    }
+
+    QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    auto languageName = settings.value(QString(DEFCFG_LANGUAGE), "").toString();
+    if(!languageName.isEmpty())
+    {
+        auto index = comboBox_language->findText(languageName);
+        if ( index != -1 )
+        {
+            comboBox_language->setCurrentIndex(index);
+        }
+    }
+
+    QObject::connect(comboBox_language, SIGNAL(currentIndexChanged(const QString &)),
+                     this, SLOT(comboCurrentIndexChanged(const QString &)));
+}
+
+void CLanguage::comboCurrentIndexChanged(const QString &val)
+{
+    DEBUGTRACE();
+    QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    settings.setValue(QString(DEFCFG_LANGUAGE), val);
+    m_callbackUpdate();
 }
 
 

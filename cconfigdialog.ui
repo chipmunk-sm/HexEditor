@@ -7,14 +7,24 @@
     <x>0</x>
     <y>0</y>
     <width>398</width>
-    <height>642</height>
+    <height>689</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="14" column="0" colspan="2">
+   <item row="12" column="0" colspan="2">
+    <widget class="QFontComboBox" name="fontComboBox"/>
+   </item>
+   <item row="13" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Font size</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pushButton_close">
@@ -39,11 +49,78 @@
      <item>
       <widget class="QPushButton" name="pushButton_restore_default">
        <property name="text">
-        <string>Reset</string>
+        <string>Defaults</string>
        </property>
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="8" column="0">
+    <widget class="QCheckBox" name="checkBox_BackupOnSave">
+     <property name="text">
+      <string>Backup on save</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="label_qt_version">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="pushButton_releaseNote">
+     <property name="text">
+      <string>Release note</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox_alternatingRowColors">
+     <property name="text">
+      <string>Alternating row colors</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox_showGrid">
+     <property name="text">
+      <string>Show grid</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0" colspan="2">
+    <widget class="QSlider" name="horizontalSlider_Zoom">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="label_app_version">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="QGroupBox" name="groupBox">
@@ -122,30 +199,6 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLabel" name="label_app_version">
-     <property name="text">
-      <string>app version</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Font size</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox_showGrid">
-     <property name="text">
-      <string>Show grid</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -162,30 +215,6 @@ Copyright (C) chipmunk-sm&lt;br&gt;
      </property>
     </widget>
    </item>
-   <item row="8" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox_alternatingRowColors">
-     <property name="text">
-      <string>Alternating row colors</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="0" colspan="2">
-    <widget class="QSlider" name="horizontalSlider_Zoom">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QLabel" name="label_qt_version">
-     <property name="text">
-      <string>qt version</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -199,25 +228,8 @@ Copyright (C) chipmunk-sm&lt;br&gt;
      </property>
     </spacer>
    </item>
-   <item row="11" column="0" colspan="2">
-    <widget class="QFontComboBox" name="fontComboBox"/>
-   </item>
    <item row="7" column="0">
-    <widget class="QCheckBox" name="checkBox_BackupOnSave">
-     <property name="text">
-      <string>Backup on save</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="pushButton_releaseNote">
-     <property name="text">
-      <string>Release note</string>
-     </property>
-    </widget>
+    <widget class="QComboBox" name="comboBox_language"/>
    </item>
   </layout>
  </widget>
@@ -227,6 +239,7 @@ Copyright (C) chipmunk-sm&lt;br&gt;
   <tabstop>pushButton_color_overwrite</tabstop>
   <tabstop>pushButton_color_insert</tabstop>
   <tabstop>pushButton_color_delete</tabstop>
+  <tabstop>comboBox_language</tabstop>
   <tabstop>checkBox_BackupOnSave</tabstop>
   <tabstop>checkBox_alternatingRowColors</tabstop>
   <tabstop>checkBox_showGrid</tabstop>

@@ -42,13 +42,13 @@ struct CEditItem
         switch (event)
         {
             case CEditEvent::CEditEventOverwrite:
-                str += "Overwrite " + QString::number(data.size()) + " byte(s) From ";
+                str += QObject::tr("Overwrite ") + QString::number(data.size()) + QObject::tr(" byte(s) From ");
             break;
             case CEditEvent::CEditEventInsert:
-                str += "Insert "    + QString::number(data.size()) + " byte(s) Before ";
+                str += QObject::tr("Insert ")    + QString::number(data.size()) + QObject::tr(" byte(s) Before ");
             break;
             case CEditEvent::CEditEventDelete:
-                str += "Delete "    + QString::number(deleteSize)  + " byte(s) From ";
+                str += QObject::tr("Delete ")    + QString::number(deleteSize)  + QObject::tr(" byte(s) From ");
             break;
             case CEditEvent::CEditEventNone: return "Error";
         }
