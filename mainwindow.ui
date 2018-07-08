@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>HexEditor</string>
+   <string notr="true">HexEditor</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
@@ -548,7 +548,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Config</string>
+        <string>Settings</string>
        </property>
       </widget>
      </item>

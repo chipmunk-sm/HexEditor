@@ -125,7 +125,7 @@
    <item row="4" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Color сonfiguration</string>
+      <string>Color settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">

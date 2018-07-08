@@ -32,7 +32,7 @@
    <enum>Qt::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>

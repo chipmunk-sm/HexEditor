@@ -6,12 +6,7 @@
     <message>
         <location filename="../cconfigdialog.ui" line="32"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../cconfigdialog.ui" line="128"/>
-        <source>Color сonfiguration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="144"/>
@@ -26,17 +21,17 @@
     <message>
         <location filename="../cconfigdialog.ui" line="178"/>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einfügen</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="195"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="23"/>
         <source>Font size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schriftgrad</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="52"/>
@@ -46,6 +41,11 @@
     <message>
         <location filename="../cconfigdialog.ui" line="98"/>
         <source>Show grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cconfigdialog.ui" line="128"/>
+        <source>Color settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -67,7 +67,7 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     <message>
         <location filename="../cconfigdialog.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einstellungen</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="61"/>
@@ -113,17 +113,18 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <location filename="../chexviewmodel.cpp" line="142"/>
         <source> MB
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> MByte
+</translation>
     </message>
     <message>
         <location filename="../chexviewmodel.cpp" line="143"/>
         <source>File size		</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dateigröße		</translation>
     </message>
     <message>
         <location filename="../chexviewmodel.cpp" line="143"/>
         <source> MB</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> MByte</translation>
     </message>
 </context>
 <context>
@@ -147,35 +148,30 @@ Copyright (C) chipmunk-sm&lt;br&gt;
 <context>
     <name>DialogSaveToFile</name>
     <message>
-        <location filename="../dialogsavetofile.ui" line="35"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogsavetofile.ui" line="47"/>
         <source>.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">.</translation>
     </message>
     <message>
         <location filename="../dialogsavetofile.ui" line="54"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="../dialogsavetofile.ui" line="68"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogsavetofile.cpp" line="90"/>
-        <location filename="../dialogsavetofile.cpp" line="123"/>
-        <source>Cancelled by user</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
         <location filename="../dialogsavetofile.cpp" line="90"/>
         <location filename="../dialogsavetofile.cpp" line="123"/>
         <source>Successfully saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogsavetofile.cpp" line="90"/>
+        <location filename="../dialogsavetofile.cpp" line="123"/>
+        <source>Canceled by user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -215,14 +211,9 @@ Copyright (C) chipmunk-sm&lt;br&gt;
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="14"/>
-        <source>HexEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="87"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bearbeiten</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="111"/>
@@ -238,17 +229,17 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     <message>
         <location filename="../mainwindow.ui" line="199"/>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einfügen</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="212"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="247"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zuweisen</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="264"/>
@@ -259,7 +250,7 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     <message>
         <location filename="../mainwindow.ui" line="351"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="368"/>
@@ -297,11 +288,6 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="551"/>
-        <source>Config</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="583"/>
         <source>Save selected</source>
         <translation type="unfinished"></translation>
@@ -309,7 +295,7 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     <message>
         <location filename="../mainwindow.ui" line="612"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Öffnen</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="67"/>
@@ -317,9 +303,10 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="551"/>
         <location filename="../mainwindow.cpp" line="238"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einstellungen</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="333"/>
@@ -396,7 +383,7 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <location filename="../mainwindow.cpp" line="227"/>
         <location filename="../mainwindow.cpp" line="422"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Öffnen</translation>
     </message>
     <message>
         <location filename="../cpropertyview.cpp" line="51"/>

@@ -9,11 +9,6 @@
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="128"/>
-        <source>Color сonfiguration</source>
-        <translation>Конфигурация цветов</translation>
-    </message>
-    <message>
         <location filename="../cconfigdialog.ui" line="144"/>
         <source>Search </source>
         <translation>Поиск </translation>
@@ -47,6 +42,11 @@
         <location filename="../cconfigdialog.ui" line="98"/>
         <source>Show grid</source>
         <translation>Показать сетку</translation>
+    </message>
+    <message>
+        <location filename="../cconfigdialog.ui" line="128"/>
+        <source>Color settings</source>
+        <translation>Цветовые параметры</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="205"/>
@@ -149,11 +149,6 @@ Copyright (C) chipmunk-sm&lt;br&gt;
 <context>
     <name>DialogSaveToFile</name>
     <message>
-        <location filename="../dialogsavetofile.ui" line="35"/>
-        <source>Dialog</source>
-        <translation>Dialog</translation>
-    </message>
-    <message>
         <location filename="../dialogsavetofile.ui" line="47"/>
         <source>.</source>
         <translation>.</translation>
@@ -171,14 +166,14 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     <message>
         <location filename="../dialogsavetofile.cpp" line="90"/>
         <location filename="../dialogsavetofile.cpp" line="123"/>
-        <source>Cancelled by user</source>
-        <translation>Отменено пользователем</translation>
+        <source>Successfully saved</source>
+        <translation>Успешно сохранен</translation>
     </message>
     <message>
         <location filename="../dialogsavetofile.cpp" line="90"/>
         <location filename="../dialogsavetofile.cpp" line="123"/>
-        <source>Successfully saved</source>
-        <translation>Успешно сохранен</translation>
+        <source>Canceled by user</source>
+        <translation>Отменено пользователем</translation>
     </message>
     <message>
         <location filename="../dialogsavetofile.cpp" line="136"/>
@@ -224,11 +219,6 @@ Copyright (C) chipmunk-sm&lt;br&gt;
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <location filename="../mainwindow.ui" line="14"/>
-        <source>HexEditor</source>
-        <translation>HexEditor</translation>
-    </message>
     <message>
         <location filename="../mainwindow.ui" line="87"/>
         <source>Edit</source>
@@ -308,7 +298,8 @@ Copyright (C) chipmunk-sm&lt;br&gt;
     </message>
     <message>
         <location filename="../mainwindow.ui" line="551"/>
-        <source>Config</source>
+        <location filename="../mainwindow.cpp" line="238"/>
+        <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
@@ -325,11 +316,6 @@ Copyright (C) chipmunk-sm&lt;br&gt;
         <location filename="../mainwindow.cpp" line="67"/>
         <source>Position</source>
         <translation>Позиция</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="238"/>
-        <source>Settings</source>
-        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="333"/>

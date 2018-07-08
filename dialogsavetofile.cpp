@@ -87,7 +87,7 @@ void DialogSaveToFile::DumpSelectionAsText(const QString &inFile, const QString 
             pThis->m_error = QObject::tr("Unexpected exception");
         }
 
-        pThis->setInfo(pThis->m_cancel ? tr("Cancelled by user") : result ? tr("Successfully saved") : pThis->m_error);
+        pThis->setInfo(pThis->m_cancel ? tr("Canceled by user") : result ? tr("Successfully saved") : pThis->m_error);
         pThis->m_exit = true;
     };
 #ifdef DEF_ENABLE_THREADING
@@ -120,7 +120,7 @@ bool DialogSaveToFile::EditFile(const QString &inFile, const QString &outFile,
         m_error = QObject::tr("Unexpected exception");
     }
 
-    setInfo(m_cancel ? tr("Cancelled by user") : result ? tr("Successfully saved") : m_error);
+    setInfo(m_cancel ? tr("Canceled by user") : result ? tr("Successfully saved") : m_error);
     m_exit = true;
     return result;
 }
