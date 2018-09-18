@@ -107,6 +107,15 @@ TRANSLATIONS += \
     translations/language_zh_CN.ts \
     translations/language_zh_TW.ts
 
+unix:!macx {
+    isEmpty(PREFIX) {
+        PREFIX=/usr
+    }
+
+    target.path = $${PREFIX}/bin/
+
+    INSTALLS += target
+}
 
 #af		Afrikaans
 #sq		Albanian
