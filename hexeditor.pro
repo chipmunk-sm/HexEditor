@@ -114,10 +114,13 @@ unix:!macx {
 
     target.path = $${PREFIX}/bin/
 
+    hicolor.path = $${PREFIX}/share/icons/hicolor/
+    hicolor.files = data/hicolor/*
+
     desktopentry.path = $${PREFIX}/share/applications/
     desktopentry.files = data/$${TARGET}.desktop
 
-    INSTALLS += target desktopentry
+    INSTALLS += target hicolor desktopentry
 }
 
 #af		Afrikaans
