@@ -9,11 +9,6 @@
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="144"/>
-        <source>Search </source>
-        <translation>Поиск </translation>
-    </message>
-    <message>
         <location filename="../cconfigdialog.ui" line="161"/>
         <source>Overwrite</source>
         <translation>Замена</translation>
@@ -47,6 +42,11 @@
         <location filename="../cconfigdialog.ui" line="128"/>
         <source>Color settings</source>
         <translation>Цветовые параметры</translation>
+    </message>
+    <message>
+        <location filename="../cconfigdialog.ui" line="144"/>
+        <source>Search</source>
+        <translation type="unfinished">Поиск</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="205"/>

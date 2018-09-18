@@ -105,7 +105,8 @@ TRANSLATIONS += \
     translations/language_ru.ts \
     translations/language_sl.ts \
     translations/language_zh_CN.ts \
-    translations/language_zh_TW.ts
+    translations/language_zh_TW.ts \
+    translations/language_es.ts
 
 unix:!macx {
     isEmpty(PREFIX) {

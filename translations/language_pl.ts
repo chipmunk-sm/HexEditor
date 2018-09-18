@@ -9,11 +9,6 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="144"/>
-        <source>Search </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../cconfigdialog.ui" line="161"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
@@ -46,6 +41,11 @@
     <message>
         <location filename="../cconfigdialog.ui" line="128"/>
         <source>Color settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cconfigdialog.ui" line="144"/>
+        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
