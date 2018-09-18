@@ -114,7 +114,10 @@ unix:!macx {
 
     target.path = $${PREFIX}/bin/
 
-    INSTALLS += target
+    desktopentry.path = $${PREFIX}/share/applications/
+    desktopentry.files = data/$${TARGET}.desktop
+
+    INSTALLS += target desktopentry
 }
 
 #af		Afrikaans
