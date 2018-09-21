@@ -108,6 +108,20 @@ TRANSLATIONS += \
     translations/language_zh_TW.ts \
     translations/language_es.ts
 
+qtPrepareTool(LRELEASE, lrelease)
+for(tsfile, TRANSLATIONS) {
+    qmfile = $$shadowed($$tsfile)
+    qmfile ~= s,.ts$,.qm,
+    qmdir = $$dirname(qmfile)
+
+    !exists($$qmdir) {
+        mkpath($$qmdir)|error("Aborting.")
+    }
+
+    command = $$LRELEASE -compress -nounfinished -removeidentical $$tsfile -qm $$qmfile
+    system($$command)|error("Failed to run: $$command")
+}
+
 unix:!macx {
     isEmpty(PREFIX) {
         PREFIX=/usr

@@ -13,5 +13,6 @@
         <file>translations/language_sl.qm</file>
         <file>translations/language_zh_CN.qm</file>
         <file>translations/language_zh_TW.qm</file>
+        <file>translations/language_es.qm</file>
     </qresource>
 </RCC>
