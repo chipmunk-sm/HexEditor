@@ -14,11 +14,6 @@
         <translation>Color settings</translation>
     </message>
     <message>
-        <location filename="../cconfigdialog.ui" line="144"/>
-        <source>Search </source>
-        <translation>Search </translation>
-    </message>
-    <message>
         <location filename="../cconfigdialog.ui" line="161"/>
         <source>Overwrite</source>
         <translation>Overwrite</translation>
@@ -47,6 +42,11 @@
         <location filename="../cconfigdialog.ui" line="98"/>
         <source>Show grid</source>
         <translation>Show grid</translation>
+    </message>
+    <message>
+        <location filename="../cconfigdialog.ui" line="144"/>
+        <source>Search</source>
+        <translation type="unfinished">Search</translation>
     </message>
     <message>
         <location filename="../cconfigdialog.ui" line="205"/>
