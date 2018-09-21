@@ -1,10 +1,11 @@
 [Desktop Entry]
-Categories=Utility;
-Comment=HexEditor (Hex Editor GUI)
+Type=Application
+Version=1.1
+Name=HexEditor
+GenericName=Hex Editor
+Comment=Cross-platform hex editor
+Icon=hexeditor
 Exec=hexeditor
-GenericName=HexEditor (Hex Editor GUI)
-Icon=hexeditor_logo
-Name=HexEditor (Hex Editor GUI)
-StartupNotify=true
 Terminal=false
-
+Categories=Utility;
+StartupNotify=true
