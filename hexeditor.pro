@@ -107,6 +107,21 @@ TRANSLATIONS += \
     translations/language_zh_CN.ts \
     translations/language_zh_TW.ts
 
+unix:!macx {
+    isEmpty(PREFIX) {
+        PREFIX=/usr
+    }
+
+    target.path = $${PREFIX}/bin/
+
+    hicolor.path = $${PREFIX}/share/icons/hicolor/
+    hicolor.files = data/hicolor/*
+
+    desktopentry.path = $${PREFIX}/share/applications/
+    desktopentry.files = data/$${TARGET}.desktop
+
+    INSTALLS += target hicolor desktopentry
+}
 
 #af		Afrikaans
 #sq		Albanian
