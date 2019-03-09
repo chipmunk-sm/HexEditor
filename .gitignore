@@ -19,3 +19,6 @@ x86
 /Installer/Release.x64
 /Installer/wix
 /*.wixobj
+/ui_cconfigdialog.h
+/ui_dialogsavetofile.h
+/ui_mainwindow.h
