@@ -85,15 +85,17 @@ void CHexViewModel::UpdateTable(bool forceReformat)
     wdth = static_cast<int>(wdth + wdth * 0.2);
     auto height = static_cast<int>(fontMetric.height() + fontMetric.lineSpacing() * 0.3);
 
+    auto minSize = fontMetric.width("00");
+    m_hexView->horizontalHeader()->setMinimumSectionSize(minSize);
+
     int nCols = m_cols_hex * 2;
     if (nCols > 0 && (forceReformat || wdth != m_hexView->columnWidth(0)))
     {
         for (int col = 0; col < nCols/2; col++)
             m_hexView->setColumnWidth(col, wdth);
 
-        wdth = fontMetric.width("00");
         for (int col = nCols/2; col < nCols; col++)
-            m_hexView->setColumnWidth(col, wdth);
+            m_hexView->setColumnWidth(col, minSize);
     }
 
     auto headerVertical = m_hexView->verticalHeader();

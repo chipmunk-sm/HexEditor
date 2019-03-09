@@ -45,6 +45,16 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts;xlf</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts;xlf</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
     <Filter Include="Distribution Files">
       <UniqueIdentifier>{B83CAF91-C7BF-462F-B76C-EA11631F866C}</UniqueIdentifier>
       <Extensions>*</Extensions>
@@ -76,6 +86,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="chexviewverticalheader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="clanguage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cmemorymappedfile.cpp">
@@ -117,6 +130,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="chexviewverticalheader.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="clanguage.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClInclude Include="cmemorymappedfile.h">
@@ -167,6 +183,8 @@
     
     
     
+    
+    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
@@ -184,6 +202,41 @@
     <ClInclude Include="ui_mainwindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="translations\language_cs.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_de.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_en.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_es.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_fr.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_ja.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_pl.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_ru.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_sl.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_zh_CN.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+    <None Include="translations\language_zh_TW.ts">
+      <Filter>Translation Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="cconfigdialog.ui">
@@ -204,6 +257,42 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="data\hexeditor_logo.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_cs.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_de.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_en.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_es.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_fr.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_ja.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_pl.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_ru.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_sl.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_zh_CN.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="translations\language_zh_TW.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\synchronize.png">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -239,6 +328,9 @@
       <Filter>Distribution Files</Filter>
     </None>
     <None Include="debian\hexeditor.install">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="installer.ps1">
       <Filter>Distribution Files</Filter>
     </None>
     <None Include="debian\rules">

@@ -476,10 +476,17 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString &src, i
     for (auto ind = 0; ind < src.length(); ind++)
     {
 
-        if(src[ind].isSpace())
+        if(src[ind].isSpace() || src[ind].isPunct())
             continue;
 
         auto val = src[ind].toLatin1();
+
+        if (tmpInd == 1 && (val == QLatin1Char('x') || val == QLatin1Char('X')))
+        {
+            tmpInd = 0;
+            continue;
+        }
+
         if(!isxdigit(val))
         {
             if(firstErrorPos != nullptr && *firstErrorPos == -1)
