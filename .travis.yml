@@ -22,4 +22,4 @@ install:
 
 script:
  - qmake  -qt=qt5
-- make -j4
+ - make -j4
