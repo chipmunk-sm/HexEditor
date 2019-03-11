@@ -27,6 +27,8 @@ https://github.com/chipmunk-sm/hexeditor
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ig500t2beurjfivx?svg=true)](https://ci.appveyor.com/project/chipmunk-sm/hexeditor)
 
+[![Build Status](https://travis-ci.org/chipmunk-sm/HexEditor.svg?branch=master)](https://travis-ci.org/chipmunk-sm/HexEditor)
+
 ## License
 GPL v3.0
 
