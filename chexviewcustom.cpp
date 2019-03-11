@@ -100,7 +100,7 @@ void CHexViewCustom::paintEvent(QPaintEvent *event)
 
     const QRegion region = event->region().translated(offset);
 
-    foreach (QRect dirtyArea , region)
+    for (QRect dirtyArea : region)
     {
 
         dirtyArea.setBottom(qMin(dirtyArea.bottom(), int(y)));
