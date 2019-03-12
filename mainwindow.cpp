@@ -447,7 +447,7 @@ void MainWindow::searchSelectionModelChanged(const QItemSelection &selected, con
         {
             auto pos = tmpstr.toLongLong();
             auto scrollRow = pos / m_pchexview->GetColHex();
-            m_ui->verticalScrollBarHexView->setValue(scrollRow);
+            m_ui->verticalScrollBarHexView->setValue(static_cast<int32_t>(scrollRow));
             break;
         }
         break;
@@ -471,27 +471,42 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString &src, i
     std::vector<uint8_t> data;
 
     uint32_t tmp[2] = {0};
-    auto tmpInd = 0;
 
-    for (auto ind = 0; ind < src.length(); ind++)
+    auto tmpInd = 0;
+    auto position = 0;
+    auto sequence = 0;
+
+    for (; position < src.length(); position++)
     {
 
-        if(src[ind].isSpace() || src[ind].isPunct())
+        if(src[position].isSpace() || src[position].isPunct())
+        {
+            sequence = 0;
+            if(tmpInd == 1)
+            {
+                if(firstErrorPos != nullptr && *firstErrorPos == -1)
+                   *firstErrorPos = position;
+                break;
+            }
             continue;
+        }
 
-        auto val = src[ind].toLatin1();
+        auto val = src[position].toLatin1();
 
         if (tmpInd == 1 && (val == QLatin1Char('x') || val == QLatin1Char('X')))
         {
             tmpInd = 0;
+            sequence = 0;
             continue;
         }
 
-        if(!isxdigit(val))
+        sequence++;
+
+        if(!isxdigit(val) || sequence > 2)
         {
             if(firstErrorPos != nullptr && *firstErrorPos == -1)
-               *firstErrorPos = ind;
-            continue;
+               *firstErrorPos = position;
+            break;
         }
 
         tmp[tmpInd++] = static_cast<uint32_t>(val);
@@ -500,6 +515,11 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString &src, i
             data.push_back(static_cast<uint8_t>(HexChartoInt(tmp[0]) << 4 | HexChartoInt(tmp[1])));
             tmpInd = 0;
         }
+    }
+
+    if(firstErrorPos != nullptr && tmpInd == 1 && *firstErrorPos == -1)
+    {
+        *firstErrorPos = position;
     }
 
     return data;
@@ -572,7 +592,11 @@ bool MainWindow::DecodeText(const QString &sourceString, QLabel *info, bool bHex
     const auto encoder = codec->makeEncoder( QTextCodec::IgnoreHeader );
     auto success = codec->canEncode(sourceString);
     auto decodedStr = encoder->fromUnicode(sourceString);
+#if (QT_VERSION > QT_VERSION_CHECK(5, 5, 1))
     info->setText(ConvertByteArrayToHexText(ConvertHexTextToByteArray(decodedStr.toHex(' '), firstErrorPos)));
+#else
+    info->setText(ConvertByteArrayToHexText(ConvertHexTextToByteArray(decodedStr.toHex(), firstErrorPos)));
+#endif
     info->setStyleSheet(success ? QString() : QStringLiteral("background-color: \"red\";"));
     return success;
 }
@@ -677,6 +701,12 @@ void MainWindow::on_textDataEditor_textChanged()
 {
     DEBUGTRACE();
     auto firstErrorPos = -1;
+
+    QString hexTip("HEX example: 0x00, 0x01 0A 0B 02:FF... ");
+    QString plainTip(" ");
+    m_ui->textDataEditor->setPlaceholderText(m_ui->checkBox_hexCoded->isChecked() ? hexTip : plainTip);
+    m_ui->lineEdit_searchtext->setPlaceholderText(m_ui->checkBox_hexCoded->isChecked() ? hexTip : plainTip);
+
     auto resSucceeded = DecodeText(m_ui->textDataEditor->toPlainText(), m_ui->label_edit_info, m_ui->checkBox_hexCoded->isChecked(), &firstErrorPos);
     HighlightError(firstErrorPos, m_ui->textDataEditor);
 
@@ -756,7 +786,7 @@ void MainWindow::on_lineEdit_goto_textChanged(const QString &arg1)
 
     auto pos = arg1.toLongLong();
     auto scrollRow = pos / m_pchexview->GetColHex();
-    m_ui->verticalScrollBarHexView->setValue(scrollRow);
+    m_ui->verticalScrollBarHexView->setValue(static_cast<int32_t>(scrollRow));
 }
 
 void MainWindow::on_lineEdit_goto_textEdited(const QString &arg1)
