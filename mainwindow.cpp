@@ -97,6 +97,33 @@ MainWindow::~MainWindow()
     delete m_ui;
 }
 
+void MainWindow::RunFromCmd(QString &sourceFile, QString &hexString)
+{
+    try
+    {
+        bool bAutorun = false;
+        if(!sourceFile.isEmpty())
+        {
+            OpenFile(sourceFile);
+            bAutorun = true;
+        }
+
+        if(!hexString.isEmpty())
+        {
+            m_ui->lineEdit_searchtext->setText(hexString);
+            m_ui->checkBox_hexCoded->setCheckState(Qt::CheckState::Checked);
+            if(bAutorun)
+                on_pushButton_search_clicked();
+        }
+    }
+    catch(...)
+    {
+        auto msg = QString("Failed on run from CMD\nFile [%1]\nHex [%2] ").arg(sourceFile).arg(hexString);
+        QMessageBox::critical(this, windowTitle(), msg, QMessageBox::Ok);
+    }
+
+}
+
 void MainWindow::changeEvent(QEvent *e)
 {
     DEBUGTRACE();
@@ -175,6 +202,11 @@ void MainWindow::showEvent(QShowEvent *event)
 
 void MainWindow::on_pushButtonOpen_clicked()
 {
+    OpenFile(QString());
+}
+
+void MainWindow::OpenFile(const QString & filePath)
+{
     DEBUGTRACE();
     auto docsLocation = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     auto docPath = (docsLocation.isEmpty()) ? "~/" : QString("%1").arg(docsLocation.first());
@@ -189,13 +221,13 @@ void MainWindow::on_pushButtonOpen_clicked()
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setNameFilters(filters);
 
-    if (dialog.exec() == QDialog::Accepted)
+    if (!filePath.isEmpty() || dialog.exec() == QDialog::Accepted)
     {
         try
         {
             settings.setValue(DEFCFG_CFG_OPENDIR, dialog.directory().absolutePath());
 
-            m_PathFilename = dialog.selectedFiles()[0];
+            m_PathFilename = !filePath.isEmpty() ? filePath : dialog.selectedFiles()[0];
             QFileInfo fileinfo(m_PathFilename);
             m_filename = fileinfo.baseName();
             setWindowTitle(m_windowTitle + " [" + m_PathFilename + "]") ;

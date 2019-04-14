@@ -20,6 +20,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
+    void RunFromCmd(QString &sourceFile, QString &hexString);
 
 private:
     Ui::MainWindow *m_ui;
@@ -48,6 +49,7 @@ private:
     void HighlightError(int firstErrorPos, QLineEdit *pEdit);
     void HighlightError(int firstErrorPos, QPlainTextEdit *pEdit);
     void LockInterfaceWhileSearch(bool lock);
+    void OpenFile(const QString &filePath);
 protected:
     void closeEvent(QCloseEvent *event) override;
     void changeEvent(QEvent *e) override;
