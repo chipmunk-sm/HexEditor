@@ -288,7 +288,7 @@
           <string notr="true"/>
          </property>
          <property name="maxLength">
-          <number>64</number>
+          <number>1024</number>
          </property>
          <property name="placeholderText">
           <string notr="true"/>
