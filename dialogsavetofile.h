@@ -17,7 +17,7 @@ class DialogSaveToFile : public QDialog
 
 public:
     explicit DialogSaveToFile(QWidget* parent = nullptr);
-    ~DialogSaveToFile();
+    ~DialogSaveToFile() override;
     void DumpSelectionAsText(const QString& inFile, const QString& outFile,
         int64_t top, int64_t left, int64_t bottom, int64_t right, int cols_hex);
     bool EditFile(const QString& inFile, const QString& outFile,

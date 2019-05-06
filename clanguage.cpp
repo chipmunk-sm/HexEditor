@@ -10,6 +10,7 @@
 #include <QLocale>
 #include <iostream>
 #include <QSettings>
+#include <utility>
 
 #define DEFCFG_LANGUAGE "base/LANGUAGE"
 
@@ -158,7 +159,7 @@ void CLanguage::SetLangByLocale()
 
     //xx
     auto list = localeName.split(QRegExp("(_|-)"), QString::SkipEmptyParts);
-    for(auto tmp : list)
+    for(const auto& tmp : list)
     {
         if (SetLangByLocale(tmp))
             return;
@@ -228,7 +229,7 @@ void CLanguage::InitCombo(QComboBox * comboBox_language, std::function<void()> c
 {
     DEBUGTRACE();
 
-    m_callbackUpdate = callbackUpdate;
+    m_callbackUpdate = std::move(callbackUpdate);
 
     comboBox_language->addItem("Language: auto");
 

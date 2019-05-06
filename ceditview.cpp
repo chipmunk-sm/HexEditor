@@ -48,7 +48,7 @@ bool CEditView::Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile* infoDialog
         return false;
     }
 
-    if ((m_event.event == CEditEventOverwrite || m_event.event == CEditEventInsert) && m_event.data.size() < 1)
+    if ((m_event.event == CEditEventOverwrite || m_event.event == CEditEventInsert) && m_event.data.empty())
     {
         infoDialog->setInfo(QObject::tr("Nothing to do"));
         return false;

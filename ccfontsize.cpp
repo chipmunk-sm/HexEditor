@@ -1,13 +1,13 @@
 /* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include <QtWidgets>
+#include <utility>
 
 #include "ccfontsize.h"
 
 CCFontSize::CCFontSize(QObject* parent)
     : QObject(parent)
     , m_fontSize(-1)
-    , m_qwidget(nullptr)
 {
 
 }
@@ -112,7 +112,7 @@ void CCFontSize::SetFontSize(int fontIndex)
 
 void CCFontSize::SetUpdateCallback(std::function<void()> callbackUpdate)
 {
-    m_callbackUpdate = callbackUpdate;
+    m_callbackUpdate = std::move(callbackUpdate);
 }
 
 void CCFontSize::Reset()

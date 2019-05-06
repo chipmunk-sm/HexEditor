@@ -13,9 +13,9 @@ public:
     explicit CHexViewCustom(QWidget* parent = nullptr);
 
 protected:
-    virtual bool event(QEvent* event) override;
-    virtual void resizeEvent(QResizeEvent* event) override;
-    virtual void paintEvent(QPaintEvent* event) override;
+    bool event(QEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
     void drawCell(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index);
     bool UseScrollbar(int keyX);
 signals:

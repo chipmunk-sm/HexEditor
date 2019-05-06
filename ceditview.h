@@ -75,7 +75,7 @@ class CEditView : public QObject
 public:
     explicit CEditView(QObject* parent);
     void Clear();
-    bool Apply(QFile* pFile1, QFile* pFile2, DialogSaveToFile* infoDialog);
+    bool Apply(QFile* pFileA, QFile* pFileB, DialogSaveToFile* infoDialog);
     CEditEvent GetCellStatus(int64_t pos);
     QString GetEditStatus(int64_t row, int col, int cols_hex);
     void SetOperation(int64_t pos, CEditEvent event, int byitesToDelete, const std::vector<uint8_t>& byteArray);

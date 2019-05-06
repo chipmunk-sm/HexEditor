@@ -74,7 +74,7 @@ void CPropertyView::Init()
     for(const auto & row : rows)
     {
         QList<QStandardItem*> items;
-        for(QString text : row)
+        for(const QString& text : row)
             items.append(new QStandardItem(text));
 
         pModel->appendRow(items);

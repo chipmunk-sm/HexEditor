@@ -23,7 +23,7 @@ class CConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CConfigDialog(std::function<void(void)> callbackUpdate, std::function<void(void)> callbackClose, QWidget* parent = nullptr);
+    explicit CConfigDialog(const std::function<void(void)>& callbackUpdate, std::function<void(void)> callbackClose, QWidget* parent = nullptr);
     ~CConfigDialog() override;
 
     void SaveChklBox(QCheckBox* chkBox, const char* configName, bool checked);
@@ -34,7 +34,7 @@ public:
 
 protected:
     void changeEvent(QEvent* e) override;
-    virtual void showEvent(QShowEvent* event) override;
+    void showEvent(QShowEvent* event) override;
 
 private slots:
     void on_pushButton_restore_default_clicked();

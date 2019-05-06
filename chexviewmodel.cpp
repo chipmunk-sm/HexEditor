@@ -24,7 +24,6 @@ CHexViewModel::CHexViewModel(QTableView* pHexView,
 
     : QAbstractTableModel(pHexView)
     , m_cachePos(-1)
-    , m_cacheLen(0)
     , m_hexView(pHexView)
     , m_editview(pEditView)
     , m_pVerticalScrollBarHexView(pVerticalScrollBarHexView)

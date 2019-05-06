@@ -20,7 +20,7 @@ class CLanguage : public QObject
 public:
 
     explicit CLanguage(QObject* parent = nullptr);
-    ~CLanguage();
+    ~CLanguage() override;
     bool SetLang(const QString& langName);
     void SetLangByLocale();
     bool SetLangByLocale(QString localeName);

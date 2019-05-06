@@ -436,7 +436,7 @@ void MainWindow::on_pushButton_search_clicked()
 
     auto firstErrorPos = -1;
     auto bytesToSearch = ConvertHexTextToByteArray(m_ui->label_search_info->text(), &firstErrorPos);
-    if (bytesToSearch.size() < 1 || firstErrorPos != -1)
+    if (bytesToSearch.empty() || firstErrorPos != -1)
         return;
 
     LockInterfaceWhileSearch(true);
@@ -603,7 +603,7 @@ void MainWindow::CollectCodecs()
         codecMap.insert(sortKey, codec);
     }
 
-    foreach(const QTextCodec * codec, codecMap.values())
+    for(const QTextCodec * codec : codecMap.values())
     {
         m_ui->comboBox_textcodec->addItem(QLatin1String(codec->name()), QVariant(codec->mibEnum()));
     }

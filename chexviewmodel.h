@@ -34,10 +34,10 @@ public:
     QTableView* GetTableView() const;
     bool isSelectedEx(int64_t col, int64_t row) const;
 
-    virtual int rowCount(const QModelIndex& parent) const override;
-    virtual int columnCount(const QModelIndex& parent) const override;
-    virtual QVariant data(const QModelIndex& index, int role) const override;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    int rowCount(const QModelIndex& parent) const override;
+    int columnCount(const QModelIndex& parent) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     QColor GetCellStatus(const QModelIndex& index) const;
 
     QString dataEx(int64_t row, int64_t col) const;

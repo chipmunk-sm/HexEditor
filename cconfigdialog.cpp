@@ -11,9 +11,10 @@
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
+#include <utility>
 
 #include "versionhelper.h"
-CConfigDialog::CConfigDialog(std::function<void()> callbackUpdate, std::function<void()> callbackClose, QWidget* parent)
+CConfigDialog::CConfigDialog(const std::function<void()>& callbackUpdate, std::function<void()> callbackClose, QWidget* parent)
     : QDialog(parent)
     , m_ui(new Ui::CConfigDialog)
 {
@@ -23,7 +24,7 @@ CConfigDialog::CConfigDialog(std::function<void()> callbackUpdate, std::function
     setAttribute(Qt::WA_DeleteOnClose);
 
     m_callbackUpdate = callbackUpdate;
-    m_callbackClose = callbackClose;
+    m_callbackClose = std::move(callbackClose);
     m_ccfontsize.SetUpdateCallback(callbackUpdate);
 
     m_lang.InitCombo(m_ui->comboBox_language, m_callbackUpdate);

@@ -13,7 +13,6 @@
 CHexViewSelectionModel::CHexViewSelectionModel(QAbstractItemModel* model, QScrollBar* pSlider, QObject* parent)
     : QItemSelectionModel(model, parent)
     , m_pSlider(pSlider)
-    , m_offset(-1)
 {
     DEBUGTRACE();
     m_selectFirst.column = 0;
@@ -90,6 +89,7 @@ void CHexViewSelectionModel::select(const QItemSelection & selection, QItemSelec
     }
 
     emit selectionChangedEx();
+
     qobject_cast<const CHexViewModel*>(model())->RepaintDisplay();
 }
 

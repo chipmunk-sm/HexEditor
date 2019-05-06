@@ -18,16 +18,16 @@ public:
     {
     }
 
-    virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         return index.column() == 2 ? QItemDelegate::createEditor(parent, option, index) : nullptr;
     }
 
-    virtual void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const override
+    void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const override
     {
     }
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         painter->save();
         painter->setPen(QColor(Qt::lightGray));

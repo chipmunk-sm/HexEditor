@@ -12,7 +12,7 @@ public:
     explicit CHexViewVerticalHeader(Qt::Orientation orientation, QWidget* parent = nullptr);
 
 protected:
-    virtual void paintEvent(QPaintEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // CHEXVIEWVERTICALHEADER_H

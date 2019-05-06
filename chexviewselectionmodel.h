@@ -22,10 +22,10 @@ public:
     void scrollSelection();
 
 public slots:
-    virtual void select(const QItemSelection& selection, QItemSelectionModel::SelectionFlags command) override;
-    virtual void clear() override;
-    virtual void reset() override;
-    virtual void clearCurrentIndex() override;
+    void select(const QItemSelection& selection, QItemSelectionModel::SelectionFlags command) override;
+    void clear() override;
+    void reset() override;
+    void clearCurrentIndex() override;
 
 signals:
     void selectionChangedEx();
