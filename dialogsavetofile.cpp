@@ -14,7 +14,7 @@
 
 //#define DEF_ENABLE_THREADING
 
-DialogSaveToFile::DialogSaveToFile(QWidget *parent) :
+DialogSaveToFile::DialogSaveToFile(QWidget* parent) :
     QDialog(parent),
     ui(new Ui::DialogSaveToFile)
 {
@@ -31,12 +31,12 @@ DialogSaveToFile::DialogSaveToFile(QWidget *parent) :
     ui->progressBar->setValue(0);
 
 #ifdef DEF_ENABLE_THREADING
-    m_callbackProgress = [&](int val)->void{
+    m_callbackProgress = [&](int val)->void {
         QMetaObject::invokeMethod(ui->progressBar, "setValue", Qt::QueuedConnection, Q_ARG(int, val));
         //qApp->processEvents();
     };
 #else
-    m_callbackProgress = [&](int val)->void{
+    m_callbackProgress = [&](int val)->void {
         ui->progressBar->setValue(val);
         qApp->processEvents();
     };
@@ -48,15 +48,15 @@ DialogSaveToFile::~DialogSaveToFile()
 {
     m_cancel = true;
     auto timeout = 100;
-    while(!m_exit && timeout-- > 0)
+    while (!m_exit && timeout-- > 0)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
     delete ui;
 }
 
-void DialogSaveToFile::DumpSelectionAsText(const QString &inFile, const QString &outFile,
-                                           int64_t top, int64_t left, int64_t bottom, int64_t right, int cols_hex)
+void DialogSaveToFile::DumpSelectionAsText(const QString& inFile, const QString& outFile,
+    int64_t top, int64_t left, int64_t bottom, int64_t right, int cols_hex)
 {
     m_InFile = inFile;
     m_OutFile = outFile;
@@ -68,7 +68,7 @@ void DialogSaveToFile::DumpSelectionAsText(const QString &inFile, const QString 
     m_exit = false;
 
 #ifdef DEF_ENABLE_THREADING
-    auto OpenProcess = [](DialogSaveToFile* pThis)
+    auto OpenProcess = [](DialogSaveToFile * pThis)
 #else
     auto pThis = this;
 #endif
@@ -78,11 +78,11 @@ void DialogSaveToFile::DumpSelectionAsText(const QString &inFile, const QString 
         {
             result = pThis->RunDumpThread();
         }
-        catch(std::exception  const&e)
+        catch (std::exception  const& e)
         {
             pThis->m_error = QObject::tr(e.what());
         }
-        catch(...)
+        catch (...)
         {
             pThis->m_error = QObject::tr("Unexpected exception");
         }
@@ -96,8 +96,8 @@ void DialogSaveToFile::DumpSelectionAsText(const QString &inFile, const QString 
 
 }
 
-bool DialogSaveToFile::EditFile(const QString &inFile, const QString &outFile,
-                                 int64_t editPos, std::vector<uint8_t> &data, int64_t deleteSize)
+bool DialogSaveToFile::EditFile(const QString & inFile, const QString & outFile,
+    int64_t editPos, std::vector<uint8_t> & data, int64_t deleteSize)
 {
     m_InFile = inFile;
     m_OutFile = outFile;
@@ -111,11 +111,11 @@ bool DialogSaveToFile::EditFile(const QString &inFile, const QString &outFile,
     {
         result = EditFile();
     }
-    catch(std::exception  const&e)
+    catch (std::exception  const& e)
     {
         m_error = QObject::tr(e.what());
     }
-    catch(...)
+    catch (...)
     {
         m_error = QObject::tr("Unexpected exception");
     }
@@ -125,7 +125,7 @@ bool DialogSaveToFile::EditFile(const QString &inFile, const QString &outFile,
     return result;
 }
 
-bool DialogSaveToFile::CopyFile(const QString &sInFile, const QString &sOutFile, QString &sError)
+bool DialogSaveToFile::CopyFile(const QString & sInFile, const QString & sOutFile, QString & sError)
 {
 
     QFile inFile(sInFile);
@@ -167,11 +167,11 @@ bool DialogSaveToFile::RunDumpThread()
     std::vector<unsigned char> buffer;
 
     auto stride = m_right - m_left + 1;
-    if(stride < 1)
+    if (stride < 1)
         return false;
 
     auto height = m_bottom - m_top + 1;
-    if(height < 1)
+    if (height < 1)
         return false;
 
     buffer.resize(static_cast<uint64_t>(m_cols_hex));
@@ -192,10 +192,10 @@ bool DialogSaveToFile::RunDumpThread()
 
     QTextStream stream(&outFile);
 
-    for(int64_t rowIdx = 0; rowIdx < height; rowIdx++)
+    for (int64_t rowIdx = 0; rowIdx < height; rowIdx++)
     {
 
-        if(m_cancel)
+        if (m_cancel)
             return false;
 
         m_callbackProgress(static_cast<int>(m_progressInc * (rowIdx + 1)));
@@ -207,35 +207,35 @@ bool DialogSaveToFile::RunDumpThread()
 #endif
 
         auto position = (m_top + rowIdx) * m_cols_hex;
-        if(!inFile.seek(position))
+        if (!inFile.seek(position))
         {
             m_error = tr("Unable to seek position ") + QString::number(position) + tr("\n") + m_InFile + tr("\n") + inFile.errorString();
             return false;
         }
 
         auto len = inFile.read(reinterpret_cast<char*>(buffer.data()), static_cast<int64_t>(buffer.size()));
-        if(len < 0)
+        if (len < 0)
             continue;
 
-        if(len < static_cast<int64_t>(buffer.size()))
+        if (len < static_cast<int64_t>(buffer.size()))
         {
             memset(buffer.data() + len, 0, buffer.size() - static_cast<uint64_t>(len));
         }
 
-        for(int64_t colIdx = m_left; colIdx < stride + m_left; colIdx++)
+        for (int64_t colIdx = m_left; colIdx < stride + m_left; colIdx++)
         {
-            if(colIdx >= m_cols_hex)
+            if (colIdx >= m_cols_hex)
             {
-                auto col = colIdx  - m_cols_hex;
+                auto col = colIdx - m_cols_hex;
                 auto charx = buffer[static_cast<uint64_t>(col)];
-                if(charx <= 0x1F || charx >= 0x7F)
+                if (charx <= 0x1F || charx >= 0x7F)
                     charx = '.';
                 stream << QChar(charx);
             }
             else
             {
                 stream << QString("%1").arg(buffer[static_cast<uint32_t>(colIdx)], 2, 16, QLatin1Char('0')).toUpper()
-                       << " ";
+                    << " ";
             }
         }
     }
@@ -279,8 +279,8 @@ bool DialogSaveToFile::EditFile()
 
     if (m_deleteSize < 0)
     {
-        auto res = outFile.write(reinterpret_cast<const char *>(m_data.data()), static_cast<qint64>(m_data.size()));
-        if(res != static_cast<qint64>(m_data.size()))
+        auto res = outFile.write(reinterpret_cast<const char*>(m_data.data()), static_cast<qint64>(m_data.size()));
+        if (res != static_cast<qint64>(m_data.size()))
         {
             m_error = GetFileError(inFile, outFile);
             return false;
@@ -289,7 +289,7 @@ bool DialogSaveToFile::EditFile()
     else
     {
         m_editPos += m_deleteSize;
-        if(!inFile.seek(inFile.pos() + m_deleteSize))
+        if (!inFile.seek(inFile.pos() + m_deleteSize))
         {
             m_error = GetFileError(inFile, outFile);
             return false;
@@ -309,7 +309,7 @@ bool DialogSaveToFile::EditFile()
 
 }
 
-bool DialogSaveToFile::CopyBlock(QFile *pSrc, QFile *pDst, int64_t length)
+bool DialogSaveToFile::CopyBlock(QFile * pSrc, QFile * pDst, int64_t length)
 {
     const auto largeBlockSize = 65535;
     const auto smallBlockSize = 4096;
@@ -320,7 +320,7 @@ bool DialogSaveToFile::CopyBlock(QFile *pSrc, QFile *pDst, int64_t length)
     auto nprogress = 0;
     const auto nprogressStep = 5;
 
-    while(length > 0)
+    while (length > 0)
     {
 
         if (m_cancel)
@@ -328,19 +328,19 @@ bool DialogSaveToFile::CopyBlock(QFile *pSrc, QFile *pDst, int64_t length)
 
         auto toRead = std::min(static_cast<int64_t>(tmpBuff.size()), length);
         auto res = pSrc->read(tmpBuff.data(), toRead);
-        if(res == -1)
+        if (res == -1)
         {
             return false;
         }
 
-        if(pDst->write(tmpBuff.data(), res) == -1)
+        if (pDst->write(tmpBuff.data(), res) == -1)
         {
             return false;
         }
 
         length -= res;
 
-        if(!nprogress--)
+        if (!nprogress--)
         {
             nprogress = nprogressStep;
             m_callbackProgress(static_cast<int>(m_progressInc * pDst->pos()));
@@ -360,13 +360,13 @@ void DialogSaveToFile::on_pushButton_exit_clicked()
     close();
 }
 
-void DialogSaveToFile::setInfo(const QString &infoString)
+void DialogSaveToFile::setInfo(const QString & infoString)
 {
 #ifdef DEF_ENABLE_THREADING
-    QMetaObject::invokeMethod(ui->progressBar,       "hide", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(ui->progressBar, "hide", Qt::QueuedConnection);
     QMetaObject::invokeMethod(ui->pushButton_cancel, "hide", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(ui->label_result,      "show", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(ui->pushButton_exit,   "show", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(ui->label_result, "show", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(ui->pushButton_exit, "show", Qt::QueuedConnection);
     QMetaObject::invokeMethod(ui->label_result, "setText", Qt::QueuedConnection, Q_ARG(const QString&, infoString));
 #else
     ui->progressBar->hide();
@@ -377,8 +377,8 @@ void DialogSaveToFile::setInfo(const QString &infoString)
 #endif
 }
 
-QString DialogSaveToFile::GetFileError(const QFile &inFile, const QFile &outFile)
+QString DialogSaveToFile::GetFileError(const QFile & inFile, const QFile & outFile)
 {
     return tr("Error: failed copy from \n %1 \n to \n %2 \n In[%3] \n Out[%4]")
-            .arg(inFile.fileName()).arg(outFile.fileName()).arg(inFile.errorString()).arg(outFile.errorString());
+        .arg(inFile.fileName()).arg(outFile.fileName()).arg(inFile.errorString()).arg(outFile.errorString());
 }

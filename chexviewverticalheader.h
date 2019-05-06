@@ -9,10 +9,10 @@ class CHexViewVerticalHeader : public QHeaderView
 {
     Q_OBJECT
 public:
-    explicit CHexViewVerticalHeader(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit CHexViewVerticalHeader(Qt::Orientation orientation, QWidget* parent = nullptr);
 
 protected:
-    virtual void paintEvent(QPaintEvent *event) override;
+    virtual void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // CHEXVIEWVERTICALHEADER_H

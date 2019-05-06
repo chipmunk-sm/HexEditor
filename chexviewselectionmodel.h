@@ -16,13 +16,13 @@ class CHexViewSelectionModel : public QItemSelectionModel
 {
     Q_OBJECT
 public:
-    explicit CHexViewSelectionModel(QAbstractItemModel *model, QScrollBar *pSlider, QObject *parent = nullptr);
+    explicit CHexViewSelectionModel(QAbstractItemModel* model, QScrollBar* pSlider, QObject* parent = nullptr);
     bool isSelectedEx(int64_t col, int64_t row) const;
-    bool GetSelectedEx(CHexViewSelectionModelItem * pItemFirst, CHexViewSelectionModelItem * pItemSecond) const;
+    bool GetSelectedEx(CHexViewSelectionModelItem* pItemFirst, CHexViewSelectionModelItem* pItemSecond) const;
     void scrollSelection();
 
 public slots:
-    virtual void select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command) override;
+    virtual void select(const QItemSelection& selection, QItemSelectionModel::SelectionFlags command) override;
     virtual void clear() override;
     virtual void reset() override;
     virtual void clearCurrentIndex() override;

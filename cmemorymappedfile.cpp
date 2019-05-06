@@ -32,7 +32,7 @@
 
 CMemoryMappedFile::CMemoryMappedFile()
 #ifdef _MSC_VER
-	: m_file(INVALID_HANDLE_VALUE)
+    : m_file(INVALID_HANDLE_VALUE)
 #endif
 {
     m_sysPageSize = CMemoryMappedFile::GetSysPageSize();
@@ -86,7 +86,7 @@ int64_t CMemoryMappedFile::GetSysPageSize()
     sysPageSize = sysconf(_SC_PAGESIZE);
 #endif
 
-    if(!sysPageSize)
+    if (!sysPageSize)
         sysPageSize = 4096;
 
     return sysPageSize;
@@ -104,9 +104,9 @@ bool CMemoryMappedFile::OpenMapped(const std::wstring& filename, CacheAccess hin
     DWORD nHint;
     switch (m_hint)
     {
-        case CacheAccess_Normal:     nHint = FILE_ATTRIBUTE_NORMAL;     break;
-        case CacheAccess_Sequential: nHint = FILE_FLAG_SEQUENTIAL_SCAN; break;
-        case CacheAccess_Random:     nHint = FILE_FLAG_RANDOM_ACCESS;   break;
+    case CacheAccess_Normal:     nHint = FILE_ATTRIBUTE_NORMAL;     break;
+    case CacheAccess_Sequential: nHint = FILE_FLAG_SEQUENTIAL_SCAN; break;
+    case CacheAccess_Random:     nHint = FILE_FLAG_RANDOM_ACCESS;   break;
     }
 
     m_file = ::CreateFile(filename.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, nHint, nullptr);
@@ -132,9 +132,9 @@ bool CMemoryMappedFile::OpenMapped(const std::wstring& filename, CacheAccess hin
     return true;
 }
 
-uint8_t* CMemoryMappedFile::GetDataPtr(int64_t pos, int64_t *pageSize)
+uint8_t * CMemoryMappedFile::GetDataPtr(int64_t pos, int64_t * pageSize)
 {
-    if(!RemapFile(pos))
+    if (!RemapFile(pos))
     {
         *pageSize = 0;
         return nullptr;
@@ -197,7 +197,7 @@ bool CMemoryMappedFile::RemapFile(int64_t offset)
     if (m_mappedView == nullptr)
     {
         m_mappedBytes = 0;
-        m_mappedView  = nullptr;
+        m_mappedView = nullptr;
         return false;
     }
 #else
@@ -205,16 +205,16 @@ bool CMemoryMappedFile::RemapFile(int64_t offset)
     if (m_mappedView == MAP_FAILED)
     {
         m_mappedBytes = 0;
-        m_mappedView  = nullptr;
+        m_mappedView = nullptr;
         return false;
     }
 
     int nHint;
     switch (m_hint)
     {
-        case CacheAccess_Normal:     nHint = MADV_NORMAL;     break;
-        case CacheAccess_Sequential: nHint = MADV_SEQUENTIAL; break;
-        case CacheAccess_Random:     nHint = MADV_RANDOM;     break;
+    case CacheAccess_Normal:     nHint = MADV_NORMAL;     break;
+    case CacheAccess_Sequential: nHint = MADV_SEQUENTIAL; break;
+    case CacheAccess_Random:     nHint = MADV_RANDOM;     break;
     }
     ::madvise(m_mappedView, static_cast<uint64_t>(m_mappedBytes), nHint);
 #endif

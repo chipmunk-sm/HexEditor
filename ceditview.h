@@ -25,9 +25,9 @@ enum CEditEvent
 
 struct CEditItem
 {
-    bool                 valid      = false;
-    CEditEvent           event      = CEditEvent::CEditEventNone;
-    int64_t              pos        = -1;
+    bool                 valid = false;
+    CEditEvent           event = CEditEvent::CEditEventNone;
+    int64_t              pos = -1;
     int64_t              deleteSize = -1;
 
     std::vector<uint8_t> data;
@@ -35,22 +35,22 @@ struct CEditItem
     QString GetInfo() const
     {
 
-        if(!valid || pos == -1)
+        if (!valid || pos == -1)
             return "";
 
         QString str;
         switch (event)
         {
-            case CEditEvent::CEditEventOverwrite:
-                str += QObject::tr("Overwrite ") + QString::number(data.size()) + QObject::tr(" byte(s) From ");
+        case CEditEvent::CEditEventOverwrite:
+            str += QObject::tr("Overwrite ") + QString::number(data.size()) + QObject::tr(" byte(s) From ");
             break;
-            case CEditEvent::CEditEventInsert:
-                str += QObject::tr("Insert ")    + QString::number(data.size()) + QObject::tr(" byte(s) Before ");
+        case CEditEvent::CEditEventInsert:
+            str += QObject::tr("Insert ") + QString::number(data.size()) + QObject::tr(" byte(s) Before ");
             break;
-            case CEditEvent::CEditEventDelete:
-                str += QObject::tr("Delete ")    + QString::number(deleteSize)  + QObject::tr(" byte(s) From ");
+        case CEditEvent::CEditEventDelete:
+            str += QObject::tr("Delete ") + QString::number(deleteSize) + QObject::tr(" byte(s) From ");
             break;
-            case CEditEvent::CEditEventNone: return "Error";
+        case CEditEvent::CEditEventNone: return "Error";
         }
 
         str += QString("%1 (HEX: %2)").arg(pos, 1, 10, QLatin1Char('0')).arg(pos, 1, 16, QLatin1Char('0')).toUpper();
@@ -73,13 +73,13 @@ class CEditView : public QObject
 {
     Q_OBJECT
 public:
-    explicit CEditView(QObject *parent);
+    explicit CEditView(QObject* parent);
     void Clear();
-    bool Apply(QFile *pFile1, QFile *pFile2, DialogSaveToFile *infoDialog);
+    bool Apply(QFile* pFile1, QFile* pFile2, DialogSaveToFile* infoDialog);
     CEditEvent GetCellStatus(int64_t pos);
     QString GetEditStatus(int64_t row, int col, int cols_hex);
-    void SetOperation(int64_t pos, CEditEvent event, int byitesToDelete, const std::vector<uint8_t> &byteArray);
-    QString GetInfo(){return  m_event.GetInfo();}
+    void SetOperation(int64_t pos, CEditEvent event, int byitesToDelete, const std::vector<uint8_t>& byteArray);
+    QString GetInfo() { return  m_event.GetInfo(); }
 private:
     CEditItem       m_event;
 };

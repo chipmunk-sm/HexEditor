@@ -9,57 +9,57 @@
 #include <QBitArray>
 
 
-CHexViewCustom::CHexViewCustom(QWidget *parent)
+CHexViewCustom::CHexViewCustom(QWidget* parent)
     : QTableView(parent)
 {
 }
 
-bool CHexViewCustom::event(QEvent *event)
+bool CHexViewCustom::event(QEvent* event)
 {
-    if(event->type() == QEvent::Wheel)
+    if (event->type() == QEvent::Wheel)
     {
         return static_cast<const CHexViewModel*>(model())->EventHandler(event);
     }
-    else if(event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
+    else if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
     {
         QKeyEvent* evt = static_cast<QKeyEvent*>(event);
         switch (evt->key())
         {
-            case Qt::Key_Down:
-            case Qt::Key_Up:
-            case Qt::Key_PageUp:
-            case Qt::Key_PageDown:
+        case Qt::Key_Down:
+        case Qt::Key_Up:
+        case Qt::Key_PageUp:
+        case Qt::Key_PageDown:
+        {
+            if (UseScrollbar(evt->key()))
             {
-                if(UseScrollbar(evt->key()))
-                {
-                    static_cast<const CHexViewModel*>(model())->EventHandler(event);
-                    QTableView::event(event);
-                    static_cast<CHexViewSelectionModel*>(selectionModel())->scrollSelection();
-                    emit selectionChangedEx();
-                    //static_cast<const CHexViewModel*>(model())->RepaintDisplay();
-                    return true;
-                }
+                static_cast<const CHexViewModel*>(model())->EventHandler(event);
+                QTableView::event(event);
+                static_cast<CHexViewSelectionModel*>(selectionModel())->scrollSelection();
+                emit selectionChangedEx();
+                //static_cast<const CHexViewModel*>(model())->RepaintDisplay();
+                return true;
             }
-            break;
-            default:
+        }
+        break;
+        default:
             break;
         }
     }
     return QTableView::event(event);
 }
 
-void CHexViewCustom::resizeEvent(QResizeEvent *event)
+void CHexViewCustom::resizeEvent(QResizeEvent* event)
 {
     QTableView::resizeEvent(event);
 
-    if(model()->rowCount(QModelIndex()) != verticalHeader()->count())
+    if (model()->rowCount(QModelIndex()) != verticalHeader()->count())
     {
         static_cast<const CHexViewModel*>(model())->UpdateScrollbarProps();
         verticalHeader()->reset();
     }
 }
 
-void CHexViewCustom::paintEvent(QPaintEvent *event)
+void CHexViewCustom::paintEvent(QPaintEvent* event)
 {
     const auto verticalHeader = QTableView::verticalHeader();
     const auto horizontalHeader = QTableView::horizontalHeader();
@@ -81,7 +81,7 @@ void CHexViewCustom::paintEvent(QPaintEvent *event)
     auto x = horizontalHeader->length() - horizontalHeader->offset();
     auto y = verticalHeader->length() - verticalHeader->offset() - 1;
 
-    auto firstVisualRow = qMax(verticalHeader->visualIndexAt(0),0);
+    auto firstVisualRow = qMax(verticalHeader->visualIndexAt(0), 0);
     auto lastVisualRow = verticalHeader->visualIndexAt(verticalHeader->viewport()->height());
 
     if (lastVisualRow == -1)
@@ -146,8 +146,8 @@ void CHexViewCustom::paintEvent(QPaintEvent *event)
             for (int visualColumnIndex = left; visualColumnIndex <= right; ++visualColumnIndex)
             {
                 auto currentBit =
-                        (visualRowIndex - firstVisualRow) * (lastVisualColumn - firstVisualColumn + 1)
-                        + visualColumnIndex - firstVisualColumn;
+                    (visualRowIndex - firstVisualRow) * (lastVisualColumn - firstVisualColumn + 1)
+                    + visualColumnIndex - firstVisualColumn;
 
                 if (currentBit < 0 || currentBit >= drawn.size() || drawn.testBit(currentBit))
                     continue;
@@ -211,7 +211,7 @@ void CHexViewCustom::paintEvent(QPaintEvent *event)
                     continue;
 
                 auto colp = columnViewportPosition(col) + offset.x();
-                colp +=  columnWidth(col) - gridSize;
+                colp += columnWidth(col) - gridSize;
                 painter.drawLine(colp, dirtyArea.top(), colp, dirtyArea.bottom());
             }
 
@@ -220,50 +220,50 @@ void CHexViewCustom::paintEvent(QPaintEvent *event)
     }
 }
 
-void CHexViewCustom::drawCell(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+void CHexViewCustom::drawCell(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index)
 {
     auto proxy = qobject_cast<const CHexViewModel*>(index.model());
-    if(!proxy)
+    if (!proxy)
         return;
 
     auto bSelectedCell = proxy->isSelectedEx(index.column(), index.row());
     auto bMirrorSelection = proxy->isSelectedEx(
-                index.column() >= proxy->GetColHex() ? index.column() - proxy->GetColHex() : index.column() + proxy->GetColHex(),
-                index.row());
+        index.column() >= proxy->GetColHex() ? index.column() - proxy->GetColHex() : index.column() + proxy->GetColHex(),
+        index.row());
 
     auto savedColor = painter->pen().color();
     auto penColor = option.palette.color(QPalette::Normal, bSelectedCell ? QPalette::HighlightedText : QPalette::Text);
 
     auto customColor = proxy->GetCellStatus(index);
     //auto customColor = proxy->data(index, Qt::TextColorRole);
-    if(customColor.isValid())
+    if (customColor.isValid())
     {
         //penColor = customColor.value<QColor>();
         penColor = customColor;
     }
     painter->setPen(penColor);
 
-    if(bSelectedCell)
+    if (bSelectedCell)
     {
         painter->fillRect(option.rect, option.palette.brush(QPalette::Normal, QPalette::Highlight));
     }
-    else if((option.features & QStyleOptionViewItem::Alternate) == QStyleOptionViewItem::Alternate)
+    else if ((option.features & QStyleOptionViewItem::Alternate) == QStyleOptionViewItem::Alternate)
     {
         painter->fillRect(option.rect, option.palette.brush(QPalette::Normal, QPalette::AlternateBase));
     }
 
-    if(bMirrorSelection)
+    if (bMirrorSelection)
     {
         auto rc = option.rect;
         painter->drawRoundedRect(rc.adjusted(0, 0, -1, -1), 2, 2);
     }
 
     option.widget->style()->drawItemText(painter,
-                                         option.rect,
-                                         Qt::AlignHCenter | Qt::AlignVCenter,
-                                         option.palette,
-                                         true,
-                                         proxy->data(index, Qt::DisplayRole).toString());
+        option.rect,
+        Qt::AlignHCenter | Qt::AlignVCenter,
+        option.palette,
+        true,
+        proxy->data(index, Qt::DisplayRole).toString());
     painter->setPen(savedColor);
 }
 
@@ -281,21 +281,21 @@ bool CHexViewCustom::UseScrollbar(int keyX)
 
     switch (keyX)
     {
-        case Qt::Key_Down:
-        case Qt::Key_PageDown:
-        {
-            if(currentRow == bottom)
-                return true;
-        }
-        break;
-        case Qt::Key_Up:
-        case Qt::Key_PageUp:
-        {
-            if(currentRow == 0)
-                return true;
-        }
-        break;
-        default:
+    case Qt::Key_Down:
+    case Qt::Key_PageDown:
+    {
+        if (currentRow == bottom)
+            return true;
+    }
+    break;
+    case Qt::Key_Up:
+    case Qt::Key_PageUp:
+    {
+        if (currentRow == 0)
+            return true;
+    }
+    break;
+    default:
         break;
     }
     return false;

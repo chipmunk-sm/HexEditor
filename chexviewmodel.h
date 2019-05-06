@@ -22,35 +22,35 @@ class CHexViewModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit CHexViewModel(QTableView *pHexView,
-                           QScrollBar *pVerticalScrollBarHexView,
-                           CEditView  *pEditView,
-                           CSearch    *pcsearch);
+    explicit CHexViewModel(QTableView* pHexView,
+        QScrollBar* pVerticalScrollBarHexView,
+        CEditView* pEditView,
+        CSearch* pcsearch);
 
     ~CHexViewModel() override;
 
     void UpdateTable(bool forceReformat);
-    bool OpenFile(const QString &path);
-    QTableView *GetTableView() const;
+    bool OpenFile(const QString& path);
+    QTableView* GetTableView() const;
     bool isSelectedEx(int64_t col, int64_t row) const;
 
-    virtual int rowCount(const QModelIndex &parent) const override;
-    virtual int columnCount(const QModelIndex &parent) const override;
-    virtual QVariant data(const QModelIndex &index, int role) const override;
+    virtual int rowCount(const QModelIndex& parent) const override;
+    virtual int columnCount(const QModelIndex& parent) const override;
+    virtual QVariant data(const QModelIndex& index, int role) const override;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    QColor GetCellStatus(const QModelIndex &index) const;
+    QColor GetCellStatus(const QModelIndex& index) const;
 
     QString dataEx(int64_t row, int64_t col) const;
-    bool EventHandler(QEvent *event) const;
+    bool EventHandler(QEvent* event) const;
     void UpdateScrollbarProps() const;
     int64_t GetCurrentPos();
 
     void UpdateColorConfig();
-    QFile *GetFileHandler();
+    QFile* GetFileHandler();
     void RepaintDisplay() const;
-    int GetColHex() const {return m_cols_hex;}
+    int GetColHex() const { return m_cols_hex; }
     void Reset();
-    void SetInfo(int64_t val, QLineEdit *pInfo, QLineEdit *pGoTo) const;
+    void SetInfo(int64_t val, QLineEdit* pInfo, QLineEdit* pGoTo) const;
     void UpdateScrollbarPos(int64_t scrollbarPosition);
 private:
 
@@ -61,10 +61,10 @@ private:
     mutable int64_t m_scrollbarMax = 0;
     int64_t m_scrollbarPosition = 0;
 
-    QTableView                  *m_hexView                   = nullptr;
-    CEditView                   *m_editview                  = nullptr;
-    QScrollBar                  *m_pVerticalScrollBarHexView = nullptr;
-    CSearch                     *m_pcsearch                  = nullptr;
+    QTableView* m_hexView = nullptr;
+    CEditView* m_editview = nullptr;
+    QScrollBar* m_pVerticalScrollBarHexView = nullptr;
+    CSearch* m_pcsearch = nullptr;
 
     QColor                      m_color_overwrite;
     QColor                      m_color_insert;

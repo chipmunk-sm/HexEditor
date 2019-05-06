@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include "cpropertyview.h"
 
@@ -22,7 +22,7 @@
     MACRO_PROP(double)\
     MACRO_PROP(long double)
 
-CPropertyView::CPropertyView(QTreeView *propertyView)
+CPropertyView::CPropertyView(QTreeView* propertyView)
 {
     m_propertyView = propertyView;
     propertyView->setItemDelegate(new CPropertyViewDelegate(propertyView));
@@ -31,7 +31,7 @@ CPropertyView::CPropertyView(QTreeView *propertyView)
 
 CPropertyView::~CPropertyView()
 {
-    if( m_file.isOpen() )
+    if (m_file.isOpen())
         m_file.close();
 }
 
@@ -49,8 +49,8 @@ void CPropertyView::Init()
 
     QStringList cols;
     cols << QObject::tr("Type Name")
-         << QObject::tr("Size")
-         << QObject::tr("Value");
+        << QObject::tr("Size")
+        << QObject::tr("Value");
 
     m_value_column = cols.size() - 1;
 
@@ -60,30 +60,30 @@ void CPropertyView::Init()
 
     auto rows = QList<QStringList>()
 
-        #undef  MACRO_PROP
-        #define MACRO_PROP(XIDNAME) << (QStringList() << #XIDNAME <<  std::to_string(sizeof(XIDNAME)).c_str())
-            GEN_LIST_PARAM
-            GEN_LIST_PARAM;
+#undef  MACRO_PROP
+#define MACRO_PROP(XIDNAME) << (QStringList() << #XIDNAME <<  std::to_string(sizeof(XIDNAME)).c_str())
+        GEN_LIST_PARAM
+        GEN_LIST_PARAM;
 #undef  MACRO_PROP
 
-    rows.append(QStringList() << "Latin1" );
-    rows.append(QStringList() << "Utf8" );
-    rows.append(QStringList() << "Utf16" );
-    rows.append(QStringList() << "Ucs4" );
+    rows.append(QStringList() << "Latin1");
+    rows.append(QStringList() << "Utf8");
+    rows.append(QStringList() << "Utf16");
+    rows.append(QStringList() << "Ucs4");
 
-    foreach (const auto &row, rows)
+    foreach(const auto & row, rows)
     {
-        QList<QStandardItem *> items;
-        foreach (QString text, row)
+        QList<QStandardItem*> items;
+        foreach(QString text, row)
             items.append(new QStandardItem(text));
 
         pModel->appendRow(items);
     }
 }
 
-void CPropertyView::OpenFile(const QString &path)
+void CPropertyView::OpenFile(const QString& path)
 {
-    if( m_file.isOpen() )
+    if (m_file.isOpen())
         m_file.close();
 
     m_file.setFileName(path);
@@ -97,12 +97,12 @@ void CPropertyView::OpenFile(const QString &path)
 
 void CPropertyView::Close()
 {
-    if( m_file.isOpen() )
+    if (m_file.isOpen())
         m_file.close();
     DecodeValue(nullptr, 0);
 }
 
-QFile *CPropertyView::GetFileHandler()
+QFile* CPropertyView::GetFileHandler()
 {
     return &m_file;
 }
@@ -110,23 +110,23 @@ QFile *CPropertyView::GetFileHandler()
 void CPropertyView::SetDisplayText(bool displayText)
 {
     m_displayText = displayText;
-//    if(!displayText)
-//        DecodeValue(nullptr, 0);
+    //    if(!displayText)
+    //        DecodeValue(nullptr, 0);
 }
 
 void CPropertyView::DecodeValue(int64_t pos)
 {
-    if(m_file.isOpen() && pos >= 0 && m_file.seek(pos))
+    if (m_file.isOpen() && pos >= 0 && m_file.seek(pos))
     {
 
-        if( m_buffer.size() < m_string_len)
+        if (m_buffer.size() < m_string_len)
             m_buffer.resize(m_string_len);
 
-        auto len = m_file.read(reinterpret_cast<char*>(m_buffer.data()), static_cast<int32_t>(m_buffer.size()) );
-        if(len >= 0)
+        auto len = m_file.read(reinterpret_cast<char*>(m_buffer.data()), static_cast<int32_t>(m_buffer.size()));
+        if (len >= 0)
         {
             auto maxLen = static_cast<int64_t>(m_buffer.size() - sizeof(uint32_t));
-            if(len > maxLen)
+            if (len > maxLen)
                 len = maxLen;
 
             memset(m_buffer.data() + len, 0, m_buffer.size() - static_cast<uint32_t>(len));
@@ -139,7 +139,7 @@ void CPropertyView::DecodeValue(int64_t pos)
     DecodeValue(nullptr, 0);
 }
 
-void CPropertyView::DecodeValue(char *pBuffer, unsigned int bufferSize)
+void CPropertyView::DecodeValue(char* pBuffer, unsigned int bufferSize)
 {
     auto pModel = m_propertyView->model();
     auto index = 0;
@@ -186,7 +186,7 @@ void CPropertyView::DecodeValue(char *pBuffer, unsigned int bufferSize)
 #undef  MACRO_PROP
 
     QString str;
-    if(!m_displayText)
+    if (!m_displayText)
     {
         pModel->setData(pModel->index(index++, m_value_column), str);
         pModel->setData(pModel->index(index++, m_value_column), str);
@@ -195,24 +195,62 @@ void CPropertyView::DecodeValue(char *pBuffer, unsigned int bufferSize)
         return;
     }
 
-    try { str = QString::fromLatin1(pBuffer); } catch (...){ str = "-"; }
-    pModel->setData(pModel->index(index++, m_value_column), str);
-
-    try { str = QString::fromUtf8(pBuffer); } catch (...){ str = "-"; }
-    pModel->setData(pModel->index(index++, m_value_column), str);
-
-    if(bufferSize >= sizeof(ushort)) {
-        try {str = QString::fromUtf16(reinterpret_cast<ushort*>(pBuffer)); } catch (...){ str = "-"; }
-    } else {
+    try
+    {
+        str = QString::fromLatin1(pBuffer);
+    }
+    catch (...)
+    {
         str = "-";
     }
+
     pModel->setData(pModel->index(index++, m_value_column), str);
 
-    if(bufferSize >= sizeof(uint)) {
-        try { str = QString::fromUcs4(reinterpret_cast<uint*>(pBuffer)); } catch (...){ str = "-"; }
-    } else {
+    try
+    {
+        str = QString::fromUtf8(pBuffer);
+    }
+    catch (...)
+    {
         str = "-";
     }
+
+    pModel->setData(pModel->index(index++, m_value_column), str);
+
+    if (bufferSize >= sizeof(ushort))
+    {
+        try
+        {
+            str = QString::fromUtf16(reinterpret_cast<ushort*>(pBuffer));
+        }
+        catch (...)
+        {
+            str = "-";
+        }
+    }
+    else
+    {
+        str = "-";
+    }
+
+    pModel->setData(pModel->index(index++, m_value_column), str);
+
+    if (bufferSize >= sizeof(uint))
+    {
+        try
+        {
+            str = QString::fromUcs4(reinterpret_cast<uint*>(pBuffer));
+        }
+        catch (...)
+        {
+            str = "-";
+        }
+    }
+    else
+    {
+        str = "-";
+    }
+
     pModel->setData(pModel->index(index++, m_value_column), str);
 
 }
