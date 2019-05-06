@@ -158,7 +158,7 @@ void CLanguage::SetLangByLocale()
 
     //xx
     auto list = localeName.split(QRegExp("(_|-)"), QString::SkipEmptyParts);
-    foreach(auto tmp, list)
+    for(auto tmp : list)
     {
         if (SetLangByLocale(tmp))
             return;

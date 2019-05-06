@@ -21,7 +21,7 @@ public:
     void DumpSelectionAsText(const QString& inFile, const QString& outFile,
         int64_t top, int64_t left, int64_t bottom, int64_t right, int cols_hex);
     bool EditFile(const QString& inFile, const QString& outFile,
-        int64_t editPos, std::vector<uint8_t>& data, int64_t deleteSize);
+        int64_t editPos, std::vector<uint8_t>& dataX, int64_t deleteSize);
 
     bool CopyFile(const QString& sInFile, const QString& sOutFile, QString& sError);
 

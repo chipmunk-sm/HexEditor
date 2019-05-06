@@ -76,7 +76,7 @@ void CHexViewSelectionModel::select(const QItemSelection & selection, QItemSelec
     if ((command & SelectionFlag::Current) == SelectionFlag::Current)
     {
         m_selectSecond.column = currentIndex().column();
-        m_selectSecond.row = currentIndex().row() + slider;
+        m_selectSecond.row = static_cast<int64_t>(currentIndex().row()) + slider;
     }
     else if ((command & SelectionFlag::Clear) == SelectionFlag::Clear)
     {

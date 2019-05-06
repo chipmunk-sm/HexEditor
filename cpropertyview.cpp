@@ -71,10 +71,10 @@ void CPropertyView::Init()
     rows.append(QStringList() << "Utf16");
     rows.append(QStringList() << "Ucs4");
 
-    foreach(const auto & row, rows)
+    for(const auto & row : rows)
     {
         QList<QStandardItem*> items;
-        foreach(QString text, row)
+        for(QString text : row)
             items.append(new QStandardItem(text));
 
         pModel->appendRow(items);

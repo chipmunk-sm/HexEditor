@@ -97,12 +97,12 @@ void DialogSaveToFile::DumpSelectionAsText(const QString& inFile, const QString&
 }
 
 bool DialogSaveToFile::EditFile(const QString & inFile, const QString & outFile,
-    int64_t editPos, std::vector<uint8_t> & data, int64_t deleteSize)
+    int64_t editPos, std::vector<uint8_t> & dataX, int64_t deleteSize)
 {
     m_InFile = inFile;
     m_OutFile = outFile;
     m_editPos = editPos;
-    m_data = data;
+    m_data = dataX;
     m_deleteSize = deleteSize;
     m_exit = false;
 

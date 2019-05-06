@@ -101,7 +101,7 @@ bool CMemoryMappedFile::OpenMapped(const std::wstring& filename, CacheAccess hin
     m_hint = hint;
 
 #ifdef _MSC_VER
-    DWORD nHint;
+    DWORD nHint = 0;
     switch (m_hint)
     {
     case CacheAccess_Normal:     nHint = FILE_ATTRIBUTE_NORMAL;     break;

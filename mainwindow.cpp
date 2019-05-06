@@ -471,11 +471,11 @@ void MainWindow::searchSelectionModelChanged(const QItemSelection & selected, co
 {
     DEBUGTRACE();
     QModelIndexList items = selected.indexes();
-    foreach(auto & tmpindex, items)
+    for(auto & tmpindex : items)
     {
         auto val = tmpindex.data().toString();
         auto list = val.split(' ', QString::SplitBehavior::SkipEmptyParts);
-        foreach(auto & tmpstr, list)
+        for(auto & tmpstr : list)
         {
             auto pos = tmpstr.toLongLong();
             auto scrollRow = pos / m_pchexview->GetColHex();
@@ -500,7 +500,7 @@ uint32_t MainWindow::HexChartoInt(uint32_t x)
 std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString & src, int* firstErrorPos)
 {
     DEBUGTRACE();
-    std::vector<uint8_t> data;
+    std::vector<uint8_t> dataX;
 
     uint32_t tmp[2] = { 0 };
 
@@ -544,7 +544,7 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString & src, 
         tmp[tmpInd++] = static_cast<uint32_t>(val);
         if (tmpInd == 2)
         {
-            data.push_back(static_cast<uint8_t>(HexChartoInt(tmp[0]) << 4 | HexChartoInt(tmp[1])));
+            dataX.push_back(static_cast<uint8_t>(HexChartoInt(tmp[0]) << 4 | HexChartoInt(tmp[1])));
             tmpInd = 0;
         }
     }
@@ -554,7 +554,7 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString & src, 
         *firstErrorPos = position;
     }
 
-    return data;
+    return dataX;
 }
 
 QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t> & byteArray)

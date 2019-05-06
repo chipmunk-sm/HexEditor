@@ -28,13 +28,13 @@ private slots:
     void SetFontFamily(const QFont& f);
 
 private:
-    int                 m_fontSize;
-    int                 m_defaultFontSize;
+    int                 m_fontSize = 0;
+    int                 m_defaultFontSize = 0;
     QString             m_defaultFontFamily;
 
-    QWidget* m_qwidget;
-    QSlider* m_slider;
-    QFontComboBox* m_pFont;
+    QWidget* m_qwidget = nullptr;
+    QSlider* m_slider = nullptr;
+    QFontComboBox* m_pFont = nullptr;
     QList<int>          m_fontSizeList;
     std::function<void(void)> m_callbackUpdate;
 
