@@ -26,7 +26,7 @@ BEGIN
             VALUE "ProductName",        "hexeditor\0"
             VALUE "FileDescription",    "hexeditor (binary file editor)\0"
             VALUE "OriginalFilename",   "hexeditor.exe\0"
-            VALUE "LegalCopyright",     "Copyright (C) 2018 chipmunk-sm\0"
+            VALUE "LegalCopyright",     "Copyright (C) 2019 chipmunk-sm\0"
             VALUE "Comments",           "https://github.com/chipmunk-sm/hexeditor\0"
         END
     END
