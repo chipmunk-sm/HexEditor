@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include "chexviewselectionmodel.h"
 #include "chexviewmodel.h"
@@ -10,10 +10,9 @@
 #   define DEBUGTRACE()
 #endif
 
-CHexViewSelectionModel::CHexViewSelectionModel(QAbstractItemModel *model, QScrollBar *pSlider, QObject *parent)
+CHexViewSelectionModel::CHexViewSelectionModel(QAbstractItemModel* model, QScrollBar* pSlider, QObject* parent)
     : QItemSelectionModel(model, parent)
     , m_pSlider(pSlider)
-    , m_offset(-1)
 {
     DEBUGTRACE();
     m_selectFirst.column = 0;
@@ -24,31 +23,31 @@ CHexViewSelectionModel::CHexViewSelectionModel(QAbstractItemModel *model, QScrol
 
 bool CHexViewSelectionModel::isSelectedEx(int64_t col, int64_t row) const
 {
-    if(!m_pSlider || m_offset < 0)
+    if (!m_pSlider || m_offset < 0)
         return false;
 
     auto currentRow = row + m_pSlider->value();
 
     auto bCol = m_selectFirst.column < m_selectSecond.column ?
-                m_selectFirst.column <= col && col <= m_selectSecond.column :
-                m_selectFirst.column >= col && col >= m_selectSecond.column;
+        m_selectFirst.column <= col && col <= m_selectSecond.column :
+        m_selectFirst.column >= col && col >= m_selectSecond.column;
 
     auto bRow = m_selectFirst.row < m_selectSecond.row ?
-                m_selectFirst.row <= currentRow && currentRow <= m_selectSecond.row :
-                m_selectFirst.row >= currentRow && currentRow >= m_selectSecond.row;
+        m_selectFirst.row <= currentRow && currentRow <= m_selectSecond.row :
+        m_selectFirst.row >= currentRow && currentRow >= m_selectSecond.row;
 
     return bCol & bRow;
 }
 
-bool CHexViewSelectionModel::GetSelectedEx(CHexViewSelectionModelItem *pItemFirst, CHexViewSelectionModelItem *pItemSecond) const
+bool CHexViewSelectionModel::GetSelectedEx(CHexViewSelectionModelItem * pItemFirst, CHexViewSelectionModelItem * pItemSecond) const
 {
-    if(!m_pSlider || m_offset < 0)
+    if (!m_pSlider || m_offset < 0)
         return false;
 
-    if(pItemFirst)
+    if (pItemFirst)
         memcpy(pItemFirst, &m_selectFirst, sizeof(CHexViewSelectionModelItem));
 
-    if(pItemSecond)
+    if (pItemSecond)
         memcpy(pItemSecond, &m_selectSecond, sizeof(CHexViewSelectionModelItem));
 
     return true;
@@ -62,27 +61,27 @@ void CHexViewSelectionModel::scrollSelection()
     m_selectSecond.row = ind.row() + m_offset;
 }
 
-void CHexViewSelectionModel::select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command)
+void CHexViewSelectionModel::select(const QItemSelection & selection, QItemSelectionModel::SelectionFlags command)
 {
     DEBUGTRACE();
 
     Q_UNUSED(selection);
 
-    if(m_offset < 0)
+    if (m_offset < 0)
         command = SelectionFlag::Clear;
 
     auto slider = m_pSlider->value();
 
-    if((command & SelectionFlag::Current) == SelectionFlag::Current)
+    if ((command & SelectionFlag::Current) == SelectionFlag::Current)
     {
         m_selectSecond.column = currentIndex().column();
-        m_selectSecond.row = currentIndex().row() + slider;
+        m_selectSecond.row = static_cast<int64_t>(currentIndex().row()) + slider;
     }
-    else if((command & SelectionFlag::Clear) == SelectionFlag::Clear)
+    else if ((command & SelectionFlag::Clear) == SelectionFlag::Clear)
     {
         m_offset = slider;
         m_selectFirst.column = m_selectSecond.column = currentIndex().column();
-        m_selectFirst.row    = m_selectSecond.row    = currentIndex().row() + m_offset;
+        m_selectFirst.row = m_selectSecond.row = currentIndex().row() + m_offset;
     }
     else
     {
@@ -90,6 +89,7 @@ void CHexViewSelectionModel::select(const QItemSelection &selection, QItemSelect
     }
 
     emit selectionChangedEx();
+
     qobject_cast<const CHexViewModel*>(model())->RepaintDisplay();
 }
 

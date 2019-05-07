@@ -8,9 +8,8 @@
 
 if [%APPVEYOR_BUILD_FOLDER%] == [] set APPVEYOR_BUILD_FOLDER=%cd%
 
-if [%QTDIR%] == [] set QTDIR=D:\Qt\5.12.1\msvc2015_64
-if [%QTDIR%] == [] set QTDIR=D:\Qt\5.12.1\msvc2015
-if [%QTDIR%] == [] set QTDIR=D:\Qt\5.12.1\msvc2017_64
+if [%QTDIR%] == [] set QTDIR=D:\Qt\5.12.3\msvc2017
+if [%QTDIR%] == [] set QTDIR=D:\Qt\5.12.3\msvc2017_64
 
 if [%CONFIGURATION%] == [] set CONFIGURATION=Release
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef CHEXVIEWCUSTOM_H
 #define CHEXVIEWCUSTOM_H
@@ -10,13 +10,13 @@ class CHexViewCustom : public QTableView
     Q_OBJECT
 
 public:
-    explicit CHexViewCustom(QWidget *parent = nullptr);
+    explicit CHexViewCustom(QWidget* parent = nullptr);
 
 protected:
-    virtual bool event(QEvent *event) override;
-    virtual void resizeEvent(QResizeEvent *event) override;
-    virtual void paintEvent(QPaintEvent *event) override;
-    void drawCell(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+    bool event(QEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
+    void drawCell(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index);
     bool UseScrollbar(int keyX);
 signals:
     void selectionChangedEx();

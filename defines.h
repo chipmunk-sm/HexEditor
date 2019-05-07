@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef DEFINES_H
 #define DEFINES_H
@@ -25,7 +25,7 @@
 #define CONFIG_BACKUPONSAVE       "cfg/BACKUPONSAVE"
 #define CONFIG_BACKUPONSAVE_DEF   true
 
-#define MAX_CLIPBOARD_SIZE 1024 * 1024
+#define MAX_CLIPBOARD_SIZE (1024 * 1024)
 
 #define DEFCFG_CLR_OVERWRITE "clr/OVERWRITE"
 #define DEFCFG_CLR_INSERT    "clr/INSERT"

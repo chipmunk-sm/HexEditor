@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef CPROPERTYVIEW_H
 #define CPROPERTYVIEW_H
@@ -10,24 +10,24 @@
 #include <QTreeView>
 
 
-class CPropertyViewDelegate: public QItemDelegate
+class CPropertyViewDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    CPropertyViewDelegate(QObject* parent=nullptr) : QItemDelegate(parent)
+    CPropertyViewDelegate(QObject* parent = nullptr) : QItemDelegate(parent)
     {
     }
 
-    virtual QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         return index.column() == 2 ? QItemDelegate::createEditor(parent, option, index) : nullptr;
     }
 
-    virtual void setModelData(QWidget *, QAbstractItemModel *, const QModelIndex &) const override
+    void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const override
     {
     }
 
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         painter->save();
         painter->setPen(QColor(Qt::lightGray));
@@ -41,22 +41,37 @@ class CPropertyView
 {
 public:
 
-    CPropertyView(QTreeView *propertyView);
+    CPropertyView(QTreeView* propertyView);
     ~CPropertyView();
     void DecodeValue(int64_t pos);
-    void OpenFile(const QString &path);
+    void OpenFile(const QString& path);
     void Close();
-    QFile *GetFileHandler();
+    QFile* GetFileHandler();
     void SetDisplayText(bool displayText);
 private:
+
+    typedef struct UUID
+    {
+        uint32_t Data1;
+        uint16_t Data2;
+        uint16_t Data3;
+        uint8_t Data4[8];
+    }UUID;
+
     void Init();
     void DecodeValue(char* pBuffer, unsigned int bufferSize);
-    QTreeView * m_propertyView;
-    int         m_value_column;
+    std::string UuidToString(const UUID *pId);
+    QTreeView* m_propertyView = nullptr;
+    int         m_value_column = 0;
     QFile       m_file;
+
     mutable std::vector<unsigned char> m_buffer;
-    const uint32_t m_string_len = 256;
+
+    uint32_t m_buffer_len = 0;
+    const uint32_t m_string_len = 128;
+
     bool m_displayText = true;
+
 };
 
 #endif // CPROPERTYVIEW_H

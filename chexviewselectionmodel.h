@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef CHEXVIEWSELECTIONMODEL_H
 #define CHEXVIEWSELECTIONMODEL_H
@@ -16,16 +16,16 @@ class CHexViewSelectionModel : public QItemSelectionModel
 {
     Q_OBJECT
 public:
-    explicit CHexViewSelectionModel(QAbstractItemModel *model, QScrollBar *pSlider, QObject *parent = nullptr);
+    explicit CHexViewSelectionModel(QAbstractItemModel* model, QScrollBar* pSlider, QObject* parent = nullptr);
     bool isSelectedEx(int64_t col, int64_t row) const;
-    bool GetSelectedEx(CHexViewSelectionModelItem * pItemFirst, CHexViewSelectionModelItem * pItemSecond) const;
+    bool GetSelectedEx(CHexViewSelectionModelItem* pItemFirst, CHexViewSelectionModelItem* pItemSecond) const;
     void scrollSelection();
 
 public slots:
-    virtual void select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command) override;
-    virtual void clear() override;
-    virtual void reset() override;
-    virtual void clearCurrentIndex() override;
+    void select(const QItemSelection& selection, QItemSelectionModel::SelectionFlags command) override;
+    void clear() override;
+    void reset() override;
+    void clearCurrentIndex() override;
 
 signals:
     void selectionChangedEx();

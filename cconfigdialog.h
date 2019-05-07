@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef CCONFIGDIALOG_H
 #define CCONFIGDIALOG_H
@@ -23,18 +23,18 @@ class CConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CConfigDialog(std::function<void(void)> callbackUpdate, std::function<void(void)> callbackClose, QWidget *parent = nullptr);
+    explicit CConfigDialog(const std::function<void(void)>& callbackUpdate, std::function<void(void)> callbackClose, QWidget* parent = nullptr);
     ~CConfigDialog() override;
 
-    void SaveChklBox(QCheckBox* chkBox, const char *configName, bool checked);
-    static bool LoadChklBox(QCheckBox* chkBox, const char *configName, bool defChecked);
+    void SaveChklBox(QCheckBox* chkBox, const char* configName, bool checked);
+    static bool LoadChklBox(QCheckBox* chkBox, const char* configName, bool defChecked);
 
-    void SaveColor(QLabel *plabel, const char *configName, const QColor &defColor);
-    void LoadColor(QLabel *plabel, const char *configName, const QColor &defColor);
+    void SaveColor(QLabel* plabel, const char* configName, const QColor& defColor);
+    void LoadColor(QLabel* plabel, const char* configName, const QColor& defColor);
 
 protected:
-    void changeEvent(QEvent *e) override;
-    virtual void showEvent(QShowEvent *event) override;
+    void changeEvent(QEvent* e) override;
+    void showEvent(QShowEvent* event) override;
 
 private slots:
     void on_pushButton_restore_default_clicked();
@@ -51,16 +51,16 @@ private slots:
     void on_pushButton_releaseNote_clicked();
 
 private:
-    Ui::CConfigDialog *m_ui;
+    Ui::CConfigDialog* m_ui;
     CCFontSize      m_ccfontsize;
 
     void LoadConfig();
-    void LoadConfigColor(const char *configName, QColor defClr, QLabel *ctrl);
+    void LoadConfigColor(const char* configName, QColor defClr, QLabel* ctrl);
 
     std::function<void(void)> m_callbackUpdate;
     std::function<void(void)> m_callbackClose;
 
-    void ColorUpdateDialog(const char *configName);
+    void ColorUpdateDialog(const char* configName);
     CLanguage m_lang;
 };
 

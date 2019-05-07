@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include "mainwindow.h"
 #include <QApplication>
@@ -7,7 +7,7 @@
 #include "clanguage.h"
 #include "versionhelper.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(hexeditor);
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     parser.addHelpOption();
     parser.addVersionOption();
 
-    QCommandLineOption source("source", "Open source file --source=\"file path name\"",  "file");
+    QCommandLineOption source("source", "Open source file --source=\"file path name\"", "file");
     parser.addOption(source);
 
     QCommandLineOption hex("hex", "HEX string to search --hex=\"50..fe.ff\"", "hex");
@@ -45,13 +45,13 @@ int main(int argc, char *argv[])
     auto sourceSet = parser.isSet(source);
     auto hexSet = parser.isSet(hex);
 
-    if(sourceSet)
+    if (sourceSet)
         sourceFile = parser.value(source);
 
-    if(hexSet)
+    if (hexSet)
         hexString = parser.value(hex);
 
-    if(sourceSet || hexSet)
+    if (sourceSet || hexSet)
         window.RunFromCmd(sourceFile, hexString);
 
     window.show();

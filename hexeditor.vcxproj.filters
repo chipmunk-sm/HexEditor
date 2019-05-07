@@ -309,6 +309,9 @@
     <None Include="appveyor.yml">
       <Filter>Distribution Files</Filter>
     </None>
+    <None Include="build.cmd">
+      <Filter>Distribution Files</Filter>
+    </None>
     <None Include="debian\changelog">
       <Filter>Distribution Files</Filter>
     </None>

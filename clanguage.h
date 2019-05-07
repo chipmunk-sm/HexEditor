@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef CLANGUAGE_H
 #define CLANGUAGE_H
@@ -19,15 +19,15 @@ class CLanguage : public QObject
 
 public:
 
-    explicit CLanguage(QObject *parent = nullptr);
-    ~CLanguage();
-    bool SetLang(const QString &langName);
+    explicit CLanguage(QObject* parent = nullptr);
+    ~CLanguage() override;
+    bool SetLang(const QString& langName);
     void SetLangByLocale();
     bool SetLangByLocale(QString localeName);
     const QStringList GetListLangNames();
-    void LoadTranslations(const QDir &dir);
-    QString ExtractLanguageName(const QString &fileName);
-    void InitCombo(QComboBox *comboBox_language, std::function<void()> callbackUpdate);
+    void LoadTranslations(const QDir& dir);
+    QString ExtractLanguageName(const QString& fileName);
+    void InitCombo(QComboBox* comboBox_language, std::function<void()> callbackUpdate);
     void SetLangByConfig();
 private:
 
@@ -39,7 +39,7 @@ private:
 
 
 private slots:
-    void comboCurrentIndexChanged(const QString &val);
+    void comboCurrentIndexChanged(const QString& val);
 
 };
 

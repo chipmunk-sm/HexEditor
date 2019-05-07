@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include "chexviewmodel.h"
 #include "chexviewverticalheader.h"
@@ -6,18 +6,18 @@
 #include <QPainter>
 #include <QResizeEvent>
 
-CHexViewVerticalHeader::CHexViewVerticalHeader(Qt::Orientation orientation, QWidget *parent)
+CHexViewVerticalHeader::CHexViewVerticalHeader(Qt::Orientation orientation, QWidget* parent)
     : QHeaderView(orientation, parent)
 {
 }
 
-void CHexViewVerticalHeader::paintEvent(QPaintEvent *event)
+void CHexViewVerticalHeader::paintEvent(QPaintEvent* event)
 {
     if (count() == 0)
         return;
 
     auto proxy = qobject_cast<const CHexViewModel*>(model());
-    if(!proxy)
+    if (!proxy)
         return;
 
     QPainter painter(viewport());
@@ -49,7 +49,7 @@ void CHexViewVerticalHeader::paintEvent(QPaintEvent *event)
         opt.section = logicalIndex(index);
         opt.rect.setRect(0, sectionViewportPosition(opt.section), width, sectionSize(opt.section));
         opt.rect.translate(offset);
-        opt.state |= QStyle::State_Enabled |QStyle::State_Active;
+        opt.state |= QStyle::State_Enabled | QStyle::State_Active;
 
         opt.textAlignment = defaultAlignment();
         opt.text = proxy->headerData(opt.section, orientation(), Qt::DisplayRole).toString();

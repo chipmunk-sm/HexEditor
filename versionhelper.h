@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef VERSIONHELPER_H
 #define VERSIONHELPER_H
@@ -49,13 +49,13 @@
 #endif // !PRODUCTVERSIONSTRING
 
 #ifndef S_VER_YEAR
-    #ifndef BUILDDATETIME
-    #define BUILDDATETIME __DATE__ " " __TIME__
-    #endif // !BUILDDATETIME
+#ifndef BUILDDATETIME
+#define BUILDDATETIME __DATE__ " " __TIME__
+#endif // !BUILDDATETIME
 #else
-    #ifndef BUILDDATETIME
-    #define BUILDDATETIME S_VER_YEAR "." S_VER_MONTH "." S_VER_DAY " " S_VER_HOUR ":" S_VER_MINUTE ":" S_VER_SECOND
-    #endif // !BUILDDATETIME
+#ifndef BUILDDATETIME
+#define BUILDDATETIME S_VER_YEAR "." S_VER_MONTH "." S_VER_DAY " " S_VER_HOUR ":" S_VER_MINUTE ":" S_VER_SECOND
+#endif // !BUILDDATETIME
 #endif // !
 
 #endif // !VERSIONHELPER_H

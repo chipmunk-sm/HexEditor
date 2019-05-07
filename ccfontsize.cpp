@@ -1,21 +1,21 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include <QtWidgets>
+#include <utility>
 
 #include "ccfontsize.h"
 
-CCFontSize::CCFontSize(QObject *parent)
+CCFontSize::CCFontSize(QObject* parent)
     : QObject(parent)
     , m_fontSize(-1)
-    , m_qwidget(nullptr)
 {
 
 }
 
-bool CCFontSize::Init(QSlider *slider, QFontComboBox *pFont, QWidget *pObj)
+bool CCFontSize::Init(QSlider* slider, QFontComboBox* pFont, QWidget* pObj)
 {
 
-    if(m_fontSize != -1)
+    if (m_fontSize != -1)
         return false;
 
     m_qwidget = pObj;
@@ -27,10 +27,10 @@ bool CCFontSize::Init(QSlider *slider, QFontComboBox *pFont, QWidget *pObj)
 
     LoadConfig();
 
-    if(slider)
+    if (slider)
         QObject::connect(slider, SIGNAL(valueChanged(int)), this, SLOT(SetFontSize(int)));
-    if(pFont)
-        QObject::connect(pFont,  SIGNAL(currentFontChanged(QFont)), this, SLOT(SetFontFamily(QFont)));
+    if (pFont)
+        QObject::connect(pFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(SetFontFamily(QFont)));
 
     return true;
 }
@@ -50,37 +50,37 @@ void CCFontSize::LoadConfig()
     m_slider->setRange(0, m_fontSizeList.length() - 1);
 
     auto index = m_fontSizeList.indexOf(fontSize);
-    if(index < 0)
+    if (index < 0)
     {
-        for(QList<int>::iterator it(m_fontSizeList.begin()); it != m_fontSizeList.end(); ++it)
+        for (QList<int>::iterator it(m_fontSizeList.begin()); it != m_fontSizeList.end(); ++it)
         {
-            if(*it < fontSize)
+            if (*it < fontSize)
                 continue;
-            m_fontSizeList.insert(it,fontSize);
+            m_fontSizeList.insert(it, fontSize);
             break;
         }
         index = m_fontSizeList.indexOf(fontSize);
     }
 
-    if(index >= 0)
+    if (index >= 0)
         m_slider->setValue(index);
 
-    if(index >= 0)
+    if (index >= 0)
         m_fontSize = fontSize;
 
-    if(index >= 0)
+    if (index >= 0)
         SetFontSize(index);
 
     m_slider->blockSignals(false);
 
     auto loadedFont = settings.value(DEFCFG_FONTFAMILY).toString();
-    if(!loadedFont.isEmpty() && m_qwidget)
+    if (!loadedFont.isEmpty() && m_qwidget)
     {
         QFont newFont(m_qwidget->font());
         newFont.setFamily(loadedFont);
         m_qwidget->setFont(newFont);
 
-        if( m_pFont )
+        if (m_pFont)
             m_pFont->setCurrentFont(newFont);
     }
 
@@ -89,11 +89,11 @@ void CCFontSize::LoadConfig()
 void CCFontSize::SetFontSize(int fontIndex)
 {
 
-    if(m_fontSize < 0 || m_qwidget == nullptr)
+    if (m_fontSize < 0 || m_qwidget == nullptr)
         return;
 
-    if( fontIndex >= m_fontSizeList.length() )
-        fontIndex  = m_fontSizeList.length() - 1;
+    if (fontIndex >= m_fontSizeList.length())
+        fontIndex = m_fontSizeList.length() - 1;
 
     m_fontSize = m_fontSizeList[fontIndex];
 
@@ -106,39 +106,39 @@ void CCFontSize::SetFontSize(int fontIndex)
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
     settings.setValue(QString(DEFCFG_FONTSIZE), m_fontSize);
 
-    if(m_callbackUpdate != nullptr)
+    if (m_callbackUpdate != nullptr)
         m_callbackUpdate();
 }
 
-void CCFontSize::SetUpdateCallback(std::function<void ()> callbackUpdate)
+void CCFontSize::SetUpdateCallback(std::function<void()> callbackUpdate)
 {
-    m_callbackUpdate = callbackUpdate;
+    m_callbackUpdate = std::move(callbackUpdate);
 }
 
 void CCFontSize::Reset()
 {
     {
         QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
-        settings.setValue(DEFCFG_FONTSIZE,   m_defaultFontSize);
-        if(!m_defaultFontFamily.isEmpty())
+        settings.setValue(DEFCFG_FONTSIZE, m_defaultFontSize);
+        if (!m_defaultFontFamily.isEmpty())
             settings.setValue(DEFCFG_FONTFAMILY, m_defaultFontFamily);
     }
     LoadConfig();
 }
 
-void CCFontSize::SetFontFamily(const QFont &f)
+void CCFontSize::SetFontFamily(const QFont & f)
 {
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
     settings.setValue(DEFCFG_FONTFAMILY, f.family());
 
-    if(!m_qwidget)
+    if (!m_qwidget)
         return;
 
     QFont newFont(m_qwidget->font());
     newFont.setFamily(f.family());
     m_qwidget->setFont(newFont);
 
-    if(m_callbackUpdate != nullptr)
+    if (m_callbackUpdate != nullptr)
         m_callbackUpdate();
 }
 

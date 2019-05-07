@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+﻿/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -25,7 +25,7 @@
 #   define DEBUGTRACE()
 #endif
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     m_ui(new Ui::MainWindow)
 {
@@ -47,16 +47,16 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->verticalScrollBarHexView->setPageStep(100);
 
     m_pchexview = new CHexViewModel(m_ui->hexView,
-                                    m_ui->verticalScrollBarHexView,
-                                    m_pceditview,
-                                    m_pcsearch);
+        m_ui->verticalScrollBarHexView,
+        m_pceditview,
+        m_pcsearch);
 
     m_ui->lineEdit_goto->setValidator(new QRegExpValidator(QRegExp("^\\d{1,16}$"), this));
 
-    connect(this, &MainWindow::callCloseConfig,       this, &MainWindow::CloseConfig);
-    connect(this, &MainWindow::callUpdateConfig,      this, &MainWindow::UpdateConfig);
+    connect(this, &MainWindow::callCloseConfig, this, &MainWindow::CloseConfig);
+    connect(this, &MainWindow::callUpdateConfig, this, &MainWindow::UpdateConfig);
 
-    QWidget *horizontalLineWidget = new QWidget(this);
+    QWidget* horizontalLineWidget = new QWidget(this);
     horizontalLineWidget->setFixedHeight(1);
     horizontalLineWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     horizontalLineWidget->setStyleSheet(QString("background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 Whitesmoke, stop:1 Darkslategray);"));
@@ -67,19 +67,19 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->treeView_searchResult->model()->setHeaderData(0, Qt::Horizontal, tr("Position"));
 
     connect(m_ui->treeView_searchResult->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &MainWindow::searchSelectionModelChanged);
+        this, &MainWindow::searchSelectionModelChanged);
 
     m_pcsearch->SetControl(qobject_cast<QStandardItemModel*>(m_ui->treeView_searchResult->model()), m_ui->progressBar_search);
     m_ui->progressBar_search->setVisible(false);
     m_ui->pushButton_abortSearch->setVisible(false);
 
-    connect(m_ui->buttonGroup_EditOverwrite,  SIGNAL(buttonClicked(QAbstractButton *)),
-            this, SLOT(on_textDataEditor_textChanged()));
+    connect(m_ui->buttonGroup_EditOverwrite, SIGNAL(buttonClicked(QAbstractButton*)),
+        this, SLOT(on_textDataEditor_textChanged()));
     connect(static_cast<CHexViewSelectionModel*>(m_ui->hexView->selectionModel()), &CHexViewSelectionModel::selectionChangedEx,
-            this, &MainWindow::SelectionChange);
+        this, &MainWindow::SelectionChange);
 
     connect(m_ui->hexView, &CHexViewCustom::selectionChangedEx,
-            this, &MainWindow::SelectionChange);
+        this, &MainWindow::SelectionChange);
 
     CollectCodecs();
 
@@ -97,26 +97,26 @@ MainWindow::~MainWindow()
     delete m_ui;
 }
 
-void MainWindow::RunFromCmd(QString &sourceFile, QString &hexString)
+void MainWindow::RunFromCmd(QString& sourceFile, QString& hexString)
 {
     try
     {
         bool bAutorun = false;
-        if(!sourceFile.isEmpty())
+        if (!sourceFile.isEmpty())
         {
             OpenFile(sourceFile);
             bAutorun = true;
         }
 
-        if(!hexString.isEmpty())
+        if (!hexString.isEmpty())
         {
             m_ui->lineEdit_searchtext->setText(hexString);
             m_ui->checkBox_hexCoded->setCheckState(Qt::CheckState::Checked);
-            if(bAutorun)
+            if (bAutorun)
                 on_pushButton_search_clicked();
         }
     }
-    catch(...)
+    catch (...)
     {
         auto msg = QString("Failed on run from CMD\nFile [%1]\nHex [%2] ").arg(sourceFile).arg(hexString);
         QMessageBox::critical(this, windowTitle(), msg, QMessageBox::Ok);
@@ -124,29 +124,29 @@ void MainWindow::RunFromCmd(QString &sourceFile, QString &hexString)
 
 }
 
-void MainWindow::changeEvent(QEvent *e)
+void MainWindow::changeEvent(QEvent* e)
 {
     DEBUGTRACE();
     QMainWindow::changeEvent(e);
     switch (e->type())
     {
-        case QEvent::LanguageChange:
-            m_ui->retranslateUi(this);
+    case QEvent::LanguageChange:
+        m_ui->retranslateUi(this);
         break;
-        case QEvent::FontChange:
-            m_pchexview->UpdateTable(false);
+    case QEvent::FontChange:
+        m_pchexview->UpdateTable(false);
         break;
-        default:
+    default:
         break;
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent *  /*event*/)
+void MainWindow::closeEvent(QCloseEvent*  /*event*/)
 {
     DEBUGTRACE();
     try
     {
-		m_pcsearch->Abort();
+        m_pcsearch->Abort();
 
         QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
         settings.setValue(DEFCFG_MAINWINDOWGEOM, saveGeometry());
@@ -155,36 +155,36 @@ void MainWindow::closeEvent(QCloseEvent *  /*event*/)
         settings.setValue(DEFCFG_PROPRTYTABS, m_ui->propertyView->header()->saveState());
         settings.setValue(DEFCFG_DISPLAYTEXT, m_ui->checkBox_displayDecodedText->isChecked());
     }
-    catch(...)
+    catch (...)
     {
         QMessageBox::critical(this, windowTitle(), "Failed on closeEvent", QMessageBox::Ok);
     }
 }
 
-void MainWindow::showEvent(QShowEvent *event)
+void MainWindow::showEvent(QShowEvent* event)
 {
     DEBUGTRACE();
 
-    QMainWindow::showEvent( event );
+    QMainWindow::showEvent(event);
 
     try
     {
-        if(!m_ccfontsize.Init(m_ui->horizontalSlider_Zoom, nullptr, this))
+        if (!m_ccfontsize.Init(m_ui->horizontalSlider_Zoom, nullptr, this))
             return;
         {
             QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
             m_ui->horizontalSlider_Zoom->setVisible(!settings.value(DEFCFG_CFG_HIDE_ZOOM, true).toBool());
-            this->restoreGeometry(settings.value(DEFCFG_MAINWINDOWGEOM,"").toByteArray());
+            this->restoreGeometry(settings.value(DEFCFG_MAINWINDOWGEOM, "").toByteArray());
             this->restoreState(settings.value(DEFCFG_MAINWINDOWSTATE).toByteArray());
             //m_ui->splitter->restoreState(settings.value(DEFCFG_MAINWINDOWSPLITS,"").toByteArray());
 
-            auto displayTextState = settings.value(DEFCFG_DISPLAYTEXT,true).toBool();
+            auto displayTextState = settings.value(DEFCFG_DISPLAYTEXT, true).toBool();
             m_ui->checkBox_displayDecodedText->setChecked(displayTextState);
             m_pcpropertyview->SetDisplayText(displayTextState);
 
-            m_ui->propertyView->header()->restoreState(settings.value(DEFCFG_PROPRTYTABS,"").toByteArray());
+            m_ui->propertyView->header()->restoreState(settings.value(DEFCFG_PROPRTYTABS, "").toByteArray());
             QList<QDockWidget*> docks = this->findChildren<QDockWidget*>();
-            for(int i = 0; i < docks.size(); i++)
+            for (int i = 0; i < docks.size(); i++)
             {
                 //docks.at(i)->raise();
                 docks.at(i)->setFloating(false);
@@ -192,7 +192,7 @@ void MainWindow::showEvent(QShowEvent *event)
             }
         }
     }
-    catch(...)
+    catch (...)
     {
         QMessageBox::critical(this, windowTitle(), "Failed on showEvent", QMessageBox::Ok);
     }
@@ -205,7 +205,7 @@ void MainWindow::on_pushButtonOpen_clicked()
     OpenFile(QString());
 }
 
-void MainWindow::OpenFile(const QString & filePath)
+void MainWindow::OpenFile(const QString& filePath)
 {
     DEBUGTRACE();
     auto docsLocation = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
@@ -230,12 +230,12 @@ void MainWindow::OpenFile(const QString & filePath)
             m_PathFilename = !filePath.isEmpty() ? filePath : dialog.selectedFiles()[0];
             QFileInfo fileinfo(m_PathFilename);
             m_filename = fileinfo.baseName();
-            setWindowTitle(m_windowTitle + " [" + m_PathFilename + "]") ;
+            setWindowTitle(m_windowTitle + " [" + m_PathFilename + "]");
 
             m_ui->lineEdit_info->setText("");
             m_ui->verticalScrollBarHexView->setValue(0);
 
-            if(m_pchexview->OpenFile(m_PathFilename))
+            if (m_pchexview->OpenFile(m_PathFilename))
             {
                 m_pcpropertyview->Close();
                 m_pcpropertyview->OpenFile(m_PathFilename);
@@ -246,15 +246,15 @@ void MainWindow::OpenFile(const QString & filePath)
                 m_pcpropertyview->Close();
             }
         }
-        catch(QException  const&e)
+        catch (QException  const& e)
         {
             QMessageBox::critical(this, QObject::tr("Open"), QObject::tr(e.what()), QMessageBox::Ok);
         }
-        catch(std::exception  const&e)
+        catch (std::exception  const& e)
         {
             QMessageBox::critical(this, QObject::tr("Open"), QObject::tr(e.what()), QMessageBox::Ok);
         }
-        catch(...)
+        catch (...)
         {
             QMessageBox::critical(this, QObject::tr("Open"), QObject::tr("Unexpected exception"), QMessageBox::Ok);
         }
@@ -266,8 +266,8 @@ void MainWindow::on_pushButton_config_clicked()
 {
     DEBUGTRACE();
     m_ui->pushButton_config->setEnabled(false);
-    auto cfg = new CConfigDialog([&](void)->void{emit MainWindow::callUpdateConfig();}, [&](void)->void{emit MainWindow::callCloseConfig();});
-    cfg->setWindowTitle(m_windowTitle + " "+ tr("Settings"));
+    auto cfg = new CConfigDialog([&](void)->void {emit MainWindow::callUpdateConfig(); }, [&](void)->void {emit MainWindow::callCloseConfig(); });
+    cfg->setWindowTitle(m_windowTitle + " " + tr("Settings"));
     auto flags = cfg->windowFlags() & (~Qt::WindowContextHelpButtonHint);
     cfg->setWindowFlags(flags);
     cfg->setWindowIcon(windowIcon());
@@ -280,7 +280,7 @@ void MainWindow::UpdateConfig()
 
     m_lang.SetLangByConfig();
 
-    m_ui->hexView->setShowGrid(            CConfigDialog::LoadChklBox(nullptr, CONFIG_SHOWGRID, CONFIG_SHOWGRID_DEF));
+    m_ui->hexView->setShowGrid(CConfigDialog::LoadChklBox(nullptr, CONFIG_SHOWGRID, CONFIG_SHOWGRID_DEF));
     m_ui->hexView->setAlternatingRowColors(CConfigDialog::LoadChklBox(nullptr, CONFIG_ROWCOLORS, CONFIG_ROWCOLORS_DEF));
     m_ccfontsize.LoadConfig();
     m_pchexview->UpdateColorConfig();
@@ -299,7 +299,7 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
     auto selsection = static_cast<CHexViewSelectionModel*>(m_ui->hexView->selectionModel());
     CHexViewSelectionModelItem itemFirst;
     CHexViewSelectionModelItem itemSecond;
-    if(!selsection->GetSelectedEx(&itemFirst, &itemSecond))
+    if (!selsection->GetSelectedEx(&itemFirst, &itemSecond))
         return;
 
     int64_t top = 0;
@@ -307,7 +307,7 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
     int64_t bottom = 0;
     int64_t right = 0;
 
-    if(itemFirst.column < itemSecond.column)
+    if (itemFirst.column < itemSecond.column)
     {
         left = itemFirst.column;
         right = itemSecond.column;
@@ -318,7 +318,7 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
         right = itemFirst.column;
     }
 
-    if(itemFirst.row < itemSecond.row)
+    if (itemFirst.row < itemSecond.row)
     {
         top = itemFirst.row;
         bottom = itemSecond.row;
@@ -330,7 +330,7 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
     }
 
     auto itemsCount = (bottom - top + 1) * (right - left + 1);
-    if(itemsCount < 1)
+    if (itemsCount < 1)
         return;
 
     auto docsLocation = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
@@ -344,7 +344,7 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
 
     QFileDialog dialog(this, QObject::tr("Save as..."), docPath);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-	dialog.setDefaultSuffix("txt");
+    dialog.setDefaultSuffix("txt");
     dialog.setNameFilters(filters);
     dialog.selectFile(m_filename);
 
@@ -355,7 +355,7 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
         {
             settings.setValue(DEFCFG_CFG_SAVEDIR, dialog.directory().absolutePath());
             outFile = dialog.selectedFiles().first();
-            if(outFile.compare(m_PathFilename,Qt::CaseInsensitive) == 0)
+            if (outFile.compare(m_PathFilename, Qt::CaseInsensitive) == 0)
             {
                 QMessageBox::critical(this, QObject::tr("Save as..."), QObject::tr("Access denied\n") + m_PathFilename, QMessageBox::Ok);
             }
@@ -370,15 +370,15 @@ void MainWindow::on_pushButton_SaveSelected_clicked()
                 infoDialog->DumpSelectionAsText(m_PathFilename, outFile, top, left, bottom, right, m_pchexview->GetColHex());
             }
         }
-        catch(QException  const&e)
+        catch (QException  const& e)
         {
             QMessageBox::critical(this, QObject::tr("Save as..."), QObject::tr(e.what()), QMessageBox::Ok);
         }
-        catch(std::exception  const&e)
+        catch (std::exception  const& e)
         {
             QMessageBox::critical(this, QObject::tr("Save as..."), QObject::tr(e.what()), QMessageBox::Ok);
         }
-        catch(...)
+        catch (...)
         {
             QMessageBox::critical(this, QObject::tr("Save as..."), QObject::tr("Unexpected exception"), QMessageBox::Ok);
         }
@@ -390,11 +390,11 @@ void MainWindow::on_pushButton_apply_clicked()
 {
     DEBUGTRACE();
 
-    if(!m_pchexview->GetFileHandler()->isOpen())
+    if (!m_pchexview->GetFileHandler()->isOpen())
         return;
 
     auto reply = QMessageBox::question(this, QObject::tr("Apply changes"), QObject::tr("Apply changes?"),
-                                       QMessageBox::Yes|QMessageBox::No);
+        QMessageBox::Yes | QMessageBox::No);
 
     if (reply != QMessageBox::Yes)
     {
@@ -411,7 +411,7 @@ void MainWindow::on_pushButton_apply_clicked()
     m_ui->pushButton_apply->setEnabled(false);
     m_ui->label_operationInfo->setEnabled(false);
 
-    if(!m_pceditview->Apply(m_pchexview->GetFileHandler(), m_pcpropertyview->GetFileHandler(), infoDialog))
+    if (!m_pceditview->Apply(m_pchexview->GetFileHandler(), m_pcpropertyview->GetFileHandler(), infoDialog))
     {
         //QMessageBox::critical(this, QObject::tr("Apply changes"), errorInfo, QMessageBox::Ok);
         m_ui->pushButton_apply->setEnabled(true);
@@ -420,7 +420,7 @@ void MainWindow::on_pushButton_apply_clicked()
     }
     else
     {
-       m_pcsearch->Clear();
+        m_pcsearch->Clear();
     }
 
     m_pchexview->Reset();
@@ -436,14 +436,14 @@ void MainWindow::on_pushButton_search_clicked()
 
     auto firstErrorPos = -1;
     auto bytesToSearch = ConvertHexTextToByteArray(m_ui->label_search_info->text(), &firstErrorPos);
-    if(bytesToSearch.size() < 1 || firstErrorPos != -1)
+    if (bytesToSearch.empty() || firstErrorPos != -1)
         return;
 
     LockInterfaceWhileSearch(true);
 
     auto timeStart = std::chrono::high_resolution_clock::now();
 
-    if(m_pcsearch->Search(bytesToSearch.data(), static_cast<int32_t>(bytesToSearch.size()), m_PathFilename))
+    if (m_pcsearch->Search(bytesToSearch.data(), static_cast<int32_t>(bytesToSearch.size()), m_PathFilename))
     {
         auto time_span = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - timeStart);
         QString info = tr("Found %1 in %2 seconds.").arg(m_pcsearch->GetResultCount()).arg(QString::number(time_span.count(), 'f', 3));
@@ -467,15 +467,15 @@ void MainWindow::on_pushButton_abortSearch_clicked()
     m_pcsearch->Abort();
 }
 
-void MainWindow::searchSelectionModelChanged(const QItemSelection &selected, const QItemSelection &)
+void MainWindow::searchSelectionModelChanged(const QItemSelection & selected, const QItemSelection&)
 {
     DEBUGTRACE();
     QModelIndexList items = selected.indexes();
-    foreach (auto &tmpindex, items)
+    for(auto & tmpindex : items)
     {
         auto val = tmpindex.data().toString();
         auto list = val.split(' ', QString::SplitBehavior::SkipEmptyParts);
-        foreach (auto &tmpstr, list)
+        for(auto & tmpstr : list)
         {
             auto pos = tmpstr.toLongLong();
             auto scrollRow = pos / m_pchexview->GetColHex();
@@ -490,19 +490,19 @@ uint32_t MainWindow::HexChartoInt(uint32_t x)
 {
     //DEBUGTRACE();
     uint32_t const xval = x;
-    if(xval < 65)
+    if (xval < 65)
         return xval - 48;
-    if(xval < 97)
+    if (xval < 97)
         return xval - (65 - 10);
     return xval - (97 - 10);
 }
 
-std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString &src, int *firstErrorPos)
+std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString & src, int* firstErrorPos)
 {
     DEBUGTRACE();
-    std::vector<uint8_t> data;
+    std::vector<uint8_t> dataX;
 
-    uint32_t tmp[2] = {0};
+    uint32_t tmp[2] = { 0 };
 
     auto tmpInd = 0;
     auto position = 0;
@@ -511,13 +511,13 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString &src, i
     for (; position < src.length(); position++)
     {
 
-        if(src[position].isSpace() || src[position].isPunct())
+        if (src[position].isSpace() || src[position].isPunct())
         {
             sequence = 0;
-            if(tmpInd == 1)
+            if (tmpInd == 1)
             {
-                if(firstErrorPos != nullptr && *firstErrorPos == -1)
-                   *firstErrorPos = position;
+                if (firstErrorPos != nullptr && *firstErrorPos == -1)
+                    * firstErrorPos = position;
                 break;
             }
             continue;
@@ -534,34 +534,34 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString &src, i
 
         sequence++;
 
-        if(!isxdigit(val) || sequence > 2)
+        if (!isxdigit(val) || sequence > 2)
         {
-            if(firstErrorPos != nullptr && *firstErrorPos == -1)
-               *firstErrorPos = position;
+            if (firstErrorPos != nullptr && *firstErrorPos == -1)
+                * firstErrorPos = position;
             break;
         }
 
         tmp[tmpInd++] = static_cast<uint32_t>(val);
-        if(tmpInd == 2)
+        if (tmpInd == 2)
         {
-            data.push_back(static_cast<uint8_t>(HexChartoInt(tmp[0]) << 4 | HexChartoInt(tmp[1])));
+            dataX.push_back(static_cast<uint8_t>(HexChartoInt(tmp[0]) << 4 | HexChartoInt(tmp[1])));
             tmpInd = 0;
         }
     }
 
-    if(firstErrorPos != nullptr && tmpInd == 1 && *firstErrorPos == -1)
+    if (firstErrorPos != nullptr && tmpInd == 1 && *firstErrorPos == -1)
     {
         *firstErrorPos = position;
     }
 
-    return data;
+    return dataX;
 }
 
-QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t> &byteArray)
+QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t> & byteArray)
 {
     DEBUGTRACE();
     QString hex;
-    foreach(auto &item, byteArray)
+    foreach(auto & item, byteArray)
         hex += QString("%1 ").arg(item, 2, 16, QLatin1Char('0')).toUpper();
     return hex;
 }
@@ -569,13 +569,13 @@ QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t> &byteAr
 void MainWindow::CollectCodecs()
 {
     DEBUGTRACE();
-    QMap<QString, QTextCodec *> codecMap;
+    QMap<QString, QTextCodec*> codecMap;
     QRegularExpression iso8859RegExp("^ISO[- ]8859-([0-9]+).*$");
     QRegularExpressionMatch match;
 
-    foreach (int mib, QTextCodec::availableMibs())
+    foreach(int mib, QTextCodec::availableMibs())
     {
-        QTextCodec *codec = QTextCodec::codecForMib(mib);
+        QTextCodec* codec = QTextCodec::codecForMib(mib);
 
         QString sortKey = codec->name().toUpper();
         int rank;
@@ -603,16 +603,16 @@ void MainWindow::CollectCodecs()
         codecMap.insert(sortKey, codec);
     }
 
-    foreach (const QTextCodec *codec, codecMap.values())
+    for(const QTextCodec * codec : codecMap.values())
     {
         m_ui->comboBox_textcodec->addItem(QLatin1String(codec->name()), QVariant(codec->mibEnum()));
     }
 }
 
-bool MainWindow::DecodeText(const QString &sourceString, QLabel *info, bool bHex, int *firstErrorPos)
+bool MainWindow::DecodeText(const QString & sourceString, QLabel * info, bool bHex, int* firstErrorPos)
 {
     DEBUGTRACE();
-    if(bHex)
+    if (bHex)
     {
         info->setText(ConvertByteArrayToHexText(ConvertHexTextToByteArray(sourceString, firstErrorPos)));
         info->setStyleSheet(QString());
@@ -621,7 +621,7 @@ bool MainWindow::DecodeText(const QString &sourceString, QLabel *info, bool bHex
 
     const auto mib = m_ui->comboBox_textcodec->itemData(m_ui->comboBox_textcodec->currentIndex()).toInt();
     const auto codec = QTextCodec::codecForMib(mib);
-    const auto encoder = codec->makeEncoder( QTextCodec::IgnoreHeader );
+    const auto encoder = codec->makeEncoder(QTextCodec::IgnoreHeader);
     auto success = codec->canEncode(sourceString);
     auto decodedStr = encoder->fromUnicode(sourceString);
 #if (QT_VERSION > QT_VERSION_CHECK(5, 5, 1))
@@ -633,10 +633,10 @@ bool MainWindow::DecodeText(const QString &sourceString, QLabel *info, bool bHex
     return success;
 }
 
-void MainWindow::HighlightError(int firstErrorPos, QLineEdit *pEdit)
+void MainWindow::HighlightError(int firstErrorPos, QLineEdit * pEdit)
 {
     DEBUGTRACE();
-    if(firstErrorPos == -1)
+    if (firstErrorPos == -1)
     {
         QList<QInputMethodEvent::Attribute> attributes;
         QInputMethodEvent event(QString(), attributes);
@@ -659,22 +659,22 @@ void MainWindow::HighlightError(int firstErrorPos, QLineEdit *pEdit)
     formats.append(formatRange);
 
     QList<QInputMethodEvent::Attribute> attributes;
-    foreach(const QTextLayout::FormatRange& fr, formats)
+    foreach(const QTextLayout::FormatRange & fr, formats)
     {
         attributes.append(QInputMethodEvent::Attribute(QInputMethodEvent::TextFormat,
-                                                       fr.start - pEdit->cursorPosition(),
-                                                       fr.length,
-                                                       fr.format));
+            fr.start - pEdit->cursorPosition(),
+            fr.length,
+            fr.format));
     }
 
     QInputMethodEvent event(QString(), attributes);
     QCoreApplication::sendEvent(pEdit, &event);
 }
 
-void MainWindow::HighlightError(int firstErrorPos, QPlainTextEdit *pEdit)
+void MainWindow::HighlightError(int firstErrorPos, QPlainTextEdit * pEdit)
 {
     DEBUGTRACE();
-    if(firstErrorPos == -1)
+    if (firstErrorPos == -1)
     {
         QList<QTextEdit::ExtraSelection> extraSelections;
         pEdit->setExtraSelections(extraSelections);
@@ -694,7 +694,7 @@ void MainWindow::HighlightError(int firstErrorPos, QPlainTextEdit *pEdit)
     pEdit->setExtraSelections(extraSelections);
 
 }
-void MainWindow::on_lineEdit_searchtext_textChanged(const QString &arg1)
+void MainWindow::on_lineEdit_searchtext_textChanged(const QString & arg1)
 {
     DEBUGTRACE();
     auto firstErrorPos = -1;
@@ -702,14 +702,14 @@ void MainWindow::on_lineEdit_searchtext_textChanged(const QString &arg1)
 
     HighlightError(firstErrorPos, m_ui->lineEdit_searchtext);
 
-    if(firstErrorPos != -1)
+    if (firstErrorPos != -1)
         res = false;
 
     m_ui->pushButton_search->setEnabled(res);
     m_pcsearch->Clear();
 }
 
-void MainWindow::on_lineEdit_searchtext_textEdited(const QString &arg1)
+void MainWindow::on_lineEdit_searchtext_textEdited(const QString & arg1)
 {
     DEBUGTRACE();
     on_lineEdit_searchtext_textChanged(arg1);
@@ -743,11 +743,11 @@ void MainWindow::on_textDataEditor_textChanged()
     HighlightError(firstErrorPos, m_ui->textDataEditor);
 
     auto isOverwrite = m_ui->radioButton_overwrite->isChecked();
-    auto isDelete    = m_ui->radioButton_delete->isChecked();
+    auto isDelete = m_ui->radioButton_delete->isChecked();
     auto event = isOverwrite ? CEditEvent::CEditEventOverwrite :
-                               isDelete ? CEditEvent::CEditEventDelete : CEditEvent::CEditEventInsert;
+        isDelete ? CEditEvent::CEditEventDelete : CEditEvent::CEditEventInsert;
 
-    if(!isDelete && firstErrorPos != -1)
+    if (!isDelete && firstErrorPos != -1)
         resSucceeded = false;
 
     m_editInactive = !resSucceeded;
@@ -758,7 +758,7 @@ void MainWindow::on_textDataEditor_textChanged()
     m_ui->spinBox_bytesCountToDelete->setEnabled(isDelete);
 
     m_pceditview->SetOperation(m_pchexview->GetCurrentPos(), event, m_ui->spinBox_bytesCountToDelete->value(),
-                               ConvertHexTextToByteArray(m_ui->label_edit_info->text(), nullptr));
+        ConvertHexTextToByteArray(m_ui->label_edit_info->text(), nullptr));
 
     m_ui->label_operationInfo->setText(m_pceditview->GetInfo());
     m_pchexview->RepaintDisplay();
@@ -811,9 +811,9 @@ void MainWindow::on_verticalScrollBarHexView_valueChanged(int value)
     m_pchexview->UpdateScrollbarPos(value);
 }
 
-void MainWindow::on_lineEdit_goto_textChanged(const QString &arg1)
+void MainWindow::on_lineEdit_goto_textChanged(const QString & arg1)
 {
-    if(m_disableGoToUpdate)
+    if (m_disableGoToUpdate)
         return;
 
     auto pos = arg1.toLongLong();
@@ -821,7 +821,7 @@ void MainWindow::on_lineEdit_goto_textChanged(const QString &arg1)
     m_ui->verticalScrollBarHexView->setValue(static_cast<int32_t>(scrollRow));
 }
 
-void MainWindow::on_lineEdit_goto_textEdited(const QString &arg1)
+void MainWindow::on_lineEdit_goto_textEdited(const QString & arg1)
 {
     on_lineEdit_goto_textChanged(arg1);
 }

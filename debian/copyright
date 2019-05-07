@@ -3,11 +3,11 @@ Upstream-Name: hexeditor
 Source: https://github.com/chipmunk-sm/HexEditor
 
 Files: *
-Copyright: 2017 chipmunk-sm <dannico@linuxmail.org>
+Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org>
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2017 chipmunk-sm <dannico@linuxmail.org>
+Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org>
 License: GPL-3.0+
 
 License: GPL-3.0+

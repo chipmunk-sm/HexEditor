@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #ifndef CHEXVIEWVERTICALHEADER_H
 #define CHEXVIEWVERTICALHEADER_H
@@ -9,10 +9,10 @@ class CHexViewVerticalHeader : public QHeaderView
 {
     Q_OBJECT
 public:
-    explicit CHexViewVerticalHeader(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit CHexViewVerticalHeader(Qt::Orientation orientation, QWidget* parent = nullptr);
 
 protected:
-    virtual void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // CHEXVIEWVERTICALHEADER_H

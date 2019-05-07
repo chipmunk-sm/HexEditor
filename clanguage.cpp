@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 
 #include "clanguage.h"
@@ -10,6 +10,7 @@
 #include <QLocale>
 #include <iostream>
 #include <QSettings>
+#include <utility>
 
 #define DEFCFG_LANGUAGE "base/LANGUAGE"
 
@@ -23,83 +24,83 @@
 
 #define ADDLANG(langPrefix, langName) m_langNamesList.insert(#langPrefix, #langName)
 
-CLanguage::CLanguage(QObject *parent)
+CLanguage::CLanguage(QObject* parent)
     : QObject(parent)
 {
     DEBUGTRACE();
-/*
-    ADDLANG(af,Afrikaans);
-    ADDLANG(sq,Albanian);
-    ADDLANG(ar,Arabic);
-    ADDLANG(eu,Basque);
-    ADDLANG(be,Belarusian);
-    ADDLANG(bs,Bosnian);
-    ADDLANG(bg,Bulgarian);
-    ADDLANG(ca,Catalan);
-    ADDLANG(hr,Croatian);
-    ADDLANG(zh_cn,Chinese (Simplified));
-    ADDLANG(zh_tw,Chinese (Traditional));
-    ADDLANG(cs,Czech);
-    ADDLANG(da,Danish);
-    ADDLANG(nl,Dutch);
-    ADDLANG(en,English);
-    ADDLANG(en_us,English (US));
-    ADDLANG(et,Estonian);
-    ADDLANG(fa,Farsi);
-    ADDLANG(fil,Filipino);
-    ADDLANG(fi,Finnish);
-    ADDLANG(fr,French);
-    ADDLANG(fr_ca,French (Canada));
-    ADDLANG(ga,Gaelic);
-    ADDLANG(gl,Gallego);
-    ADDLANG(ka,Georgian);
-    ADDLANG(de,German);
-    ADDLANG(de_du,German (Personal));
-    ADDLANG(el,Greek);
-    ADDLANG(gu,Gujarati);
-    ADDLANG(he,Hebrew);
-    ADDLANG(hi,Hindi);
-    ADDLANG(hu,Hungarian);
-    ADDLANG(is,Icelandic);
-    ADDLANG(id,Indonesian);
-    ADDLANG(it,Italian);
-    ADDLANG(ja,Japanese);
-    ADDLANG(kn,Kannada);
-    ADDLANG(km,Khmer);
-    ADDLANG(ko,Korean);
-    ADDLANG(lo,Lao);
-    ADDLANG(lt,Lithuanian);
-    ADDLANG(lv,Latvian);
-    ADDLANG(ml,Malayalam);
-    ADDLANG(ms,Malaysian);
-    ADDLANG(mi_tn,Maori (Ngai Tahu));
-    ADDLANG(mi_wwow,Maori (Waikoto Uni));
-    ADDLANG(mn,Mongolian);
-    ADDLANG(no,Norwegian);
-    ADDLANG(no_gr,Norwegian (Primary));
-    ADDLANG(nn,Nynorsk);
-    ADDLANG(pl,Polish);
-    ADDLANG(pt,Portuguese);
-    ADDLANG(pt_br,Portuguese (Brazil));
-    ADDLANG(ro,Romanian);
-    ADDLANG(ru,Russian);
-    ADDLANG(sm,Samoan);
-    ADDLANG(sr,Serbian);
-    ADDLANG(sk,Slovak);
-    ADDLANG(sl,Slovenian);
-    ADDLANG(so,Somali);
-    ADDLANG(es,Spanish (International));
-    ADDLANG(sv,Swedish);
-    ADDLANG(tl,Tagalog);
-    ADDLANG(ta,Tamil);
-    ADDLANG(th,Thai);
-    ADDLANG(to,Tongan);
-    ADDLANG(tr,Turkish);
-    ADDLANG(uk,Ukrainian);
-    ADDLANG(vi,Vietnamese);
+    /*
+        ADDLANG(af,Afrikaans);
+        ADDLANG(sq,Albanian);
+        ADDLANG(ar,Arabic);
+        ADDLANG(eu,Basque);
+        ADDLANG(be,Belarusian);
+        ADDLANG(bs,Bosnian);
+        ADDLANG(bg,Bulgarian);
+        ADDLANG(ca,Catalan);
+        ADDLANG(hr,Croatian);
+        ADDLANG(zh_cn,Chinese (Simplified));
+        ADDLANG(zh_tw,Chinese (Traditional));
+        ADDLANG(cs,Czech);
+        ADDLANG(da,Danish);
+        ADDLANG(nl,Dutch);
+        ADDLANG(en,English);
+        ADDLANG(en_us,English (US));
+        ADDLANG(et,Estonian);
+        ADDLANG(fa,Farsi);
+        ADDLANG(fil,Filipino);
+        ADDLANG(fi,Finnish);
+        ADDLANG(fr,French);
+        ADDLANG(fr_ca,French (Canada));
+        ADDLANG(ga,Gaelic);
+        ADDLANG(gl,Gallego);
+        ADDLANG(ka,Georgian);
+        ADDLANG(de,German);
+        ADDLANG(de_du,German (Personal));
+        ADDLANG(el,Greek);
+        ADDLANG(gu,Gujarati);
+        ADDLANG(he,Hebrew);
+        ADDLANG(hi,Hindi);
+        ADDLANG(hu,Hungarian);
+        ADDLANG(is,Icelandic);
+        ADDLANG(id,Indonesian);
+        ADDLANG(it,Italian);
+        ADDLANG(ja,Japanese);
+        ADDLANG(kn,Kannada);
+        ADDLANG(km,Khmer);
+        ADDLANG(ko,Korean);
+        ADDLANG(lo,Lao);
+        ADDLANG(lt,Lithuanian);
+        ADDLANG(lv,Latvian);
+        ADDLANG(ml,Malayalam);
+        ADDLANG(ms,Malaysian);
+        ADDLANG(mi_tn,Maori (Ngai Tahu));
+        ADDLANG(mi_wwow,Maori (Waikoto Uni));
+        ADDLANG(mn,Mongolian);
+        ADDLANG(no,Norwegian);
+        ADDLANG(no_gr,Norwegian (Primary));
+        ADDLANG(nn,Nynorsk);
+        ADDLANG(pl,Polish);
+        ADDLANG(pt,Portuguese);
+        ADDLANG(pt_br,Portuguese (Brazil));
+        ADDLANG(ro,Romanian);
+        ADDLANG(ru,Russian);
+        ADDLANG(sm,Samoan);
+        ADDLANG(sr,Serbian);
+        ADDLANG(sk,Slovak);
+        ADDLANG(sl,Slovenian);
+        ADDLANG(so,Somali);
+        ADDLANG(es,Spanish (International));
+        ADDLANG(sv,Swedish);
+        ADDLANG(tl,Tagalog);
+        ADDLANG(ta,Tamil);
+        ADDLANG(th,Thai);
+        ADDLANG(to,Tongan);
+        ADDLANG(tr,Turkish);
+        ADDLANG(uk,Ukrainian);
+        ADDLANG(vi,Vietnamese);
 
-    //qDebug() << m_langNamesList;
-*/
+        //qDebug() << m_langNamesList;
+    */
     LoadTranslations(QDir(":/translations"));
 
 }
@@ -109,21 +110,21 @@ CLanguage::~CLanguage()
 
 }
 
-void CLanguage::LoadTranslations(const QDir &dir)
+void CLanguage::LoadTranslations(const QDir& dir)
 {
     DEBUGTRACE();
     auto fileNames = dir.entryList(QStringList("*.qm"), QDir::Files, QDir::Name);
-    foreach (const QString &str, fileNames)
+    foreach(const QString & str, fileNames)
     {
         auto path = dir.filePath(str);
         auto langName = ExtractLanguageName(path);
 
-       // qDebug() << langName << "\t" << str << "\t" << path;
+        // qDebug() << langName << "\t" << str << "\t" << path;
 
-        if(langName.length() < 1)
+        if (langName.length() < 1)
             continue;
 
-        if(m_langList.find(langName) != m_langList.end())
+        if (m_langList.find(langName) != m_langList.end())
             continue;
 
         m_langList.insert(langName, path);
@@ -132,12 +133,12 @@ void CLanguage::LoadTranslations(const QDir &dir)
 
 }
 
-bool CLanguage::SetLang(const QString &langName)
+bool CLanguage::SetLang(const QString & langName)
 {
     DEBUGTRACE();
 
-    auto it= m_langList.find(langName);
-    if(it == m_langList.end())
+    auto it = m_langList.find(langName);
+    if (it == m_langList.end())
         return false;
 
     if (!m_translator.load(it.value()))
@@ -153,14 +154,14 @@ void CLanguage::SetLangByLocale()
 
     //xx_XX
     auto localeName = QLocale::system().name();
-    if(SetLangByLocale(localeName))
+    if (SetLangByLocale(localeName))
         return;
 
     //xx
     auto list = localeName.split(QRegExp("(_|-)"), QString::SkipEmptyParts);
-    foreach (auto tmp, list)
+    for(const auto& tmp : list)
     {
-        if(SetLangByLocale(tmp))
+        if (SetLangByLocale(tmp))
             return;
         break;
     }
@@ -173,9 +174,9 @@ void CLanguage::SetLangByConfig()
 
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
     auto languageName = settings.value(QString(DEFCFG_LANGUAGE), "").toString();
-    if(!languageName.isEmpty())
+    if (!languageName.isEmpty())
     {
-        if(SetLang(languageName))
+        if (SetLang(languageName))
             return;
     }
 
@@ -189,9 +190,9 @@ bool CLanguage::SetLangByLocale(QString localeName)
 
     localeName = QString("language_%1.qm").arg(localeName);
 
-    foreach (auto value, m_langList)
+    foreach(auto value, m_langList)
     {
-        if(value.contains(localeName, Qt::CaseInsensitive))
+        if (value.contains(localeName, Qt::CaseInsensitive))
         {
             if (!m_translator.load(value))
                 return false;
@@ -211,7 +212,7 @@ const QStringList CLanguage::GetListLangNames()
     return m_langNames;
 }
 
-QString CLanguage::ExtractLanguageName(const QString &fileName)
+QString CLanguage::ExtractLanguageName(const QString & fileName)
 {
     DEBUGTRACE();
 
@@ -224,35 +225,35 @@ QString CLanguage::ExtractLanguageName(const QString &fileName)
     return translator.translate("QObject", "English_us");
 }
 
-void CLanguage::InitCombo(QComboBox *comboBox_language, std::function<void()> callbackUpdate)
+void CLanguage::InitCombo(QComboBox * comboBox_language, std::function<void()> callbackUpdate)
 {
     DEBUGTRACE();
 
-    m_callbackUpdate = callbackUpdate;
+    m_callbackUpdate = std::move(callbackUpdate);
 
     comboBox_language->addItem("Language: auto");
 
-    foreach (const auto &codec, GetListLangNames())
+    foreach(const auto & codec, GetListLangNames())
     {
         comboBox_language->addItem(codec);
     }
 
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
     auto languageName = settings.value(QString(DEFCFG_LANGUAGE), "").toString();
-    if(!languageName.isEmpty())
+    if (!languageName.isEmpty())
     {
         auto index = comboBox_language->findText(languageName);
-        if ( index != -1 )
+        if (index != -1)
         {
             comboBox_language->setCurrentIndex(index);
         }
     }
 
-    QObject::connect(comboBox_language, SIGNAL(currentIndexChanged(const QString &)),
-                     this, SLOT(comboCurrentIndexChanged(const QString &)));
+    QObject::connect(comboBox_language, SIGNAL(currentIndexChanged(const QString&)),
+        this, SLOT(comboCurrentIndexChanged(const QString&)));
 }
 
-void CLanguage::comboCurrentIndexChanged(const QString &val)
+void CLanguage::comboCurrentIndexChanged(const QString & val)
 {
     DEBUGTRACE();
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());

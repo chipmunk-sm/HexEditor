@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 chipmunk-sm <dannico@linuxmail.org> */
+/* Copyright (C) 2019 chipmunk-sm <dannico@linuxmail.org> */
 
 #include "csearch.h"
 
@@ -7,29 +7,29 @@
 #include <QStandardItemModel>
 #include <QApplication>
 
-CSearch::CSearch(QObject *parent)
+CSearch::CSearch(QObject* parent)
     : QObject(parent)
 {
 }
 
-void CSearch::SetControl(QStandardItemModel *resultControl, QProgressBar *progressBar)
+void CSearch::SetControl(QStandardItemModel* resultControl, QProgressBar* progressBar)
 {
     m_resultControl = resultControl;
     m_progressBar = progressBar;
 }
 
-bool CSearch::Search(const uint8_t *searchBuffer, int32_t searchBufferLength, const QString &searchFile)
+bool CSearch::Search(const uint8_t* searchBuffer, int32_t searchBufferLength, const QString& searchFile)
 {
-	Clear();
+    Clear();
     m_error = "";
 
     if (!searchBufferLength)
     {
-        m_error =  tr("Nothing to search for");
+        m_error = tr("Nothing to search for");
         return false;
     }
 
-    if(m_mappedFile.OpenMapped(searchFile.toStdWString(), CMemoryMappedFile::CacheAccess_Sequential))
+    if (m_mappedFile.OpenMapped(searchFile.toStdWString(), CMemoryMappedFile::CacheAccess_Sequential))
     {
         return ParseFile(searchBuffer, searchBufferLength);
     }
@@ -38,7 +38,7 @@ bool CSearch::Search(const uint8_t *searchBuffer, int32_t searchBufferLength, co
 
     if (!m_file.open(QIODevice::ReadOnly))
     {
-        m_error =  m_file.errorString();
+        m_error = m_file.errorString();
         return false;
     }
 
@@ -48,15 +48,15 @@ bool CSearch::Search(const uint8_t *searchBuffer, int32_t searchBufferLength, co
 
 }
 
-bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
+bool CSearch::ParseFile(const uint8_t* searchBuffer, int32_t searchBufferLength)
 {
 
     auto sysPageSize = CMemoryMappedFile::GetSysPageSize();
     auto useMapped = !m_file.isOpen();
 
-    if(searchBufferLength == 0 || searchBufferLength > sysPageSize)
+    if (searchBufferLength == 0 || searchBufferLength > sysPageSize)
     {
-        if(useMapped)
+        if (useMapped)
         {
             m_mappedFile.Close();
         }
@@ -64,13 +64,13 @@ bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
         {
             m_file.close();
         }
-        m_error =  tr("Search pattern out of range");
+        m_error = tr("Search pattern out of range");
         return false;
     }
 
     std::vector<uint8_t> m_buffer;
 
-    if(!useMapped)
+    if (!useMapped)
         m_buffer.resize(static_cast<uint64_t>(sysPageSize));
 
     auto dataPtr = m_buffer.data();
@@ -80,7 +80,7 @@ bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
     int64_t pos = 0;
     int64_t pageSize;
     int64_t fileSize;
-    if(useMapped)
+    if (useMapped)
     {
         fileSize = m_mappedFile.GetFileSize();
     }
@@ -89,43 +89,43 @@ bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
         fileSize = m_file.size();
     }
 
-    while(!m_abort)
+    while (!m_abort)
     {
-        if(useMapped)
+        if (useMapped)
         {
-            if(m_mappedFile.GetFileSize() < pos)
+            if (m_mappedFile.GetFileSize() < pos)
                 break;
 
             dataPtr = m_mappedFile.GetDataPtr(pos, &pageSize);
-            if(dataPtr == nullptr || pageSize < 1)
+            if (dataPtr == nullptr || pageSize < 1)
                 break;
         }
         else
         {
             pageSize = m_file.read(reinterpret_cast<char*>(m_buffer.data()), static_cast<int64_t>(m_buffer.size()));
-            if( pageSize < 1)
+            if (pageSize < 1)
                 break;
         }
 
         auto progress1 = 100.0 * static_cast<double>(pos) / static_cast<double>(fileSize);
         auto progress = static_cast<int>(progress1);
         QMetaObject::invokeMethod(m_progressBar, "setValue",
-                                  Qt::QueuedConnection, Q_ARG(int, progress));
+            Qt::QueuedConnection, Q_ARG(int, progress));
 
         qApp->processEvents();
 
         int64_t endPos = pageSize + pos;
 
-        if(tmpPartialSearchExist)
+        if (tmpPartialSearchExist)
         {
-            for(auto &res : tmpResult)
+            for (auto& res : tmpResult)
             {
 
                 int64_t searchIndex = 0;
 
-                do{
+                do {
 
-                    if(searchIndex + res.len == searchBufferLength)
+                    if (searchIndex + res.len == searchBufferLength)
                     {
                         AddResult(res.pos, searchBufferLength);
                         pos += searchIndex - 1;
@@ -133,12 +133,12 @@ bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
                         break;
                     }
 
-                    if(dataPtr[searchIndex] != searchBuffer[searchIndex + res.len])
+                    if (dataPtr[searchIndex] != searchBuffer[searchIndex + res.len])
                         break;
 
                     searchIndex++;
 
-                }while(true);
+                } while (true);
 
             }
 
@@ -146,16 +146,16 @@ bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
             tmpPartialSearchExist = false;
         }
 
-        for(; pos < endPos; pos++)
+        for (; pos < endPos; pos++)
         {
-            if(*dataPtr++ != searchBuffer[0])
+            if (*dataPtr++ != searchBuffer[0])
                 continue;
 
             int64_t searchIndex = 1;
 
-            do{
+            do {
 
-                if(searchIndex == searchBufferLength)
+                if (searchIndex == searchBufferLength)
                 {
                     AddResult(pos, searchBufferLength);
                     pos += searchIndex - 1;
@@ -163,24 +163,24 @@ bool CSearch::ParseFile(const uint8_t *searchBuffer, int32_t searchBufferLength)
                     break;
                 }
 
-                if(pos + searchIndex >= endPos)
+                if (pos + searchIndex >= endPos)
                 {
                     tmpResult.emplace_back(pos, searchIndex);
                     tmpPartialSearchExist = true;
                     break;
                 }
 
-                if(dataPtr[searchIndex - 1] != searchBuffer[searchIndex])
+                if (dataPtr[searchIndex - 1] != searchBuffer[searchIndex])
                     break;
 
                 searchIndex++;
 
-            }while(true);
+            } while (true);
 
         }
     }
 
-    if(useMapped)
+    if (useMapped)
     {
         m_mappedFile.Close();
     }
@@ -201,8 +201,8 @@ void CSearch::AddResult(int64_t pos, int64_t len)
     QList<QStandardItem*> listitems;
     listitems << new QStandardItem(tr("%1 (HEX %2)").arg(pos, 8, 10, QLatin1Char('0')).arg(pos, 8, 16, QLatin1Char('0')).toUpper());
 
-//    QMetaObject::invokeMethod(m_resultControl, "appendRow", Qt::QueuedConnection,
-//                              Q_ARG(const QList<QStandardItem*>&, listitems));
+    //    QMetaObject::invokeMethod(m_resultControl, "appendRow", Qt::QueuedConnection,
+    //                              Q_ARG(const QList<QStandardItem*>&, listitems));
 
     m_resultControl->appendRow(listitems);
 
@@ -210,9 +210,9 @@ void CSearch::AddResult(int64_t pos, int64_t len)
 
 bool CSearch::GetCellStatus(int64_t pos)
 {
-    foreach(auto &item, m_result)
+    foreach(auto & item, m_result)
     {
-        if(pos >= item.pos && pos < item.pos + item.len )
+        if (pos >= item.pos && pos < item.pos + item.len)
             return true;
     }
     return false;
@@ -225,10 +225,10 @@ void CSearch::Abort()
 
 void CSearch::Clear()
 {
-	m_progressBar->setValue(0);
-	m_resultControl->removeRows(0, m_resultControl->rowCount());
-	m_result.clear();
-	m_abort = false;
+    m_progressBar->setValue(0);
+    m_resultControl->removeRows(0, m_resultControl->rowCount());
+    m_result.clear();
+    m_abort = false;
 }
 
 uint64_t CSearch::GetResultCount()
