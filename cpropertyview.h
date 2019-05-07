@@ -49,14 +49,29 @@ public:
     QFile* GetFileHandler();
     void SetDisplayText(bool displayText);
 private:
+
+    typedef struct UUID
+    {
+        uint32_t Data1;
+        uint16_t Data2;
+        uint16_t Data3;
+        uint8_t Data4[8];
+    }UUID;
+
     void Init();
     void DecodeValue(char* pBuffer, unsigned int bufferSize);
+    std::string UuidToString(const UUID *pId);
     QTreeView* m_propertyView = nullptr;
     int         m_value_column = 0;
     QFile       m_file;
+
     mutable std::vector<unsigned char> m_buffer;
-    const uint32_t m_string_len = 256;
+
+    uint32_t m_buffer_len = 0;
+    const uint32_t m_string_len = 128;
+
     bool m_displayText = true;
+
 };
 
 #endif // CPROPERTYVIEW_H

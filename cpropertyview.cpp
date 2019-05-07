@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 
+
 #define GEN_LIST_PARAM\
     MACRO_PROP(int8_t)\
     MACRO_PROP(uint8_t)\
@@ -38,14 +39,23 @@ CPropertyView::~CPropertyView()
 void CPropertyView::Init()
 {
 
+    // prepare read buffer
+
 #undef  MACRO_PROP
 #define MACRO_PROP(XIDNAME) \
-    if( m_buffer.size() < sizeof(XIDNAME))\
-    m_buffer.resize(sizeof(XIDNAME));
+    if( m_buffer_len < sizeof(XIDNAME))\
+        m_buffer_len = sizeof(XIDNAME);
 
     GEN_LIST_PARAM;
 
 #undef  MACRO_PROP
+
+    m_buffer_len = std::max(m_buffer_len, m_string_len);
+    m_buffer_len = std::max(m_buffer_len, static_cast<uint32_t>(sizeof(UUID)));
+
+    m_buffer.resize(m_buffer_len * 2, 0);
+
+    // column
 
     QStringList cols;
     cols << QObject::tr("Type Name")
@@ -58,6 +68,8 @@ void CPropertyView::Init()
     pModel->setHorizontalHeaderLabels(cols);
     m_propertyView->setModel(pModel);
 
+    // rows
+
     auto rows = QList<QStringList>()
 
 #undef  MACRO_PROP
@@ -66,10 +78,12 @@ void CPropertyView::Init()
         GEN_LIST_PARAM;
 #undef  MACRO_PROP
 
-    rows.append(QStringList() << "Latin1");
-    rows.append(QStringList() << "Utf8");
-    rows.append(QStringList() << "Utf16");
-    rows.append(QStringList() << "Ucs4");
+    rows.append(QStringList() << "UUID" << std::to_string(sizeof(UUID)).c_str());
+
+    rows.append(QStringList() << "Latin1" << (std::string("Max ") + std::to_string(m_buffer_len)).c_str());
+    rows.append(QStringList() << "Utf8" << (std::string("Max ") + std::to_string(m_buffer_len)).c_str());
+    rows.append(QStringList() << "Utf16" << (std::string("Max ") + std::to_string(m_buffer_len)).c_str());
+    rows.append(QStringList() << "Ucs4" << (std::string("Max ") + std::to_string(m_buffer_len)).c_str());
 
     for(const auto & row : rows)
     {
@@ -118,20 +132,15 @@ void CPropertyView::DecodeValue(int64_t pos)
 {
     if (m_file.isOpen() && pos >= 0 && m_file.seek(pos))
     {
-
-        if (m_buffer.size() < m_string_len)
-            m_buffer.resize(m_string_len);
-
-        auto len = m_file.read(reinterpret_cast<char*>(m_buffer.data()), static_cast<int32_t>(m_buffer.size()));
-        if (len >= 0)
+        auto len = m_file.read(reinterpret_cast<char*>(m_buffer.data()), m_buffer_len);
+        if (len > 0)
         {
-            auto maxLen = static_cast<int64_t>(m_buffer.size() - sizeof(uint32_t));
-            if (len > maxLen)
-                len = maxLen;
 
-            memset(m_buffer.data() + len, 0, m_buffer.size() - static_cast<uint32_t>(len));
+            if(len < m_buffer_len)
+                memset(m_buffer.data() + len, 0, m_buffer_len - static_cast<uint32_t>(len));
 
             DecodeValue(reinterpret_cast<char*>(m_buffer.data()), static_cast<uint32_t>(len));
+
             return;
         }
     }
@@ -147,6 +156,7 @@ void CPropertyView::DecodeValue(char* pBuffer, unsigned int bufferSize)
     const auto hexPrefixEnd = 8;
 
 #undef  MACRO_PROP
+
 #define MACRO_PROP(XIDNAME)\
     try {\
     if(bufferSize >= sizeof(XIDNAME)){\
@@ -165,7 +175,9 @@ void CPropertyView::DecodeValue(char* pBuffer, unsigned int bufferSize)
 }\
     index++;
 
+
     GEN_LIST_PARAM;
+
 #undef  MACRO_PROP
 
 #define MACRO_PROP(XIDNAME)\
@@ -183,74 +195,106 @@ void CPropertyView::DecodeValue(char* pBuffer, unsigned int bufferSize)
     index++;
 
     GEN_LIST_PARAM;
+
 #undef  MACRO_PROP
 
     QString str;
+
+    if (bufferSize >= sizeof(UUID))
+    {
+        try
+        {
+            str = UuidToString(reinterpret_cast<UUID*>(pBuffer)).c_str();
+        }
+        catch (...)
+        {
+            str = "-";
+        }
+    }
+    else
+    {
+        str = "-";
+    }
+
+    pModel->setData(pModel->index(index++, m_value_column), str);
+
+
     if (!m_displayText)
     {
-        pModel->setData(pModel->index(index++, m_value_column), str);
-        pModel->setData(pModel->index(index++, m_value_column), str);
-        pModel->setData(pModel->index(index++, m_value_column), str);
-        pModel->setData(pModel->index(index++, m_value_column), str);
-        return;
+        pModel->setData(pModel->index(index++, m_value_column), "");
+        pModel->setData(pModel->index(index++, m_value_column), "");
+        pModel->setData(pModel->index(index++, m_value_column), "");
+        pModel->setData(pModel->index(index++, m_value_column), "");
     }
-
-    try
-    {
-        str = QString::fromLatin1(pBuffer);
-    }
-    catch (...)
-    {
-        str = "-";
-    }
-
-    pModel->setData(pModel->index(index++, m_value_column), str);
-
-    try
-    {
-        str = QString::fromUtf8(pBuffer);
-    }
-    catch (...)
-    {
-        str = "-";
-    }
-
-    pModel->setData(pModel->index(index++, m_value_column), str);
-
-    if (bufferSize >= sizeof(ushort))
+    else
     {
         try
         {
-            str = QString::fromUtf16(reinterpret_cast<ushort*>(pBuffer));
+            str = QString::fromLatin1(pBuffer);
         }
         catch (...)
         {
             str = "-";
         }
-    }
-    else
-    {
-        str = "-";
-    }
 
-    pModel->setData(pModel->index(index++, m_value_column), str);
+        pModel->setData(pModel->index(index++, m_value_column), str);
 
-    if (bufferSize >= sizeof(uint))
-    {
         try
         {
-            str = QString::fromUcs4(reinterpret_cast<uint*>(pBuffer));
+            str = QString::fromUtf8(pBuffer);
         }
         catch (...)
         {
             str = "-";
         }
-    }
-    else
-    {
-        str = "-";
-    }
 
-    pModel->setData(pModel->index(index++, m_value_column), str);
+        pModel->setData(pModel->index(index++, m_value_column), str);
 
+        if (bufferSize >= sizeof(ushort))
+        {
+            try
+            {
+                str = QString::fromUtf16(reinterpret_cast<ushort*>(pBuffer));
+            }
+            catch (...)
+            {
+                str = "-";
+            }
+        }
+        else
+        {
+            str = "-";
+        }
+
+        pModel->setData(pModel->index(index++, m_value_column), str);
+
+        if (bufferSize >= sizeof(uint))
+        {
+            try
+            {
+                str = QString::fromUcs4(reinterpret_cast<uint*>(pBuffer));
+            }
+            catch (...)
+            {
+                str = "-";
+            }
+        }
+        else
+        {
+            str = "-";
+        }
+
+        pModel->setData(pModel->index(index++, m_value_column), str);
+    }
 }
+
+std::string CPropertyView::UuidToString(const UUID* pId)
+{
+    char buff[256];
+    sprintf(buff, "{ 0x%08x, 0x%04x, 0x%04x, {0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x} }",
+        pId->Data1, pId->Data2, pId->Data3,
+        pId->Data4[0], pId->Data4[1], pId->Data4[2], pId->Data4[3],
+        pId->Data4[4], pId->Data4[5], pId->Data4[6], pId->Data4[7]);
+    return std::string(buff);
+}
+
