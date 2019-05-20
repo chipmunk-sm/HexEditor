@@ -67,6 +67,10 @@ void CPropertyView::Init()
     auto pModel = new QStandardItemModel(0, cols.size(), m_propertyView);
     pModel->setHorizontalHeaderLabels(cols);
     m_propertyView->setModel(pModel);
+    m_propertyView->setRootIsDecorated(false);
+    //m_propertyView->setAlternatingRowColors(true);
+    m_propertyView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_propertyView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     // rows
 

@@ -190,6 +190,9 @@ void MainWindow::showEvent(QShowEvent* event)
                 docks.at(i)->setFloating(false);
                 docks.at(i)->show();
             }
+
+            UpdateConfig();
+
         }
     }
     catch (...)
@@ -198,6 +201,7 @@ void MainWindow::showEvent(QShowEvent* event)
     }
 
     m_pchexview->UpdateTable(false);
+
 }
 
 void MainWindow::on_pushButtonOpen_clicked()
@@ -282,6 +286,8 @@ void MainWindow::UpdateConfig()
 
     m_ui->hexView->setShowGrid(CConfigDialog::LoadChklBox(nullptr, CONFIG_SHOWGRID, CONFIG_SHOWGRID_DEF));
     m_ui->hexView->setAlternatingRowColors(CConfigDialog::LoadChklBox(nullptr, CONFIG_ROWCOLORS, CONFIG_ROWCOLORS_DEF));
+    //m_ui->propertyView->setShowGrid(CConfigDialog::LoadChklBox(nullptr, CONFIG_SHOWGRID, CONFIG_SHOWGRID_DEF));
+    m_ui->propertyView->setAlternatingRowColors(CConfigDialog::LoadChklBox(nullptr, CONFIG_ROWCOLORS, CONFIG_ROWCOLORS_DEF));
     m_ccfontsize.LoadConfig();
     m_pchexview->UpdateColorConfig();
 }
