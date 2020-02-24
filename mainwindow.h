@@ -77,6 +77,8 @@ private slots:
     void on_lineEdit_goto_textChanged(const QString& arg1);
     void on_lineEdit_goto_textEdited(const QString& arg1);
 
+    void on_pushButton_compareTo_clicked();
+
 signals:
     void callUpdateConfig();
     void callCloseConfig();

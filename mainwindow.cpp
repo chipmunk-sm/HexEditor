@@ -25,7 +25,7 @@
 #   define DEBUGTRACE()
 #endif
 
-MainWindow::MainWindow(QWidget* parent) :
+MainWindow::MainWindow(QWidget * parent) :
     QMainWindow(parent),
     m_ui(new Ui::MainWindow)
 {
@@ -473,15 +473,15 @@ void MainWindow::on_pushButton_abortSearch_clicked()
     m_pcsearch->Abort();
 }
 
-void MainWindow::searchSelectionModelChanged(const QItemSelection & selected, const QItemSelection&)
+void MainWindow::searchSelectionModelChanged(const QItemSelection& selected, const QItemSelection&)
 {
     DEBUGTRACE();
     QModelIndexList items = selected.indexes();
-    for(auto & tmpindex : items)
+    for (auto& tmpindex : items)
     {
         auto val = tmpindex.data().toString();
         auto list = val.split(' ', QString::SplitBehavior::SkipEmptyParts);
-        for(auto & tmpstr : list)
+        for (auto& tmpstr : list)
         {
             auto pos = tmpstr.toLongLong();
             auto scrollRow = pos / m_pchexview->GetColHex();
@@ -503,7 +503,7 @@ uint32_t MainWindow::HexChartoInt(uint32_t x)
     return xval - (97 - 10);
 }
 
-std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString & src, int* firstErrorPos)
+std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString& src, int* firstErrorPos)
 {
     DEBUGTRACE();
     std::vector<uint8_t> dataX;
@@ -563,7 +563,7 @@ std::vector<uint8_t> MainWindow::ConvertHexTextToByteArray(const QString & src, 
     return dataX;
 }
 
-QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t> & byteArray)
+QString MainWindow::ConvertByteArrayToHexText(const std::vector<uint8_t>& byteArray)
 {
     DEBUGTRACE();
     QString hex;
@@ -609,13 +609,13 @@ void MainWindow::CollectCodecs()
         codecMap.insert(sortKey, codec);
     }
 
-    for(const QTextCodec * codec : codecMap.values())
+    for (const QTextCodec* codec : codecMap.values())
     {
         m_ui->comboBox_textcodec->addItem(QLatin1String(codec->name()), QVariant(codec->mibEnum()));
     }
 }
 
-bool MainWindow::DecodeText(const QString & sourceString, QLabel * info, bool bHex, int* firstErrorPos)
+bool MainWindow::DecodeText(const QString& sourceString, QLabel* info, bool bHex, int* firstErrorPos)
 {
     DEBUGTRACE();
     if (bHex)
@@ -639,7 +639,7 @@ bool MainWindow::DecodeText(const QString & sourceString, QLabel * info, bool bH
     return success;
 }
 
-void MainWindow::HighlightError(int firstErrorPos, QLineEdit * pEdit)
+void MainWindow::HighlightError(int firstErrorPos, QLineEdit* pEdit)
 {
     DEBUGTRACE();
     if (firstErrorPos == -1)
@@ -677,7 +677,7 @@ void MainWindow::HighlightError(int firstErrorPos, QLineEdit * pEdit)
     QCoreApplication::sendEvent(pEdit, &event);
 }
 
-void MainWindow::HighlightError(int firstErrorPos, QPlainTextEdit * pEdit)
+void MainWindow::HighlightError(int firstErrorPos, QPlainTextEdit* pEdit)
 {
     DEBUGTRACE();
     if (firstErrorPos == -1)
@@ -700,7 +700,7 @@ void MainWindow::HighlightError(int firstErrorPos, QPlainTextEdit * pEdit)
     pEdit->setExtraSelections(extraSelections);
 
 }
-void MainWindow::on_lineEdit_searchtext_textChanged(const QString & arg1)
+void MainWindow::on_lineEdit_searchtext_textChanged(const QString& arg1)
 {
     DEBUGTRACE();
     auto firstErrorPos = -1;
@@ -715,7 +715,7 @@ void MainWindow::on_lineEdit_searchtext_textChanged(const QString & arg1)
     m_pcsearch->Clear();
 }
 
-void MainWindow::on_lineEdit_searchtext_textEdited(const QString & arg1)
+void MainWindow::on_lineEdit_searchtext_textEdited(const QString& arg1)
 {
     DEBUGTRACE();
     on_lineEdit_searchtext_textChanged(arg1);
@@ -817,7 +817,7 @@ void MainWindow::on_verticalScrollBarHexView_valueChanged(int value)
     m_pchexview->UpdateScrollbarPos(value);
 }
 
-void MainWindow::on_lineEdit_goto_textChanged(const QString & arg1)
+void MainWindow::on_lineEdit_goto_textChanged(const QString& arg1)
 {
     if (m_disableGoToUpdate)
         return;
@@ -827,7 +827,136 @@ void MainWindow::on_lineEdit_goto_textChanged(const QString & arg1)
     m_ui->verticalScrollBarHexView->setValue(static_cast<int32_t>(scrollRow));
 }
 
-void MainWindow::on_lineEdit_goto_textEdited(const QString & arg1)
+void MainWindow::on_lineEdit_goto_textEdited(const QString& arg1)
 {
     on_lineEdit_goto_textChanged(arg1);
+}
+
+void MainWindow::on_pushButton_compareTo_clicked()
+{
+    DEBUGTRACE();
+
+    if (m_PathFilename.isEmpty())
+        return;
+
+    QFileInfo fileinfo(m_PathFilename);
+    if (!fileinfo.exists())
+        return;
+
+    auto docsLocation = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    auto docPath = (docsLocation.isEmpty()) ? "~/" : QString("%1").arg(docsLocation.first());
+
+    QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    docPath = settings.value(DEFCFG_CFG_OPENDIR, docPath).toString();
+
+    QStringList filters;
+    filters << "ALL (*)";
+
+    QFileDialog dialog(this, QObject::tr("Open"), docPath);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setNameFilters(filters);
+
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        try
+        {
+            settings.setValue(DEFCFG_CFG_OPENDIR, dialog.directory().absolutePath());
+
+            auto filename1 = dialog.selectedFiles()[0];
+            auto filename2 = m_PathFilename;
+
+            QFile file1(filename1);
+            if (!file1.open(QIODevice::ReadOnly))
+            {
+                QMessageBox::information(this, "Error ", filename1 + "\n" + file1.errorString());
+                return;
+            }
+
+            QFile file2(filename2);
+            if (!file2.open(QIODevice::ReadOnly))
+            {
+                QMessageBox::information(this, "Error ", filename2 + "\n" + file2.errorString());
+                return;
+            }
+
+            constexpr auto bufferLen = 1024/* * 1024 * 10*/;
+
+            std::vector<uint8_t> buff2(bufferLen);
+            std::vector<uint8_t> buff1(bufferLen);
+
+
+            int64_t diffOffset = -1;
+            int64_t filePointer = 0;
+
+            while (true)
+            {
+
+                auto len1 = file1.read(reinterpret_cast<char*>(buff1.data()), buff1.size());
+                auto len2 = file2.read(reinterpret_cast<char*>(buff2.data()), buff2.size());
+
+                auto minLen = std::min(len1, len2);
+
+                if (minLen == 0 || // check zero length to avoid undefined behavior
+                    memcmp(buff1.data(), buff2.data(), minLen) == 0)
+                {
+
+                    if (len1 != len2)
+                    {
+                        diffOffset = filePointer + minLen;
+                        break;
+                    }
+
+                    if (minLen == 0)
+                        break;
+
+                    filePointer += minLen;
+                    continue;
+                }
+
+                for (int64_t index = 0; index < minLen; index++)
+                {
+                    if (buff1[index] != buff2[index])
+                    {
+                        diffOffset = filePointer + index;
+                        break;
+                    }
+                }
+
+                if (diffOffset != -1)
+                    break;
+
+                filePointer += minLen;
+            }
+
+            if (diffOffset < 0)
+            {
+                QMessageBox::information(this, QObject::tr("Compare"), QObject::tr("Files are identical") +
+                    "\nSize " + QString::number(file1.size()) + " [" + file1.fileName() + "]" +
+                    "\nSize " + QString::number(file2.size()) + " [" + file2.fileName() + "]",
+                    QMessageBox::Ok);
+            }
+            else
+            {
+                QMessageBox::information(this, QObject::tr("Compare"), QObject::tr("Files are different starting at offset") +
+                    " [" + QString::number(diffOffset) + "]" +
+                    "\nSize " + QString::number(file1.size()) + " [" + file1.fileName() + "]" + 
+                    "\nSize " + QString::number(file2.size()) + " [" + file2.fileName() + "]",
+                    QMessageBox::Ok);
+            }
+        }
+        catch (QException  const& e)
+        {
+            QMessageBox::critical(this, QObject::tr("Compare"), QObject::tr(e.what()), QMessageBox::Ok);
+        }
+        catch (std::exception  const& e)
+        {
+            QMessageBox::critical(this, QObject::tr("Compare"), QObject::tr(e.what()), QMessageBox::Ok);
+        }
+        catch (...)
+        {
+            QMessageBox::critical(this, QObject::tr("Compare"), QObject::tr("Unexpected exception"), QMessageBox::Ok);
+        }
+
+    }
 }
