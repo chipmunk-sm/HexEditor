@@ -3,15 +3,15 @@ version: 0.0.{build}
 
 environment:
   matrix:
-  - QTDIR: C:\Qt\5.12.2\msvc2017_64
+  - QTDIR: C:\Qt\5.12\msvc2017_64
     BUILD_PLATFORMID: "x64"
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     WINVER: Win10
-  - QTDIR: C:\Qt\5.12.2\msvc2017
+  - QTDIR: C:\Qt\5.12\msvc2017
     BUILD_PLATFORMID: "x86"
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     WINVER: Win10
-  - QTDIR: C:\Qt\5.12.2\msvc2015_64
+  - QTDIR: C:\Qt\5.12\msvc2015_64
     BUILD_PLATFORMID: "x64"
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     WINVER: Win8
