@@ -27,6 +27,6 @@ deploy:
 - provider: GitHub
   description: 'New release of hexeditor'
   auth_token:
-    secure: azJMeKO4Mknyw014rSykTRmDuUinLoKKdOzwWBPA9VjDjGQO5t+r6pRPz6HNpR4A
+    secure: Wzt04IzSwnytdau8R6dpRXet/npbyur3S02EA35OQBGRKFZyJuUjh95OLFzDrX3N
   on:
    appveyor_repo_tag: true
