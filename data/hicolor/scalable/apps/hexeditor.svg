@@ -1,12 +1,19 @@
-<svg width="256" height="256">
-	<g fill="none" stroke-width="24.347" paint-order="markers fill stroke">
-		<path d="M51.105 119.341l21.963 5.498-20.382-6.689-17.773-4.335zm-16.192-5.526l71.118-24.419 42.302 4.452-95.647 24.302zM156.271 93.34l65.229 6.615-73.167-6.107-42.302-4.452z"/>
-		<path d="M73.068 124.84L221.5 99.954l-73.167-6.107-95.647 24.302z"/>
-		<path d="M51.105 119.341l105.166-26-50.24-3.945-71.118 24.42z"/>
-		<path d="M51.105 119.341l105.166-26 65.229 6.614L73.068 124.84z"/>
-	</g>
-	<path fill="#545555" fill-rule="evenodd" stroke="#8d8c8d" stroke-opacity=".453" stroke-width="1.011" d="M3.534 32.697h251.022v199.606H3.534z"/>
-	<text font-size="152.803" style="line-height:1.25" x="24.227" y="152.213" fill="#fffcff" stroke-width="3.82" font-family="sans-serif" font-weight="400" letter-spacing="0" transform="scale(.70411 1.42023)" word-spacing="0">
-		<tspan x="24.227" y="152.213">HEX</tspan>
-	</text>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+    <dc:rights>
+     <cc:Agent>
+      <dc:title>Copyright (c) 2021 chipmunk-sm  dannico@linuxmail.org</dc:title>
+     </cc:Agent>
+    </dc:rights>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <path d="m3.534 32.697h251.02v199.61h-251.02v-199.61z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#545555" fill-rule="evenodd" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stop-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+ <path d="m173.57 62.199h12.893c7.3474 16.088 14.695 32.175 22.042 48.263 7.387-16.088 14.774-32.175 22.161-48.263h12.893c-9.5061 20.783-19.012 41.567-28.518 62.35 10.14 22.494 20.28 44.987 30.42 67.481h-12.893c-8.3179-18.406-16.636-36.813-24.954-55.219-8.3773 18.406-16.755 36.813-25.132 55.219h-12.952c10.556-23.102 21.112-46.205 31.667-69.307-9.209-20.175-18.418-40.349-27.627-60.524zm-72.722 0h56.086v14.783h-44.085v38.436h42.243v14.783h-42.243v47.045h45.154v14.783h-57.156v-129.83zm-91.496 0h12.001v53.219h43.609v-53.219h12.001v129.83h-12.001v-61.828h-43.609v61.828h-12.001v-129.83z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#fffcff" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stop-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
 </svg>

@@ -1,12 +1,23 @@
-<svg width="256" height="256">
-	<g fill="none" stroke-width="24.347" paint-order="markers fill stroke">
-		<path d="M51.105 119.341l21.963 5.498-20.382-6.689-17.773-4.335zm-16.192-5.526l71.118-24.419 42.302 4.452-95.647 24.302zM156.271 93.34l65.229 6.615-73.167-6.107-42.302-4.452z"/>
-		<path d="M73.068 124.84L221.5 99.954l-73.167-6.107-95.647 24.302z"/>
-		<path d="M51.105 119.341l105.166-26-50.24-3.945-71.118 24.42z"/>
-		<path d="M51.105 119.341l105.166-26 65.229 6.614L73.068 124.84z"/>
-	</g>
-	<path fill="#545555" fill-rule="evenodd" stroke="#8d8c8d" stroke-opacity=".453" stroke-width="1.011" d="M3.534 32.697h251.022v199.606H3.534z"/>
-	<text font-size="152.803" style="line-height:1.25" x="24.227" y="152.213" fill="#fffcff" stroke-width="3.82" font-family="sans-serif" font-weight="400" letter-spacing="0" transform="scale(.70411 1.42023)" word-spacing="0">
-		<tspan x="24.227" y="152.213">HEX</tspan>
-	</text>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+    <dc:rights>
+     <cc:Agent>
+      <dc:title>Copyright (c) 2021 chipmunk-sm  dannico@linuxmail.org</dc:title>
+     </cc:Agent>
+    </dc:rights>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <path d="m3.534 32.697h251.02v199.61h-251.02z" fill="#545555" fill-rule="evenodd" stroke="#8d8c8d" stroke-opacity=".453" stroke-width="1.011"/>
+ <g transform="scale(.70411 1.4202)" fill="#fffcff" stroke-width="3.82" aria-label="HEX">
+  <path d="m39.224 40.819h15.071v45.662h54.764v-45.662h15.071v111.39h-15.071v-53.048h-54.764v53.048h-15.071z"/>
+  <path d="m154.12 40.819h70.433v12.684h-55.361v32.978h53.048v12.684h-53.048v40.364h56.704v12.684h-71.776z"/>
+  <path d="m245.45 40.819h16.191l27.681 41.409 27.83-41.409h16.191l-35.813 53.496 38.201 57.898h-16.191l-31.337-47.378-31.56 47.378h-16.265l39.768-59.465z"/>
+ </g>
 </svg>
