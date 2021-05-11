@@ -119,13 +119,13 @@ $gitTagList = git -C $directory tag --sort=-version:refname
 if(1 -ge $gitTagList.Count)
 {
     echo "Use all entries for a release note:"
-    git -C $directory log --pretty=format:"%d %s %N" | Out-File -FilePath "$releaseNoteFile"
+    git -C $directory log  --date=short --pretty=format:"  * %ad [%aN] %s" | Out-File -FilePath "$releaseNoteFile"
 }
 else
 {
     $gitTagRange = $gitTagList[1] + "..$revision"
     echo "Release note range $gitTagRange :"
-    git -C $directory log "$gitTagRange" --pretty=format:"%d %s %N" | Out-File -FilePath "$releaseNoteFile"
+    git -C $directory log "$gitTagRange"  --date=short --pretty=format:"  * %ad [%aN] %s" | Out-File -FilePath "$releaseNoteFile"
 }
 
 echo ""
