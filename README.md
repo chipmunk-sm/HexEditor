@@ -26,7 +26,6 @@ Release version: https://github.com/chipmunk-sm/HexEditor/releases
 https://github.com/chipmunk-sm/hexeditor
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ig500t2beurjfivx?svg=true)](https://ci.appveyor.com/project/chipmunk-sm/hexeditor)
-[![Build Status](https://travis-ci.org/chipmunk-sm/HexEditor.svg?branch=master)](https://travis-ci.org/chipmunk-sm/HexEditor)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/chipmunk-sm/HexEditor.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/chipmunk-sm/HexEditor/alerts/)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/chipmunk-sm/HexEditor.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/chipmunk-sm/HexEditor/context:cpp)
 
