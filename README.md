@@ -8,6 +8,9 @@ Delete
 Search
 The maximum file size HexEditor can edit is 64 GB
 ```
+<a href="https://www.buymeacoffee.com/chipmunksm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
+
 ### Linux
 To get the last release version, please use the PPA:
 
